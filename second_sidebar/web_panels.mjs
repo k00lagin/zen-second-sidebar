@@ -60,14 +60,14 @@ export class WebPanels extends VBox {
 
   /**
    *
-   * @param {string} url
+   * @param {WebPanel} webPanel
    * @returns {WebPanels}
    */
-  delete(url) {
-    const index = this.webPanels.findIndex((webPanel) => webPanel.url);
+  delete(webPanel) {
+    const index = this.getIndex(webPanel);
     if (index !== -1) {
       this.webPanels.splice(index, 1);
-      delete this.webPanelsMap[url];
+      delete this.webPanelsMap[webPanel.url];
     }
     return this;
   }
@@ -82,6 +82,61 @@ export class WebPanels extends VBox {
   move(oldURL, newURL, webPanel) {
     delete this.webPanelsMap[oldURL];
     this.webPanelsMap[newURL] = webPanel;
+    return this;
+  }
+
+  /**
+   *
+   * @param {WebPanel} targetWebPanel
+   * @returns {boolean}
+   */
+  getIndex(targetWebPanel) {
+    return this.webPanels.findIndex((webPanel) => webPanel === targetWebPanel);
+  }
+
+  /**
+   *
+   * @param {WebPanel} webPanel
+   * @returns {boolean}
+   */
+  isFirst(webPanel) {
+    return this.getIndex(webPanel) === 0;
+  }
+
+  /**
+   *
+   * @param {WebPanel} webPanel
+   * @returns {boolean}
+   */
+  isLast(webPanel) {
+    return this.getIndex(webPanel) === this.webPanels.length - 1;
+  }
+
+  /**
+   *
+   * @param {WebPanel} webPanel
+   * @returns {WebPanels}
+   */
+  moveDown(webPanel) {
+    const index = this.getIndex(webPanel);
+    if (index !== -1) {
+      this.webPanels.splice(index, 1);
+      this.webPanels.splice(index + 1, 0, webPanel);
+    }
+    return this;
+  }
+
+  /**
+   *
+   * @param {WebPanel} webPanel
+   * @returns {WebPanels}
+   */
+  moveUp(webPanel) {
+    const index = this.getIndex(webPanel);
+    if (index !== -1) {
+      this.webPanels.splice(index, 1);
+      this.webPanels.splice(index - 1, 0, webPanel);
+    }
     return this;
   }
 

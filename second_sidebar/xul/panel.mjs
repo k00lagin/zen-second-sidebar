@@ -45,7 +45,7 @@ export class Panel extends XULElement {
    * @param {string} position
    * @returns {Panel}
    */
-  openPopup(target, position = "bottomright topright") {
+  openPopup(target, position = "start_before") {
     this.element.openPopup(target.getXUL(), position);
     return this;
   }
