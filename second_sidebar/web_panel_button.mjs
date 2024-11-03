@@ -10,8 +10,7 @@ export class WebPanelButton extends ToolbarButton {
   constructor(webPanel) {
     super({ classList: ["sidebar-2-main-button"] });
     this.webPanel = webPanel;
-
-    this.#fetchIconURL((iconURL) => this.setIcon(iconURL));
+    this.setIcon(webPanel.faviconURL);
 
     this.addEventListener("mousedown", (event) => {
       event.stopPropagation();
@@ -21,36 +20,5 @@ export class WebPanelButton extends ToolbarButton {
         SidebarController.webPanelPopupEdit.openPopup(this);
       }
     });
-  }
-
-  /**
-   *
-   * @param {function(string):void} callback
-   */
-  async #fetchIconURL(callback) {
-    const url = this.webPanel.url;
-    const uri = NetUtil.newURI(url);
-    Favicons.setDefaultIconURIPreferredSize(32);
-    Favicons.getFaviconURLForPage(uri, (faviconURI) => {
-      let faviconURL = faviconURI?.spec;
-      let provider = null;
-      if (typeof faviconURL !== "undefined" && faviconURL !== null) {
-        provider = "browser";
-      } else {
-        provider = "google";
-        faviconURL = `https://www.google.com/s2/favicons?domain=${uri.host}&sz=32`;
-      }
-      console.log(`Got favicon for ${url} from ${provider}`);
-      callback(faviconURL);
-    });
-  }
-
-  /**
-   *
-   * @returns {WebPanelButton}
-   */
-  updateIcon() {
-    this.#fetchIconURL((iconURL) => this.setIcon(iconURL));
-    return this;
   }
 }

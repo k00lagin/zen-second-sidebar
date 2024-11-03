@@ -1,13 +1,13 @@
-import { SidebarController } from './sidebar_controller.mjs';
-import { VBox } from './xul/vbox.mjs';
-import { WebPanel } from './web_panel.mjs';
-import { WebPanelButton } from './web_panel_button.mjs';
+import { SidebarController } from "./sidebar_controller.mjs";
+import { VBox } from "./xul/vbox.mjs";
+import { WebPanel } from "./web_panel.mjs";
+import { WebPanelButton } from "./web_panel_button.mjs";
 
-const PREF = 'second-sidebar.web-panels';
+const PREF = "second-sidebar.web-panels";
 
 export class WebPanels extends VBox {
   constructor() {
-    super({ id: 'sidebar-2-web-panels' });
+    super({ id: "sidebar-2-web-panels" });
 
     /** @type {Map<string, WebPanel>} */
     this.webPanelsMap = {};
@@ -165,15 +165,16 @@ export class WebPanels extends VBox {
       for (const webPanelPref of prefs) {
         const webPanel = new WebPanel(
           webPanelPref.url,
+          webPanelPref.faviconURL,
           webPanelPref.pinned ?? true,
-          webPanelPref.width ?? '400'
+          webPanelPref.width ?? "400"
         );
         const webPanelButton = new WebPanelButton(webPanel);
         SidebarController.webPanelButtons.appendChild(webPanelButton);
         this.add(webPanel);
       }
     } catch (error) {
-      console.log('No prefs');
+      console.log("Got error while loading prefs:", error);
     }
   }
 
@@ -182,11 +183,12 @@ export class WebPanels extends VBox {
     for (const webPanel of this.webPanels) {
       prefs.push({
         url: webPanel.url,
+        faviconURL: webPanel.faviconURL,
         pinned: webPanel.pinned,
         width: webPanel.width,
       });
     }
-    console.log('Saving prefs: ', prefs);
+    console.log("Saving prefs: ", prefs);
     Services.prefs.setStringPref(PREF, JSON.stringify(prefs));
   }
 }

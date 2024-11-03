@@ -1,21 +1,27 @@
-import { Button } from './xul/button.mjs';
-import { HBox } from './xul/hbox.mjs';
-import { Input } from './xul/input.mjs';
-import { Panel } from './xul/panel.mjs';
-import { PanelMultiView } from './xul/panel_multi_view.mjs';
-import { SidebarController } from './sidebar_controller.mjs';
-import { WebPanelButton } from './web_panel_button.mjs';
+import { Button } from "./xul/button.mjs";
+import { HBox } from "./xul/hbox.mjs";
+import { Input } from "./xul/input.mjs";
+import { Panel } from "./xul/panel.mjs";
+import { PanelMultiView } from "./xul/panel_multi_view.mjs";
+import { SidebarController } from "./sidebar_controller.mjs";
+import { WebPanelButton } from "./web_panel_button.mjs";
+import { fetchIconURL } from "./utils.mjs";
 
 export class WebPanelPopupEdit extends Panel {
   constructor() {
-    super({ id: 'sidebar-2-web-panel-popup-edit' });
-    this.setType('default').setRole('group');
+    super({ id: "sidebar-2-web-panel-popup-edit" });
+    this.setType("default").setRole("group");
     this.urlInput = this.#createURLInput();
+    this.faviconURLInput = this.#createFaviconURLInput();
+
+    this.resetIconButton = this.#createResetIconButton();
     this.moveDownButton = this.#createMoveDownButton();
     this.moveUpButton = this.#createMoveUpButton();
     this.saveButton = this.#createSaveButton();
     this.deleteButton = this.#createDeleteButton();
+
     this.buttonsRow = this.#createButtonsRow();
+
     this.multiView = this.#createMultiView();
   }
 
@@ -25,9 +31,10 @@ export class WebPanelPopupEdit extends Panel {
    */
   #createButtonsRow() {
     const row = new HBox({
-      id: 'sidebar-2-web-panel-popup-edit-multiview-buttons-row',
+      id: "sidebar-2-web-panel-popup-edit-multiview-buttons-row",
     });
     row
+      .appendChild(this.resetIconButton)
       .appendChild(this.moveDownButton)
       .appendChild(this.moveUpButton)
       .appendChild(this.saveButton)
@@ -41,9 +48,10 @@ export class WebPanelPopupEdit extends Panel {
    */
   #createMultiView() {
     const multiView = new PanelMultiView({
-      id: 'sidebar-2-web-panel-popup-edit-multiview',
+      id: "sidebar-2-web-panel-popup-edit-multiview",
     })
       .appendChild(this.urlInput)
+      .appendChild(this.faviconURLInput)
       .appendChild(this.buttonsRow);
 
     this.appendChild(multiView);
@@ -51,7 +59,12 @@ export class WebPanelPopupEdit extends Panel {
   }
 
   #createURLInput() {
-    const input = new Input().setType('text');
+    const input = new Input().setType("text");
+    return input;
+  }
+
+  #createFaviconURLInput() {
+    const input = new Input().setType("text");
     return input;
   }
 
@@ -59,10 +72,29 @@ export class WebPanelPopupEdit extends Panel {
    *
    * @returns {Button}
    */
-  #createMoveDownButton() {
-    const button = new Button().setText('Move Down');
+  #createResetIconButton() {
+    const button = new Button().setText("Reset Icon");
 
-    button.addEventListener('mousedown', (event) => {
+    button.addEventListener("mousedown", async (event) => {
+      if (event.button !== 0) {
+        return;
+      }
+
+      const faviconURL = await fetchIconURL(this.webPanel.url);
+      this.faviconURLInput.setValue(faviconURL);
+    });
+
+    return button;
+  }
+
+  /**
+   *
+   * @returns {Button}
+   */
+  #createMoveDownButton() {
+    const button = new Button().setText("Move Down");
+
+    button.addEventListener("mousedown", (event) => {
       if (event.button !== 0) {
         return;
       }
@@ -88,9 +120,9 @@ export class WebPanelPopupEdit extends Panel {
    * @returns {Button}
    */
   #createMoveUpButton() {
-    const button = new Button().setText('Move Up');
+    const button = new Button().setText("Move Up");
 
-    button.addEventListener('mousedown', (event) => {
+    button.addEventListener("mousedown", (event) => {
       if (event.button !== 0) {
         return;
       }
@@ -116,19 +148,27 @@ export class WebPanelPopupEdit extends Panel {
    * @returns {Button}
    */
   #createSaveButton() {
-    const button = new Button().setText('Save');
+    const button = new Button().setText("Save");
 
-    button.addEventListener('mousedown', (event) => {
+    button.addEventListener("mousedown", (event) => {
       if (event.button !== 0) {
         return;
       }
+
       const url = this.urlInput.getValue();
       if (this.webPanel.url !== url) {
         this.webPanel.changeURL(url);
-        this.webPanelButton.updateIcon();
+        const faviconURL = fetchIconURL(url);
+        this.webPanelButton.setIcon(faviconURL);
         if (SidebarController.webPanels.contains(this.webPanel)) {
           this.webPanel.goHome();
         }
+      }
+
+      const faviconURL = this.faviconURLInput.getValue();
+      if (this.webPanel.faviconURL !== faviconURL) {
+        this.webPanel.faviconURL = faviconURL;
+        this.webPanelButton.setIcon(faviconURL);
       }
 
       SidebarController.webPanelPopupEdit.hidePopup();
@@ -143,9 +183,9 @@ export class WebPanelPopupEdit extends Panel {
    * @returns {Button}
    */
   #createDeleteButton() {
-    const button = new Button().setText('Delete');
+    const button = new Button().setText("Delete");
 
-    button.addEventListener('mousedown', (event) => {
+    button.addEventListener("mousedown", (event) => {
       if (event.button !== 0) {
         return;
       }
@@ -171,6 +211,7 @@ export class WebPanelPopupEdit extends Panel {
     this.webPanelButton = target;
     this.webPanel = this.webPanelButton.webPanel;
     this.urlInput.setValue(this.webPanel.url);
+    this.faviconURLInput.setValue(this.webPanel.faviconURL);
     Panel.prototype.openPopup.call(this, target);
   }
 }

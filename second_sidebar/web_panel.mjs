@@ -1,16 +1,19 @@
-import { Browser } from './xul/browser.mjs';
-import { SidebarController } from './sidebar_controller.mjs';
+import { Browser } from "./xul/browser.mjs";
+import { SidebarController } from "./sidebar_controller.mjs";
 
 export class WebPanel extends Browser {
   /**
    *
    * @param {string} url
+   * @param {string} faviconURL
    * @param {boolean} pinned
+   * @param {string} width
    */
-  constructor(url, pinned = true, width = '400') {
-    super({ classList: ['web-panel'] });
-    this.setDisableGlobalHistory('true').setType('content').setRemote('true');
+  constructor(url, faviconURL, pinned = true, width = "400") {
+    super({ classList: ["web-panel"] });
+    this.setDisableGlobalHistory("true").setType("content").setRemote("true");
     this.url = url;
+    this.faviconURL = faviconURL;
     this.pinned = pinned;
     this.width = width;
 
@@ -21,8 +24,8 @@ export class WebPanel extends Browser {
     const webPanel = this;
     this.listener = {
       QueryInterface: ChromeUtils.generateQI([
-        'nsIWebProgressListener',
-        'nsISupportsWeakReference',
+        "nsIWebProgressListener",
+        "nsISupportsWeakReference",
       ]),
       onLocationChange: function () {
         SidebarController.sidebarToolbar.setTitle(webPanel.getTitle());

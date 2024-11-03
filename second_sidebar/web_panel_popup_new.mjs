@@ -5,6 +5,7 @@ import { SidebarController } from "./sidebar_controller.mjs";
 import { WebPanel } from "./web_panel.mjs";
 import { WebPanelButton } from "./web_panel_button.mjs";
 import { WebPanelNewButton } from "./web_panel_new_button.mjs";
+import { fetchIconURL } from "./utils.mjs";
 
 export class WebPanelPopupNew extends Panel {
   constructor() {
@@ -36,15 +37,17 @@ export class WebPanelPopupNew extends Panel {
       id: "sidebar-2-web-panel-popup-new-multiview-input",
     }).setType("text");
 
-    input.addEventListener("keyup", (event) => {
+    input.addEventListener("keyup", async (event) => {
       if (event.key === "Enter" || event.keyCode === 13) {
-        const url = input.getValue();
         this.hidePopup();
-        const webPanel = new WebPanel(url);
+        const url = input.getValue();
+        const faviconURL = await fetchIconURL(url);
+        const webPanel = new WebPanel(url, faviconURL);
         const webPanelButton = new WebPanelButton(webPanel);
         SidebarController.webPanelButtons.appendChild(webPanelButton);
-        SidebarController.webPanels.add(webPanel).save();
+        SidebarController.webPanels.add(webPanel);
         SidebarController.switch(webPanel);
+        SidebarController.webPanels.save();
       }
     });
 
