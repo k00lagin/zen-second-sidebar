@@ -86,6 +86,25 @@ export class XULElement {
 
   /**
    *
+   * @returns {string}
+   */
+  getWidth() {
+    return this.getAttribute("width");
+  }
+
+  /**
+   *
+   * @param {string} width
+   * @returns {XULElement}
+   */
+  setWidth(width) {
+    this.setAttribute("width", width);
+    this.element.style.width = width + "px";
+    return this;
+  }
+
+  /**
+   *
    * @param {string} event
    * @param {function(MouseEvent):void} callback
    * @returns {XULElement}

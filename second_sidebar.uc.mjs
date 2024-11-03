@@ -1,4 +1,4 @@
-import { SidebarController } from "./second_sidebar/sidebar_controller.mjs";
+import { SidebarController } from './second_sidebar/sidebar_controller.mjs';
 
 const TIMEOUT = 1000;
 
@@ -36,25 +36,40 @@ const STYLE = `
       background-color: var(--toolbar-bgcolor);
       width: 500px;
       z-index: 3;
-      padding-block-end: var(--space-small);
+      pointer-events: none;
     }
 
-    #sidebar-2-box[pinned="false"] {
+    #sidebar-2-box:has(#sidebar-2[pinned="false"]) {
       position: absolute;
       background-color: transparent;
       height: 100%;
+      width: 100% !important;
       right: var(--sidebar-2-main-width);
       padding-block-start: var(--sidebar-2-box-padding);
-      padding-block-end: calc(var(--space-small) + var(--sidebar-2-box-padding));
+      padding-block-end: var(--sidebar-2-box-padding);
       padding-inline-end: var(--sidebar-2-box-padding);
+    }
+
+    #sidebar-2-box-filler {
+      display: none;
+      pointer-events: none;
+    }
+
+    #sidebar-2-box:has(#sidebar-2[pinned="false"]) #sidebar-2-box-filler {
+      display: block;
+      flex: 1;
     }
 
     #sidebar-2 {
       box-shadow: var(--content-area-shadow);
       border-radius: var(--border-radius-medium);
       overflow: hidden;
-      width: 100%;
       height: 100%;
+      pointer-events: auto;
+    }
+    
+    #sidebar-2[pinned="true"] {
+      width: 100% !important;
     }
 
     #sidebar-2-toolbar {
@@ -88,11 +103,19 @@ const STYLE = `
       height: 100%;
     }
 
-    #sidebar-2-splitter {
+    #sidebar-2-splitter-pinned {
       order: 5;
     }
 
-    #sidebar-2-splitter[pinned="false"] {
+    #sidebar-2-box:has(#sidebar-2[pinned="false"]) #sidebar-2-splitter-pinned {
+      display: none;
+    }
+
+    #sidebar-2-splitter-unpinned {
+      pointer-events: auto;
+    }
+
+    #sidebar-2-box:has(#sidebar-2[pinned="true"]) #sidebar-2-splitter-unpinned {
       display: none;
     }
 
@@ -124,14 +147,14 @@ class SecondSidebar {
   }
 
   decorate() {
-    const style = document.createElement("style");
+    const style = document.createElement('style');
     style.innerHTML = STYLE;
-    document.querySelector("head").appendChild(style);
+    document.querySelector('head').appendChild(style);
   }
 }
 
 var interval = setInterval(() => {
-  if (document.querySelector("#browser")) {
+  if (document.querySelector('#browser')) {
     window.second_sidebar = new SecondSidebar();
     window.SecondSidebarController = SidebarController;
     clearInterval(interval);

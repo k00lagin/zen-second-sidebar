@@ -1,14 +1,16 @@
-import { Sidebar } from "./sidebar.mjs";
-import { SidebarBox } from "./sidebar_box.mjs";
-import { SidebarMain } from "./sidebar_main.mjs";
-import { SidebarSplitter } from "./sidebar_splitter.mjs";
-import { SidebarToolbar } from "./sidebar_toolbar.mjs";
-import { WebPanel } from "./web_panel.mjs";
-import { WebPanelButtons } from "./web_panel_buttons.mjs";
-import { WebPanelNewButton } from "./web_panel_new_button.mjs";
-import { WebPanelPopupEdit } from "./web_panel_popup_edit.mjs";
-import { WebPanelPopupNew } from "./web_panel_popup_new.mjs";
-import { WebPanels } from "./web_panels.mjs";
+import { Sidebar } from './sidebar.mjs';
+import { SidebarBox } from './sidebar_box.mjs';
+import { SidebarBoxFiller } from './sidebar_box_filler.mjs';
+import { SidebarMain } from './sidebar_main.mjs';
+import { SidebarSplitterPinned } from './sidebar_splitter_pinned.mjs';
+import { SidebarSplitterUnpinned } from './sidebar_splitter_unpinned.mjs';
+import { SidebarToolbar } from './sidebar_toolbar.mjs';
+import { WebPanel } from './web_panel.mjs';
+import { WebPanelButtons } from './web_panel_buttons.mjs';
+import { WebPanelNewButton } from './web_panel_new_button.mjs';
+import { WebPanelPopupEdit } from './web_panel_popup_edit.mjs';
+import { WebPanelPopupNew } from './web_panel_popup_new.mjs';
+import { WebPanels } from './web_panels.mjs';
 
 export class SidebarController {
   static sidebarMain = new SidebarMain();
@@ -20,7 +22,9 @@ export class SidebarController {
   static sidebar = new Sidebar();
   static sidebarToolbar = new SidebarToolbar();
   static webPanels = new WebPanels();
-  static sidebarSplitter = new SidebarSplitter();
+  static sidebarSplitterPinned = new SidebarSplitterPinned();
+  static sidebarSplitterUnpinned = new SidebarSplitterUnpinned();
+  static sidebarBoxFiller = new SidebarBoxFiller();
 
   static onClickUnpinned = (event) => {
     if (!this.sidebarBox.element.contains(event.target)) {
@@ -29,24 +33,21 @@ export class SidebarController {
   };
 
   static inject() {
-    this.sidebarMain.appendChild(this.webPanelButtons);
-    this.sidebarMain.appendChild(this.webPanelNewButton);
-    this.sidebar.appendChild(this.sidebarToolbar);
-    this.sidebar.appendChild(this.webPanels);
-    this.sidebarBox.appendChild(this.sidebar);
+    this.sidebarMain.appendChild(this.webPanelButtons).appendChild(this.webPanelNewButton);
+    this.sidebar.appendChild(this.sidebarToolbar).appendChild(this.webPanels);
+    this.sidebarBox
+      .appendChild(this.sidebarBoxFiller)
+      .appendChild(this.sidebarSplitterUnpinned)
+      .appendChild(this.sidebar);
 
     this.sidebarToolbar
-      .addButton("chrome://browser/skin/back.svg", (panel) => panel.goBack())
-      .addButton("chrome://browser/skin/forward.svg", (panel) =>
-        panel.goForward()
-      )
-      .addButton("chrome://global/skin/icons/reload.svg", (panel) =>
-        panel.reload()
-      )
-      .addButton("chrome://browser/skin/home.svg", (panel) => panel.goHome());
+      .addButton('chrome://browser/skin/back.svg', (panel) => panel.goBack())
+      .addButton('chrome://browser/skin/forward.svg', (panel) => panel.goForward())
+      .addButton('chrome://global/skin/icons/reload.svg', (panel) => panel.reload())
+      .addButton('chrome://browser/skin/home.svg', (panel) => panel.goHome());
 
-    const browser = document.querySelector("#browser");
-    browser.appendChild(this.sidebarSplitter.getXUL());
+    const browser = document.querySelector('#browser');
+    browser.appendChild(this.sidebarSplitterPinned.getXUL());
     browser.appendChild(this.sidebarBox.getXUL());
     browser.appendChild(this.sidebarMain.getXUL());
 
@@ -62,14 +63,14 @@ export class SidebarController {
    */
   static open(pinned) {
     this.sidebarBox.show();
-    this.sidebarSplitter.show();
+    this.sidebarSplitterPinned.show();
     pinned ? this.pin() : this.unpin();
   }
 
   static close() {
     this.sidebarBox.hide();
-    this.sidebarSplitter.hide();
-    document.removeEventListener("mousedown", this.onClickUnpinned);
+    this.sidebarSplitterPinned.hide();
+    document.removeEventListener('mousedown', this.onClickUnpinned);
   }
 
   /**
@@ -77,21 +78,19 @@ export class SidebarController {
    * @returns {boolean}
    */
   static closed() {
-    return this.sidebarBox.hidden() && this.sidebarSplitter.hidden();
+    return this.sidebarBox.hidden() && this.sidebarSplitterPinned.hidden();
   }
 
   static pin() {
-    this.sidebarBox.pin();
-    this.sidebarSplitter.pin();
     this.sidebarToolbar.setPinned(true);
-    document.removeEventListener("mousedown", this.onClickUnpinned);
+    this.sidebar.pin();
+    document.removeEventListener('mousedown', this.onClickUnpinned);
   }
 
   static unpin() {
-    this.sidebarBox.unpin();
-    this.sidebarSplitter.unpin();
+    this.sidebar.unpin();
     this.sidebarToolbar.setPinned(false);
-    document.addEventListener("mousedown", this.onClickUnpinned);
+    document.addEventListener('mousedown', this.onClickUnpinned);
   }
 
   /**
