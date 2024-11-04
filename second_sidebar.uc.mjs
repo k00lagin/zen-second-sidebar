@@ -133,7 +133,7 @@ const STYLE = `
       z-index: 4;
     }
 
-    #sidebar-2-box:has(#sidebar-2[pinned="false"]) #sidebar-2-splitter-pinned {
+    .sidebar-2-panel-button.subviewbutton-iconic .toolbarbutton-text {
       display: none;
     }
 
@@ -168,7 +168,7 @@ const STYLE = `
 
     #sidebar-2-web-panel-popup-new-buttons {
       justify-content: end;
-      width: 100%;
+      width: 100%/;
       margin-top: var(--space-small);
     }
 
@@ -201,6 +201,10 @@ const STYLE = `
       justify-content: space-between;
       width: 100%;
       margin-top: var(--space-large);
+    }
+
+    #sidebar-2-web-panel-popup-edit-move-buttons .toolbarbutton-text {
+      display: none;
     }
 
     #sidebar-2-web-panel-popup-edit-save-button {

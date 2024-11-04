@@ -51,9 +51,13 @@ export class WebPanelPopupEdit extends Panel {
   }
 
   #createFaviconResetButton() {
-    const button = new ToolbarButton().setIcon(
-      "chrome://global/skin/icons/undo.svg"
-    );
+    const button = new ToolbarButton({
+      classList: [
+        "subviewbutton",
+        "subviewbutton-iconic",
+        "sidebar-2-panel-button",
+      ],
+    }).setIcon("chrome://global/skin/icons/undo.svg");
 
     button.addEventListener("mousedown", async (event) => {
       if (event.button !== 0) {
@@ -141,9 +145,13 @@ export class WebPanelPopupEdit extends Panel {
    * @returns {ToolbarButton}
    */
   #createMoveDownButton() {
-    const button = new ToolbarButton().setIcon(
-      "chrome://global/skin/icons/arrow-down.svg"
-    );
+    const button = new ToolbarButton({
+      classList: [
+        "subviewbutton",
+        "subviewbutton-iconic",
+        "sidebar-2-panel-button",
+      ],
+    }).setIcon("chrome://global/skin/icons/arrow-down.svg");
 
     button.addEventListener("mousedown", (event) => {
       if (event.button !== 0) {
@@ -171,9 +179,13 @@ export class WebPanelPopupEdit extends Panel {
    * @returns {ToolbarButton}
    */
   #createMoveUpButton() {
-    const button = new ToolbarButton().setIcon(
-      "chrome://global/skin/icons/arrow-up.svg"
-    );
+    const button = new ToolbarButton({
+      classList: [
+        "subviewbutton",
+        "subviewbutton-iconic",
+        "sidebar-2-panel-button",
+      ],
+    }).setIcon("chrome://global/skin/icons/arrow-up.svg");
 
     button.addEventListener("mousedown", (event) => {
       if (event.button !== 0) {
