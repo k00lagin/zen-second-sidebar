@@ -1,4 +1,4 @@
-import { SidebarController } from "./second_sidebar/sidebar_controller.mjs";
+import { SidebarController } from './second_sidebar/sidebar_controller.mjs';
 
 const TIMEOUT = 1000;
 
@@ -29,6 +29,10 @@ const STYLE = `
       display: flex;
       flex-direction: column;
       gap: 8px;
+    }
+
+    #sidebar-2-main-web-panel-buttons:empty {
+      display: none;
     }
 
     .sidebar-2-main-button {
@@ -235,14 +239,14 @@ class SecondSidebar {
   }
 
   decorate() {
-    const style = document.createElement("style");
+    const style = document.createElement('style');
     style.innerHTML = STYLE;
-    document.querySelector("head").appendChild(style);
+    document.querySelector('head').appendChild(style);
   }
 }
 
 var interval = setInterval(() => {
-  if (document.querySelector("#browser")) {
+  if (document.querySelector('#browser')) {
     window.second_sidebar = new SecondSidebar();
     window.SecondSidebarController = SidebarController;
     clearInterval(interval);
