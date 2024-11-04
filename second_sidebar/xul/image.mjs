@@ -1,6 +1,6 @@
 import { XULElement } from "./xul_element.mjs";
 
-export class Img extends XULElement {
+export class Image extends XULElement {
   /**
    *
    * @param {object} params
@@ -8,17 +8,13 @@ export class Img extends XULElement {
    * @param {Array<string>} params.classList
    */
   constructor({ id = null, classList = [] } = {}) {
-    super("img", {
-      id,
-      classList,
-      create: (tag) => document.createElement(tag),
-    });
+    super("image", { id, classList });
   }
 
   /**
    *
    * @param {string} src
-   * @returns {Img}
+   * @returns {Image}
    */
   setSrc(src) {
     this.element.src = src;

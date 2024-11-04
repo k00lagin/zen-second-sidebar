@@ -1,7 +1,6 @@
 import { Button } from "./xul/button.mjs";
 import { HBox } from "./xul/hbox.mjs";
 import { Header } from "./xul/header.mjs";
-import { Img } from "./xul/img.mjs";
 import { Input } from "./xul/input.mjs";
 import { Panel } from "./xul/panel.mjs";
 import { PanelMultiView } from "./xul/panel_multi_view.mjs";

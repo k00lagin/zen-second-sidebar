@@ -26,9 +26,27 @@ const STYLE = `
       gap: 8px;
     }
 
+    .sidebar-2-main-button {
+      position: relative;
+    }
+
     .sidebar-2-main-button > .toolbarbutton-icon {
       width: 32px !important;
       height: 32px !important;
+    }
+
+    .sidebar-2-main-button > .tab-icon-overlay {
+      position: absolute !important;
+      width: 12px !important;
+      height: 12px !important;
+      padding: 0px !important;
+      margin: 0px !important;
+      top: 0 !important;
+      right: 0 !important;
+    }
+
+    .sidebar-2-main-button > .tab-icon-overlay[hidden="true"] {
+      display: none !important;
     }
 
     #sidebar-2-box {

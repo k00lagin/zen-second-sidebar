@@ -1,5 +1,6 @@
 import { Browser } from "./xul/browser.mjs";
 import { SidebarController } from "./sidebar_controller.mjs";
+import { WebPanelButton } from "./web_panel_button.mjs";
 
 export class WebPanel extends Browser {
   /**
@@ -16,8 +17,19 @@ export class WebPanel extends Browser {
     this.faviconURL = faviconURL;
     this.pinned = pinned;
     this.width = width;
+    this.button = null;
 
     this.listener = null;
+  }
+
+  /**
+   *
+   * @param {WebPanelButton} button
+   * @returns {WebPanel}
+   */
+  setButton(button) {
+    this.button = button;
+    return this;
   }
 
   startListening() {
@@ -29,6 +41,7 @@ export class WebPanel extends Browser {
         SidebarController.sidebarToolbar.setTitle(this.getTitle());
       }
     };
+
     this.listener = {
       QueryInterface: ChromeUtils.generateQI([
         "nsIWebProgressListener",
@@ -40,6 +53,15 @@ export class WebPanel extends Browser {
       onStatusChange: update,
     };
     this.element.addProgressListener(this.listener, null);
+
+    const mediaController = this.element.browsingContext.mediaController;
+    mediaController.addEventListener("playbackstatechange", () => {
+      if (mediaController.isPlaying) {
+        this.button.showPlayingIcon();
+      } else {
+        this.button.hidePlayingIcon();
+      }
+    });
   }
 
   /**
