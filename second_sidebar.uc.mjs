@@ -119,39 +119,56 @@ const STYLE = `
       display: none;
     }
 
-    #sidebar-2-web-panel-popup-new {
+    .sidebar-2-panel {
       width: 300px;
     }
 
-    #sidebar-2-web-panel-popup-new > panelmultiview {
+    .sidebar-2-panel > panelmultiview {
       display: flex;
       flex-direction: column;
       width: 100%;
-      align-items: center;
-      padding: 0 var(--space-xsmall) var(--space-xsmall) var(--space-xsmall);
+      padding: 0 var(--space-small) var(--space-small) var(--space-small);
+    }
+    
+    .sidebar-2-panel > panelmultiview > .panel-header {
+      align-self: center;
     }
 
-    #sidebar-2-web-panel-popup-new input {
-      width: -moz-available;
-    }
-
-    #sidebar-2-web-panel-popup-new toolbarseparator {
-      width: 100%;
+    .sidebar-2-panel {
+      toolbarseparator, input {
+        width: -moz-available;
+      }
     }
 
     #sidebar-2-web-panel-popup-edit {
-      width: 300px;
+      width: 400px;
     }
 
-    #sidebar-2-web-panel-popup-edit > panelmultiview {
+    #sidebar-2-web-panel-popup-edit-favicon-row {
       display: flex;
-      flex-direction: column;
-      gap: 4px;
+      flex-direction: row;
+      align-items: center;
+      gap: var(--space-xsmall);
+      width: 100%;
+    }
+
+    #sidebar-2-web-panel-favicon-input {
+      background-size: 22px;
+      padding-right: 30px;
+      background-position-x: calc(100% - var(--space-xsmall));
+      background-position-y: center;
+      background-repeat: no-repeat;
     }
 
     #sidebar-2-web-panel-popup-edit-multiview-buttons-row {
-      justify-content: center;
+      justify-content: space-between;
       width: 100%;
+      margin-top: var(--space-large);
+    }
+
+    #sidebar-2-web-panel-popup-edit-save-button {
+      background-color: var(--color-accent-primary);
+      color: var(--button-text-color-primary);
     }
   `;
 

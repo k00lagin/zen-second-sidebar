@@ -42,4 +42,14 @@ export class Input extends XULElement {
   getValue() {
     return this.element.value;
   }
+
+  /**
+   *
+   * @param {string} image
+   * @returns {Input}
+   */
+  setBackgroundImage(image) {
+    this.element.style.backgroundImage = `url("${image}")`;
+    return this;
+  }
 }

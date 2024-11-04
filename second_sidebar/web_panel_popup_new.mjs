@@ -12,12 +12,16 @@ import { fetchIconURL } from "./utils.mjs";
 
 export class WebPanelPopupNew extends Panel {
   constructor() {
-    super({ id: "sidebar-2-web-panel-popup-new" });
+    super({
+      id: "sidebar-2-web-panel-popup-new",
+      classList: ["sidebar-2-panel"],
+    });
     this.setType("arrow").setRole("group");
 
     this.panelHeader = new HBox({ classList: ["panel-header"] });
-    this.header = this.#createHeader();
-    this.separator = this.#createSeparator();
+    this.header = new Header(1).setText("New Web Panel");
+    this.separator = new ToolbarSeparator();
+
     this.input = this.#createInput();
     this.multiView = this.#createMultiView();
 
@@ -39,14 +43,6 @@ export class WebPanelPopupNew extends Panel {
 
     this.appendChild(multiView);
     return multiView;
-  }
-
-  #createHeader() {
-    return new Header(1).setText("Create New Web Panel");
-  }
-
-  #createSeparator() {
-    return new ToolbarSeparator();
   }
 
   /**
