@@ -101,6 +101,7 @@ const STYLE = `
     .web-panel {
       width: 100%;
       height: 100%;
+      background-color: var(--toolbar-bgcolor);
     }
 
     #sidebar-2-splitter-pinned {
