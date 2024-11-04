@@ -134,7 +134,14 @@ export class WebPanelPopupNew extends Panel {
    * @param {WebPanelNewButton} target
    */
   openPopup(target) {
-    this.input.setValue("https://");
+    let suggest = "https://";
+    const currentURI = gBrowser.currentURI;
+
+    if (["http", "https"].includes(currentURI.scheme)) {
+      suggest = currentURI.spec;
+    }
+
+    this.input.setValue(suggest);
     Panel.prototype.openPopup.call(this, target);
   }
 }
