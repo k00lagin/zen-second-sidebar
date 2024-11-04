@@ -44,8 +44,11 @@ export class WebPanelPopupEdit extends Panel {
     });
 
     this.buttonsRow = this.#createButtonsRow();
-
     this.multiView = this.#createMultiView();
+
+    this.addEventListener("popupshown", () => {
+      this.urlInput.focus();
+    });
   }
 
   #createFaviconResetButton() {

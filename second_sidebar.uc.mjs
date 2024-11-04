@@ -141,6 +141,17 @@ const STYLE = `
       }
     }
 
+    #sidebar-2-web-panel-popup-new-buttons {
+      justify-content: end;
+      width: 100%;
+      margin-top: var(--space-small);
+    }
+
+    #sidebar-2-web-panel-popup-new-save-button {
+      background-color: var(--color-accent-primary);
+      color: var(--button-text-color-primary);
+    }
+
     #sidebar-2-web-panel-popup-edit {
       width: 400px;
     }

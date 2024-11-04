@@ -1,3 +1,4 @@
+import { Button } from "./xul/button.mjs";
 import { HBox } from "./xul/hbox.mjs";
 import { Header } from "./xul/header.mjs";
 import { Input } from "./xul/input.mjs";
@@ -23,6 +24,13 @@ export class WebPanelPopupNew extends Panel {
     this.separator = new ToolbarSeparator();
 
     this.input = this.#createInput();
+
+    this.saveButton = this.#createSaveButton();
+    this.cancelButton = this.#createCancelButton();
+    this.buttons = new HBox({
+      id: "sidebar-2-web-panel-popup-new-buttons",
+    });
+
     this.multiView = this.#createMultiView();
 
     this.addEventListener("popupshown", () => {
@@ -36,13 +44,36 @@ export class WebPanelPopupNew extends Panel {
    */
   #createMultiView() {
     this.panelHeader.appendChild(this.header);
+    this.buttons.appendChild(this.cancelButton).appendChild(this.saveButton);
     const multiView = new PanelMultiView()
       .appendChild(this.panelHeader)
       .appendChild(this.separator)
-      .appendChild(this.input);
+      .appendChild(this.input)
+      .appendChild(this.buttons);
 
     this.appendChild(multiView);
     return multiView;
+  }
+
+  async #createWebPanel() {
+    const url = this.input.getValue();
+
+    try {
+      NetUtil.newURI(url);
+    } catch (error) {
+      console.log("Invalid url");
+      return;
+    }
+
+    this.hidePopup();
+
+    const faviconURL = await fetchIconURL(url);
+    const webPanel = new WebPanel(url, faviconURL);
+    const webPanelButton = new WebPanelButton(webPanel);
+    SidebarController.webPanelButtons.appendChild(webPanelButton);
+    SidebarController.webPanels.add(webPanel);
+    SidebarController.switch(webPanel);
+    SidebarController.webPanels.save();
   }
 
   /**
@@ -54,19 +85,48 @@ export class WebPanelPopupNew extends Panel {
 
     input.addEventListener("keyup", async (event) => {
       if (event.key === "Enter" || event.keyCode === 13) {
-        this.hidePopup();
-        const url = input.getValue();
-        const faviconURL = await fetchIconURL(url);
-        const webPanel = new WebPanel(url, faviconURL);
-        const webPanelButton = new WebPanelButton(webPanel);
-        SidebarController.webPanelButtons.appendChild(webPanelButton);
-        SidebarController.webPanels.add(webPanel);
-        SidebarController.switch(webPanel);
-        SidebarController.webPanels.save();
+        await this.#createWebPanel();
       }
     });
 
     return input;
+  }
+
+  /**
+   *
+   * @returns {Button}
+   */
+  #createSaveButton() {
+    const button = new Button({
+      id: "sidebar-2-web-panel-popup-new-save-button",
+      classList: ["footer-button"],
+    }).setText("Save");
+
+    button.addEventListener("mousedown", async (event) => {
+      if (event.button === 0) {
+        await this.#createWebPanel();
+      }
+    });
+
+    return button;
+  }
+
+  /**
+   *
+   * @returns {Button}
+   */
+  #createCancelButton() {
+    const button = new Button({ classList: ["footer-button"] }).setText(
+      "Cancel"
+    );
+
+    button.addEventListener("mousedown", async (event) => {
+      if (event.button === 0) {
+        this.hidePopup();
+      }
+    });
+
+    return button;
   }
 
   /**
