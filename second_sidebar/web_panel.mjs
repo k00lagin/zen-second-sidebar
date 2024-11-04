@@ -21,15 +21,21 @@ export class WebPanel extends Browser {
   }
 
   startListening() {
-    const webPanel = this;
+    const fetchTitle = () => {
+      const activeWebPanel = SidebarController.webPanels.getActive();
+      if (activeWebPanel === this) {
+        SidebarController.sidebarToolbar.setTitle(this.getTitle());
+      }
+    };
     this.listener = {
       QueryInterface: ChromeUtils.generateQI([
         "nsIWebProgressListener",
         "nsISupportsWeakReference",
       ]),
-      onLocationChange: function () {
-        SidebarController.sidebarToolbar.setTitle(webPanel.getTitle());
-      },
+      onLocationChange: fetchTitle,
+      onStateChange: fetchTitle,
+      onProgressChange: fetchTitle,
+      onStatusChange: fetchTitle,
     };
     this.element.addProgressListener(this.listener, null);
   }
