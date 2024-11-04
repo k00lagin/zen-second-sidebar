@@ -1,4 +1,4 @@
-import { SidebarController } from './second_sidebar/sidebar_controller.mjs';
+import { SidebarController } from "./second_sidebar/sidebar_controller.mjs";
 
 const TIMEOUT = 1000;
 
@@ -89,7 +89,7 @@ const STYLE = `
       white-space: nowrap;
     }
 
-    #sidebar-2-toolbar-pin-button {
+    #sidebar-2-pin-button {
       transform: scale(-1, 1);
     }
 
@@ -119,16 +119,31 @@ const STYLE = `
       display: none;
     }
 
-    #sidebar-2-web-panel-popup-new-multiview {
+    #sidebar-2-web-panel-popup-new {
+      width: 300px;
+    }
+
+    #sidebar-2-web-panel-popup-new > panelmultiview {
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
+      width: 100%;
+      align-items: center;
+      padding: 0 var(--space-xsmall) var(--space-xsmall) var(--space-xsmall);
     }
 
-    #sidebar-2-web-panel-popup-new-multiview-input {
-      width: 200px;
+    #sidebar-2-web-panel-popup-new input {
+      width: -moz-available;
     }
 
-    #sidebar-2-web-panel-popup-edit-multiview {
+    #sidebar-2-web-panel-popup-new toolbarseparator {
+      width: 100%;
+    }
+
+    #sidebar-2-web-panel-popup-edit {
+      width: 300px;
+    }
+
+    #sidebar-2-web-panel-popup-edit > panelmultiview {
       display: flex;
       flex-direction: column;
       gap: 4px;
@@ -147,14 +162,14 @@ class SecondSidebar {
   }
 
   decorate() {
-    const style = document.createElement('style');
+    const style = document.createElement("style");
     style.innerHTML = STYLE;
-    document.querySelector('head').appendChild(style);
+    document.querySelector("head").appendChild(style);
   }
 }
 
 var interval = setInterval(() => {
-  if (document.querySelector('#browser')) {
+  if (document.querySelector("#browser")) {
     window.second_sidebar = new SecondSidebar();
     window.SecondSidebarController = SidebarController;
     clearInterval(interval);

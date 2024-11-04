@@ -105,6 +105,15 @@ export class XULElement {
 
   /**
    *
+   * @returns {XULElement}
+   */
+  focus() {
+    this.element.focus();
+    return this;
+  }
+
+  /**
+   *
    * @param {string} event
    * @param {function(MouseEvent):void} callback
    * @returns {XULElement}

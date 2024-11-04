@@ -35,7 +35,7 @@ export class SidebarToolbar extends Toolbar {
 
   #createPinButton() {
     const pinButton = new ToolbarButton({
-      id: "sidebar-2-toolbar-pin-button",
+      id: "sidebar-2-pin-button",
     });
 
     pinButton.addEventListener("mousedown", (event) => {

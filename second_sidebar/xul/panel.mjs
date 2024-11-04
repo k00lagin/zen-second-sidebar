@@ -1,4 +1,3 @@
-import { PanelMultiView } from "./panel_multi_view.mjs";
 import { XULElement } from "./xul_element.mjs";
 
 export class Panel extends XULElement {

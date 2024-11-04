@@ -10,7 +10,7 @@ import { fetchIconURL } from "./utils.mjs";
 export class WebPanelPopupEdit extends Panel {
   constructor() {
     super({ id: "sidebar-2-web-panel-popup-edit" });
-    this.setType("default").setRole("group");
+    this.setType("arrow").setRole("group");
     this.urlInput = this.#createURLInput();
     this.faviconURLInput = this.#createFaviconURLInput();
 

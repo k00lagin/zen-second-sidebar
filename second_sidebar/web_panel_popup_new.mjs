@@ -1,7 +1,10 @@
+import { HBox } from "./xul/hbox.mjs";
+import { Header } from "./xul/header.mjs";
 import { Input } from "./xul/input.mjs";
 import { Panel } from "./xul/panel.mjs";
 import { PanelMultiView } from "./xul/panel_multi_view.mjs";
 import { SidebarController } from "./sidebar_controller.mjs";
+import { ToolbarSeparator } from "./xul/toolbar_separator.mjs";
 import { WebPanel } from "./web_panel.mjs";
 import { WebPanelButton } from "./web_panel_button.mjs";
 import { WebPanelNewButton } from "./web_panel_new_button.mjs";
@@ -10,9 +13,17 @@ import { fetchIconURL } from "./utils.mjs";
 export class WebPanelPopupNew extends Panel {
   constructor() {
     super({ id: "sidebar-2-web-panel-popup-new" });
-    this.setType("default").setRole("group");
+    this.setType("arrow").setRole("group");
+
+    this.panelHeader = new HBox({ classList: ["panel-header"] });
+    this.header = this.#createHeader();
+    this.separator = this.#createSeparator();
     this.input = this.#createInput();
     this.multiView = this.#createMultiView();
+
+    this.addEventListener("popupshown", () => {
+      this.input.focus();
+    });
   }
 
   /**
@@ -20,12 +31,22 @@ export class WebPanelPopupNew extends Panel {
    * @returns {PanelMultiView}
    */
   #createMultiView() {
-    const multiView = new PanelMultiView({
-      id: "sidebar-2-web-panel-popup-new-multiview",
-    }).appendChild(this.input);
+    this.panelHeader.appendChild(this.header);
+    const multiView = new PanelMultiView()
+      .appendChild(this.panelHeader)
+      .appendChild(this.separator)
+      .appendChild(this.input);
 
     this.appendChild(multiView);
     return multiView;
+  }
+
+  #createHeader() {
+    return new Header(1).setText("Create New Web Panel");
+  }
+
+  #createSeparator() {
+    return new ToolbarSeparator();
   }
 
   /**
@@ -33,9 +54,7 @@ export class WebPanelPopupNew extends Panel {
    * @returns {Input}
    */
   #createInput() {
-    const input = new Input({
-      id: "sidebar-2-web-panel-popup-new-multiview-input",
-    }).setType("text");
+    const input = new Input().setType("text");
 
     input.addEventListener("keyup", async (event) => {
       if (event.key === "Enter" || event.keyCode === 13) {
