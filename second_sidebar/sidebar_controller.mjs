@@ -64,6 +64,7 @@ export class SidebarController {
   }
 
   static close() {
+    this.sidebar.unpin();
     this.sidebarBox.hide();
     this.sidebarSplitterPinned.hide();
     this.webPanels.hideActive();

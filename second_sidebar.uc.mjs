@@ -11,6 +11,11 @@ const STYLE = `
       --sidebar-2-main-width: calc(var(--sidebar-2-button-icon-size) + 2 * var(--toolbarbutton-outer-padding) + 2 * var(--sidebar-2-main-padding));
       --sidebar-2-box-padding: 4px;
     }
+
+    #tabbrowser-tabbox {
+      z-index: 4;
+    }
+
     #sidebar-2-main {
       display: flex;
       flex-direction: column;
@@ -53,12 +58,12 @@ const STYLE = `
       order: 6;
       background-color: var(--toolbar-bgcolor);
       min-width: 200px;
-      z-index: 3;
       pointer-events: none;
     }
 
     #sidebar-2-box:has(#sidebar-2[pinned="true"]) {
       padding-inline-start: var(--space-small);
+      z-index: 3;
     }
 
     #sidebar-2-box:has(#sidebar-2[pinned="false"]) {
@@ -70,6 +75,7 @@ const STYLE = `
       padding-block-start: var(--sidebar-2-box-padding);
       padding-block-end: var(--sidebar-2-box-padding);
       padding-inline-end: var(--sidebar-2-box-padding);
+      z-index: 5;
     }
 
     #sidebar-2-box-filler {
@@ -89,6 +95,7 @@ const STYLE = `
       height: 100%;
       pointer-events: auto;
       min-width: 200px;
+      outline: 0.01px solid var(--chrome-content-separator-color);
     }
     
     #sidebar-2[pinned="true"] {
@@ -125,6 +132,7 @@ const STYLE = `
       width: 100%;
       height: 100%;
       background-color: var(--toolbar-bgcolor);
+      clip-path: inset(-1px 0 round 0 0 var(--border-radius-medium) var(--border-radius-medium));
     }
 
     #sidebar-2-splitter-pinned {
@@ -145,6 +153,7 @@ const STYLE = `
 
     #sidebar-2-splitter-unpinned {
       pointer-events: auto;
+      border: unset;
     }
 
     #sidebar-2-box:has(#sidebar-2[pinned="true"]) #sidebar-2-splitter-unpinned {
