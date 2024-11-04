@@ -134,7 +134,8 @@ export class WebPanelPopupEdit extends Panel {
     }).setType("text");
 
     input.addEventListener("input", () => {
-      input.setBackgroundImage(input.getValue());
+      const faviconURL = input.getValue();
+      input.setBackgroundImage(faviconURL);
     });
 
     return input;
@@ -280,10 +281,20 @@ export class WebPanelPopupEdit extends Panel {
   openPopup(target) {
     this.webPanelButton = target;
     this.webPanel = this.webPanelButton.webPanel;
+
     this.urlInput.setValue(this.webPanel.url);
+
     this.faviconURLInput
       .setValue(this.webPanel.faviconURL)
       .setBackgroundImage(this.webPanel.faviconURL);
+
+    this.moveUpButton.setDisabled(
+      SidebarController.webPanels.isFirst(this.webPanel)
+    );
+    this.moveDownButton.setDisabled(
+      SidebarController.webPanels.isLast(this.webPanel)
+    );
+
     Panel.prototype.openPopup.call(this, target);
   }
 }
