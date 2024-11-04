@@ -8,6 +8,24 @@ export class SidebarToolbar extends Toolbar {
   constructor() {
     super({ id: "sidebar-2-toolbar" });
     this.setMode("icons");
+
+    this.backButton = this.#createButton(
+      "chrome://browser/skin/back.svg",
+      (panel) => panel.goBack()
+    );
+    this.forwardButton = this.#createButton(
+      "chrome://browser/skin/forward.svg",
+      (panel) => panel.goForward()
+    );
+    this.reloadButton = this.#createButton(
+      "chrome://global/skin/icons/reload.svg",
+      (panel) => panel.reload()
+    );
+    this.homeButton = this.#createButton(
+      "chrome://browser/skin/home.svg",
+      (panel) => panel.goHome()
+    );
+
     this.toolbarButtons = this.#createToolbarButtons();
     this.toolbarTitle = this.#createToolbarTitle();
     this.pinButton = this.#createPinButton();
@@ -18,7 +36,12 @@ export class SidebarToolbar extends Toolbar {
    * @returns {HBox}
    */
   #createToolbarButtons() {
-    const toolbarButtons = new HBox({ id: "sidebar-2-toolbar-buttons" });
+    const toolbarButtons = new HBox({ id: "sidebar-2-toolbar-buttons" })
+      .appendChild(this.backButton)
+      .appendChild(this.forwardButton)
+      .appendChild(this.reloadButton)
+      .appendChild(this.homeButton);
+
     this.appendChild(toolbarButtons);
     return toolbarButtons;
   }
@@ -90,9 +113,9 @@ export class SidebarToolbar extends Toolbar {
    *
    * @param {string} iconUrl
    * @param {function(WebPanel):void} action
-   * @returns {SidebarToolbar}
+   * @returns {ToolbarButton}
    */
-  addButton(iconUrl, action) {
+  #createButton(iconUrl, action) {
     const toolbarButton = new ToolbarButton({
       classList: ["sidebar-2-toolbar-button"],
     })
@@ -104,7 +127,6 @@ export class SidebarToolbar extends Toolbar {
         const webPanel = SidebarController.webPanels.getActive();
         action(webPanel);
       });
-    this.toolbarButtons.appendChild(toolbarButton);
-    return this;
+    return toolbarButton;
   }
 }

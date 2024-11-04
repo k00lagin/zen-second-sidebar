@@ -21,7 +21,9 @@ export class WebPanel extends Browser {
   }
 
   startListening() {
-    const fetchTitle = () => {
+    const update = () => {
+      this.updateButtons();
+
       const activeWebPanel = SidebarController.webPanels.getActive();
       if (activeWebPanel === this) {
         SidebarController.sidebarToolbar.setTitle(this.getTitle());
@@ -32,10 +34,10 @@ export class WebPanel extends Browser {
         "nsIWebProgressListener",
         "nsISupportsWeakReference",
       ]),
-      onLocationChange: fetchTitle,
-      onStateChange: fetchTitle,
-      onProgressChange: fetchTitle,
-      onStatusChange: fetchTitle,
+      onLocationChange: update,
+      onStateChange: update,
+      onProgressChange: update,
+      onStatusChange: update,
     };
     this.element.addProgressListener(this.listener, null);
   }
@@ -66,6 +68,20 @@ export class WebPanel extends Browser {
     const oldURL = this.url;
     this.url = url;
     SidebarController.webPanels.move(oldURL, url, this);
+    return this;
+  }
+
+  /**
+   *
+   * @returns {WebPanel}
+   */
+  updateButtons() {
+    SidebarController.sidebarToolbar.backButton.setDisabled(
+      !this.element.canGoBack
+    );
+    SidebarController.sidebarToolbar.forwardButton.setDisabled(
+      !this.element.canGoForward
+    );
     return this;
   }
 }

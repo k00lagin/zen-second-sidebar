@@ -86,6 +86,16 @@ export class XULElement {
 
   /**
    *
+   * @param {string} name
+   * @returns {XULElement}
+   */
+  removeAttribute(name, value) {
+    this.element.removeAttribute(name);
+    return this;
+  }
+
+  /**
+   *
    * @returns {string}
    */
   getWidth() {

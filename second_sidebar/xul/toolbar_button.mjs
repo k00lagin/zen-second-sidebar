@@ -39,4 +39,18 @@ export class ToolbarButton extends XULElement {
   setBadged(value) {
     return this.setAttribute("badged", value);
   }
+
+  /**
+   *
+   * @param {boolean} value
+   * @returns {ToolbarButton}
+   */
+  setDisabled(value) {
+    if (value) {
+      this.setAttribute("disabled", true);
+    } else {
+      this.removeAttribute("disabled");
+    }
+    return true;
+  }
 }

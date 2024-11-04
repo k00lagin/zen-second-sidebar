@@ -149,6 +149,7 @@ export class WebPanels extends VBox {
     for (const webPanel of this.webPanels) {
       if (webPanel === targetWebPanel) {
         webPanel.show();
+        webPanel.updateButtons();
         SidebarController.sidebarToolbar.setTitle(webPanel.getTitle());
         SidebarController.sidebarBox.setWidth(webPanel.width);
         SidebarController.sidebar.setWidth(webPanel.width);
