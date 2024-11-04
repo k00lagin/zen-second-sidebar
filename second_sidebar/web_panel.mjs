@@ -10,7 +10,7 @@ export class WebPanel extends Browser {
    * @param {boolean} pinned
    * @param {string} width
    */
-  constructor(url, faviconURL, pinned = true, width = "400") {
+  constructor(url, faviconURL, pinned = false, width = "400") {
     super({ classList: ["web-panel"] });
     this.setDisableGlobalHistory("true").setType("content").setRemote("true");
     this.url = url;
