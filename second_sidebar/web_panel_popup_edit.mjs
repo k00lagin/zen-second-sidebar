@@ -61,7 +61,7 @@ export class WebPanelPopupEdit extends Panel {
         return;
       }
 
-      const faviconURL = await fetchIconURL(this.webPanel.url);
+      const faviconURL = await fetchIconURL(this.urlInput.getValue());
       this.faviconURLInput.setValue(faviconURL).setBackgroundImage(faviconURL);
     });
 
