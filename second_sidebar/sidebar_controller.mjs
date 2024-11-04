@@ -66,6 +66,7 @@ export class SidebarController {
   static close() {
     this.sidebarBox.hide();
     this.sidebarSplitterPinned.hide();
+    this.webPanels.hideActive();
     document.removeEventListener("mousedown", this.onClickUnpinned);
   }
 

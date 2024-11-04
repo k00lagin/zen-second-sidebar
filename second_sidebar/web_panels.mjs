@@ -160,6 +160,16 @@ export class WebPanels extends VBox {
     return this;
   }
 
+  /**
+   *
+   * @returns {WebPanels}
+   */
+  hideActive() {
+    const activeWebPanel = this.getActive();
+    activeWebPanel.hide();
+    return this;
+  }
+
   load() {
     try {
       const prefs = JSON.parse(Services.prefs.getStringPref(PREF));

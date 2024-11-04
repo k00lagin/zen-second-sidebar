@@ -106,4 +106,22 @@ export class WebPanel extends Browser {
     );
     return this;
   }
+
+  /**
+   *
+   * @returns {WebPanel}
+   */
+  show() {
+    this.button.setOpen(true);
+    return Browser.prototype.show.call(this);
+  }
+
+  /**
+   *
+   * @returns {WebPanel}
+   */
+  hide() {
+    this.button.setOpen(false);
+    return Browser.prototype.hide.call(this);
+  }
 }
