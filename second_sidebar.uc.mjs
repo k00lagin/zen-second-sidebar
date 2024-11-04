@@ -52,7 +52,7 @@ const STYLE = `
     #sidebar-2-box {
       order: 6;
       background-color: var(--toolbar-bgcolor);
-      width: 500px;
+      min-width: 200px;
       z-index: 3;
       pointer-events: none;
     }
@@ -88,6 +88,7 @@ const STYLE = `
       overflow: hidden;
       height: 100%;
       pointer-events: auto;
+      min-width: 200px;
     }
     
     #sidebar-2[pinned="true"] {
