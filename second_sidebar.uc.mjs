@@ -57,6 +57,10 @@ const STYLE = `
       pointer-events: none;
     }
 
+    #sidebar-2-box:has(#sidebar-2[pinned="true"]) {
+      padding-inline-start: var(--space-small);
+    }
+
     #sidebar-2-box:has(#sidebar-2[pinned="false"]) {
       position: absolute;
       background-color: transparent;
@@ -124,6 +128,9 @@ const STYLE = `
 
     #sidebar-2-splitter-pinned {
       order: 5;
+      margin-inline-start: unset;
+      margin-inline-end: calc(-1 * var(--splitter-width));
+      z-index: 4;
     }
 
     #sidebar-2-box:has(#sidebar-2[pinned="false"]) #sidebar-2-splitter-pinned {
