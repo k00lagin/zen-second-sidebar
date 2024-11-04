@@ -183,7 +183,7 @@ const STYLE = `
 
     #sidebar-2-web-panel-popup-new-buttons {
       justify-content: end;
-      width: 100%/;
+      width: 100%;
       margin-top: var(--space-small);
     }
 
