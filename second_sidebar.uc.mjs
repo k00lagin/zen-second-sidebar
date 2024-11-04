@@ -127,6 +127,11 @@ const STYLE = `
     }
 
     #sidebar-2-splitter-pinned {
+      display: none;
+    }
+
+    #browser:has(#sidebar-2[pinned="true"]) #sidebar-2-splitter-pinned {
+      display: block;
       order: 5;
       margin-inline-start: unset;
       margin-inline-end: calc(-1 * var(--splitter-width));
