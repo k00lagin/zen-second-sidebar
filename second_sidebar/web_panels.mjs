@@ -178,7 +178,8 @@ export class WebPanels extends VBox {
           webPanelPref.url,
           webPanelPref.faviconURL,
           webPanelPref.pinned ?? true,
-          webPanelPref.width ?? "400"
+          webPanelPref.width ?? "400",
+          webPanelPref.unloadOnClose ?? false
         );
         const webPanelButton = new WebPanelButton(webPanel);
         SidebarController.webPanelButtons.appendChild(webPanelButton);
@@ -197,6 +198,7 @@ export class WebPanels extends VBox {
         faviconURL: webPanel.faviconURL,
         pinned: webPanel.pinned,
         width: webPanel.width,
+        unloadOnClose: webPanel.unloadOnClose,
       });
     }
     console.log("Saving prefs: ", prefs);

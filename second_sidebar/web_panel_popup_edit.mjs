@@ -20,12 +20,11 @@ export class WebPanelPopupEdit extends Panel {
 
     this.panelHeader = new HBox({ classList: ["panel-header"] });
     this.header = new Header(1).setText("Edit Web Panel");
-    this.separator = new ToolbarSeparator();
 
-    this.urlInputHeader = new Header(1).setText("URL");
+    this.urlInputHeader = new Header(1).setText("Page web address");
     this.urlInput = this.#createURLInput();
 
-    this.faviconURLInputHeader = new Header(1).setText("Favicon URL");
+    this.faviconURLInputHeader = new Header(1).setText("Favicon web address");
     this.faviconURLInput = this.#createFaviconURLInput();
     this.faviconResetButton = this.#createFaviconResetButton();
     this.faviconRow = this.#createFaviconRow();
@@ -41,6 +40,9 @@ export class WebPanelPopupEdit extends Panel {
     this.storageButtons = new HBox({
       id: "sidebar-2-web-panel-popup-edit-storage-buttons",
     });
+
+    this.unloadOnCloseToggle = this.#createUnloadOnCloseToggle();
+    this.unloadOnCloseGroup = this.#createUnloadOnCloseGroup();
 
     this.buttonsRow = this.#createButtonsRow();
     this.multiView = this.#createMultiView();
@@ -112,11 +114,12 @@ export class WebPanelPopupEdit extends Panel {
       id: "sidebar-2-web-panel-popup-edit-multiview",
     })
       .appendChild(this.panelHeader)
-      .appendChild(this.separator)
+      .appendChild(new ToolbarSeparator())
       .appendChild(this.urlInputHeader)
       .appendChild(this.urlInput)
       .appendChild(this.faviconURLInputHeader)
       .appendChild(this.faviconRow)
+      .appendChild(this.unloadOnCloseGroup)
       .appendChild(this.buttonsRow);
 
     this.appendChild(multiView);
@@ -213,6 +216,38 @@ export class WebPanelPopupEdit extends Panel {
    *
    * @returns {Button}
    */
+  #createUnloadOnCloseToggle() {
+    const button = new Button({
+      id: "moz-toggle-button",
+      classList: ["toggle-button"],
+    });
+    button.setAttribute("part", "button");
+    button.setAttribute("type", "button");
+
+    button.addEventListener("click", (event) => {
+      if (event.button === 0) {
+        button.setPressed(!button.getPressed());
+      }
+    });
+
+    return button;
+  }
+
+  /**
+   *
+   * @returns {HBox}
+   */
+  #createUnloadOnCloseGroup() {
+    const box = new HBox({ id: "sidebar-2-web-panel-popup-edit-unload-group" });
+    const label = new Header(1).setText("Unload from memory after closing");
+    box.appendChild(label).appendChild(this.unloadOnCloseToggle);
+    return box;
+  }
+
+  /**
+   *
+   * @returns {Button}
+   */
   #createSaveButton() {
     const button = new Button({
       id: "sidebar-2-web-panel-popup-edit-save-button",
@@ -240,6 +275,11 @@ export class WebPanelPopupEdit extends Panel {
         this.webPanelButton.setIcon(faviconURL);
       }
 
+      this.webPanel.unloadOnClose = this.unloadOnCloseToggle.getPressed();
+      if (this.webPanel.unloadOnClose && this.webPanel.hidden()) {
+        this.webPanel.hide();
+      }
+
       SidebarController.webPanelPopupEdit.hidePopup();
       SidebarController.webPanels.save();
     });
@@ -265,6 +305,7 @@ export class WebPanelPopupEdit extends Panel {
         SidebarController.close();
       }
 
+      SidebarController.webPanels.delete(this.webPanel);
       this.webPanel.remove();
       this.webPanelButton.remove();
       SidebarController.webPanelPopupEdit.hidePopup();
@@ -287,6 +328,8 @@ export class WebPanelPopupEdit extends Panel {
     this.faviconURLInput
       .setValue(this.webPanel.faviconURL)
       .setBackgroundImage(this.webPanel.faviconURL);
+
+    this.unloadOnCloseToggle.setPressed(this.webPanel.unloadOnClose);
 
     this.moveUpButton.setDisabled(
       SidebarController.webPanels.isFirst(this.webPanel)

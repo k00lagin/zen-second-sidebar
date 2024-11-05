@@ -24,4 +24,22 @@ export class Button extends XULElement {
     this.element.innerText = text;
     return this;
   }
+
+  /**
+   *
+   * @returns {boolean}
+   */
+  getPressed() {
+    return this.element.ariaPressed === "true";
+  }
+
+  /**
+   *
+   * @param {boolean} value
+   * @returns {Button}
+   */
+  setPressed(value) {
+    this.element.ariaPressed = value;
+    return this;
+  }
 }

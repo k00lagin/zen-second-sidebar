@@ -15,14 +15,16 @@ There are many forks of Firefox, but I prefer to continue using the original bro
 1. Adding a new web panel by left-clicking on the plus sign. If you are on a web page, the current address will be automatically inserted into the address bar.
 2. Changing the width of the sidebar, each web panel has its own width.
 3. Pinning and unpinning the sidebar, each web panel has its own state. In the pinned state, the sidebar will be located statically next to the page. The unpinned sidebar appears on top of the page and closes when the focus is lost.
-4. Editing the web panel by right-clicking on the corresponding button:
+4. Closing sidebar with unloading of the web panel;
+5. Editing the web panel by right-clicking on the corresponding button:
     - Changing the web address.
     - Changing the favicon.
     - Resetting the favicon.
+    - Option to unload from memory after closing.
     - Moving the web panel button.
     - Deleting the web panel.
-5. Managing the page opened in the web panel: going back and forth, refreshing the page and going to the home page.
-6. Sound indicator.
+6. Managing the page opened in the web panel: going back and forth, refreshing the page and going to the home page.
+7. Sound indicator.
 
 ## Install
 

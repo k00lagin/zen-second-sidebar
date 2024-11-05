@@ -26,21 +26,37 @@ export class SidebarToolbar extends Toolbar {
       (panel) => panel.goHome()
     );
 
-    this.toolbarButtons = this.#createToolbarButtons();
-    this.toolbarTitle = this.#createToolbarTitle();
     this.pinButton = this.#createPinButton();
+    this.closeButton = this.#createCloseButton();
+
+    this.toolbarNavButtons = this.#createNavButtons();
+    this.toolbarTitle = this.#createToolbarTitle();
+    this.toolbarSidebarButtons = this.#createSidebarButtons();
   }
 
   /**
    *
    * @returns {HBox}
    */
-  #createToolbarButtons() {
-    const toolbarButtons = new HBox({ id: "sidebar-2-toolbar-buttons" })
+  #createNavButtons() {
+    const toolbarButtons = new HBox({ id: "sidebar-2-toolbar-nav-buttons" })
       .appendChild(this.backButton)
       .appendChild(this.forwardButton)
       .appendChild(this.reloadButton)
       .appendChild(this.homeButton);
+
+    this.appendChild(toolbarButtons);
+    return toolbarButtons;
+  }
+
+  /**
+   *
+   * @returns {HBox}
+   */
+  #createSidebarButtons() {
+    const toolbarButtons = new HBox({ id: "sidebar-2-toolbar-sidebar-buttons" })
+      .appendChild(this.pinButton)
+      .appendChild(this.closeButton);
 
     this.appendChild(toolbarButtons);
     return toolbarButtons;
@@ -56,6 +72,10 @@ export class SidebarToolbar extends Toolbar {
     return toolbarTitle;
   }
 
+  /**
+   *
+   * @returns {ToolbarButton}
+   */
   #createPinButton() {
     const pinButton = new ToolbarButton({
       id: "sidebar-2-pin-button",
@@ -83,6 +103,29 @@ export class SidebarToolbar extends Toolbar {
 
     this.appendChild(pinButton);
     return pinButton;
+  }
+
+  /**
+   *
+   * @returns {ToolbarButton}
+   */
+  #createCloseButton() {
+    const closeButton = new ToolbarButton({
+      id: "sidebar-2-close-button",
+    }).setIcon("chrome://global/skin/icons/close.svg");
+
+    closeButton.addEventListener("mousedown", (event) => {
+      if (event.button !== 0) {
+        return;
+      }
+
+      const activeWebPanel = SidebarController.webPanels.getActive();
+      SidebarController.close();
+      activeWebPanel.remove();
+    });
+
+    this.appendChild(closeButton);
+    return closeButton;
   }
 
   /**
