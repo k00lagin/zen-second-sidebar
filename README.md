@@ -22,6 +22,7 @@ There are many forks of Firefox, but I prefer to continue using the original bro
     - Moving the web panel button.
     - Deleting the web panel.
 5. Managing the page opened in the web panel: going back and forth, refreshing the page and going to the home page.
+6. Sound indicator.
 
 ## Install
 
