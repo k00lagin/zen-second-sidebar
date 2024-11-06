@@ -41,6 +41,9 @@ export class WebPanelPopupEdit extends Panel {
       id: "sidebar-2-web-panel-popup-edit-storage-buttons",
     });
 
+    this.loadOnStartupToggle = this.#createLoadOnStartupToggle();
+    this.loadOnStartupGroup = this.#createLoadOnStartupGroup();
+
     this.unloadOnCloseToggle = this.#createUnloadOnCloseToggle();
     this.unloadOnCloseGroup = this.#createUnloadOnCloseGroup();
 
@@ -119,6 +122,7 @@ export class WebPanelPopupEdit extends Panel {
       .appendChild(this.urlInput)
       .appendChild(this.faviconURLInputHeader)
       .appendChild(this.faviconRow)
+      .appendChild(this.loadOnStartupGroup)
       .appendChild(this.unloadOnCloseGroup)
       .appendChild(this.buttonsRow);
 
@@ -172,7 +176,7 @@ export class WebPanelPopupEdit extends Panel {
       this.hidePopup();
       this.openPopup(this.webPanelButton);
 
-      SidebarController.webPanels.save();
+      SidebarController.webPanels.savePrefs();
     });
 
     return button;
@@ -206,10 +210,44 @@ export class WebPanelPopupEdit extends Panel {
       this.hidePopup();
       this.openPopup(this.webPanelButton);
 
-      SidebarController.webPanels.save();
+      SidebarController.webPanels.savePrefs();
     });
 
     return button;
+  }
+
+  /**
+   *
+   * @returns {Button}
+   */
+  #createLoadOnStartupToggle() {
+    const button = new Button({
+      id: "moz-toggle-button",
+      classList: ["toggle-button"],
+    });
+    button.setAttribute("part", "button");
+    button.setAttribute("type", "button");
+
+    button.addEventListener("click", (event) => {
+      if (event.button === 0) {
+        button.setPressed(!button.getPressed());
+      }
+    });
+
+    return button;
+  }
+
+  /**
+   *
+   * @returns {HBox}
+   */
+  #createLoadOnStartupGroup() {
+    const box = new HBox({
+      classList: ["sidebar-2-web-panel-popup-edit-toggle-group"],
+    });
+    const label = new Header(1).setText("Load into memory at startup");
+    box.appendChild(label).appendChild(this.loadOnStartupToggle);
+    return box;
   }
 
   /**
@@ -238,7 +276,9 @@ export class WebPanelPopupEdit extends Panel {
    * @returns {HBox}
    */
   #createUnloadOnCloseGroup() {
-    const box = new HBox({ id: "sidebar-2-web-panel-popup-edit-unload-group" });
+    const box = new HBox({
+      classList: ["sidebar-2-web-panel-popup-edit-toggle-group"],
+    });
     const label = new Header(1).setText("Unload from memory after closing");
     box.appendChild(label).appendChild(this.unloadOnCloseToggle);
     return box;
@@ -275,13 +315,15 @@ export class WebPanelPopupEdit extends Panel {
         this.webPanelButton.setIcon(faviconURL);
       }
 
+      this.webPanel.loadOnStartup = this.loadOnStartupToggle.getPressed();
+
       this.webPanel.unloadOnClose = this.unloadOnCloseToggle.getPressed();
       if (this.webPanel.unloadOnClose && this.webPanel.hidden()) {
         this.webPanel.hide();
       }
 
       SidebarController.webPanelPopupEdit.hidePopup();
-      SidebarController.webPanels.save();
+      SidebarController.webPanels.savePrefs();
     });
 
     return button;
@@ -300,16 +342,15 @@ export class WebPanelPopupEdit extends Panel {
       if (event.button !== 0) {
         return;
       }
-      const activeWebPanel = SidebarController.webPanels.getActive();
-      if (this.webPanel === activeWebPanel) {
-        SidebarController.close();
+      if (!this.webPanel.hidden()) {
+        SidebarController.sidebarBox.close();
       }
 
       SidebarController.webPanels.delete(this.webPanel);
       this.webPanel.remove();
       this.webPanelButton.remove();
       SidebarController.webPanelPopupEdit.hidePopup();
-      SidebarController.webPanels.save();
+      SidebarController.webPanels.savePrefs();
     });
 
     return button;
@@ -329,6 +370,7 @@ export class WebPanelPopupEdit extends Panel {
       .setValue(this.webPanel.faviconURL)
       .setBackgroundImage(this.webPanel.faviconURL);
 
+    this.loadOnStartupToggle.setPressed(this.webPanel.loadOnStartup);
     this.unloadOnCloseToggle.setPressed(this.webPanel.unloadOnClose);
 
     this.moveUpButton.setDisabled(

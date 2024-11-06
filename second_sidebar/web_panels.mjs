@@ -149,7 +149,7 @@ export class WebPanels extends VBox {
     for (const webPanel of this.webPanels) {
       if (webPanel === targetWebPanel) {
         webPanel.show();
-        webPanel.updateButtons();
+        webPanel.updateToolbarButtons();
         SidebarController.sidebarToolbar.setTitle(webPanel.getTitle());
         SidebarController.sidebarBox.setWidth(webPanel.width);
         SidebarController.sidebar.setWidth(webPanel.width);
@@ -166,11 +166,13 @@ export class WebPanels extends VBox {
    */
   hideActive() {
     const activeWebPanel = this.getActive();
-    activeWebPanel.hide();
+    if (activeWebPanel !== null) {
+      activeWebPanel.hide();
+    }
     return this;
   }
 
-  load() {
+  loadPrefs() {
     try {
       const prefs = JSON.parse(Services.prefs.getStringPref(PREF));
       for (const webPanelPref of prefs) {
@@ -179,18 +181,24 @@ export class WebPanels extends VBox {
           webPanelPref.faviconURL,
           webPanelPref.pinned ?? true,
           webPanelPref.width ?? "400",
+          webPanelPref.loadOnStartup ?? false,
           webPanelPref.unloadOnClose ?? false
         );
-        const webPanelButton = new WebPanelButton(webPanel);
-        SidebarController.webPanelButtons.appendChild(webPanelButton);
-        this.add(webPanel);
+
+        if (webPanel.loadOnStartup) {
+          webPanel.load();
+        }
+
+        webPanel.setButton(
+          new WebPanelButton(webPanel).setUnloaded(!webPanel.loadOnStartup)
+        );
       }
     } catch (error) {
       console.log("Got error while loading prefs:", error);
     }
   }
 
-  save() {
+  savePrefs() {
     const prefs = [];
     for (const webPanel of this.webPanels) {
       prefs.push({
@@ -198,6 +206,7 @@ export class WebPanels extends VBox {
         faviconURL: webPanel.faviconURL,
         pinned: webPanel.pinned,
         width: webPanel.width,
+        loadOnStartup: webPanel.loadOnStartup,
         unloadOnClose: webPanel.unloadOnClose,
       });
     }

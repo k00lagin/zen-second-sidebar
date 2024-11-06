@@ -46,6 +46,10 @@ const STYLE = `
       height: 32px !important;
     }
 
+    .sidebar-2-main-button[unloaded="true"] > .toolbarbutton-icon {
+      opacity: var(--toolbarbutton-disabled-opacity);
+    }
+
     .sidebar-2-main-button > .tab-icon-overlay {
       position: absolute !important;
       width: 12px !important;
@@ -218,7 +222,7 @@ const STYLE = `
       background-repeat: no-repeat;
     }
 
-    #sidebar-2-web-panel-popup-edit-unload-group {
+    .sidebar-2-web-panel-popup-edit-toggle-group {
       justify-content: space-between;
       align-items: center;
       width: 100%;

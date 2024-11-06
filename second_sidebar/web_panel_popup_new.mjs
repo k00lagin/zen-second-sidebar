@@ -69,11 +69,9 @@ export class WebPanelPopupNew extends Panel {
 
     const faviconURL = await fetchIconURL(url);
     const webPanel = new WebPanel(url, faviconURL);
-    const webPanelButton = new WebPanelButton(webPanel);
-    SidebarController.webPanelButtons.appendChild(webPanelButton);
-    SidebarController.webPanels.add(webPanel);
+    webPanel.setButton(new WebPanelButton(webPanel));
     SidebarController.switch(webPanel);
-    SidebarController.webPanels.save();
+    SidebarController.webPanels.savePrefs();
   }
 
   /**

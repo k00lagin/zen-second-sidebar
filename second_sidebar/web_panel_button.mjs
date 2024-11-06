@@ -11,7 +11,6 @@ export class WebPanelButton extends ToolbarButton {
   constructor(webPanel) {
     super({ classList: ["sidebar-2-main-button"] });
     this.webPanel = webPanel;
-    this.webPanel.setButton(this);
     this.playingIcon = null;
 
     this.setIcon(webPanel.faviconURL);
@@ -20,10 +19,15 @@ export class WebPanelButton extends ToolbarButton {
       event.stopPropagation();
       if (event.button === 0) {
         SidebarController.switch(this.webPanel);
+      } else if (event.button === 1) {
+        SidebarController.sidebarBox.close();
+        this.webPanel.remove();
       } else if (event.button === 2) {
         SidebarController.webPanelPopupEdit.openPopup(this);
       }
     });
+
+    SidebarController.webPanelButtons.appendChild(this);
   }
 
   /**
@@ -60,6 +64,16 @@ export class WebPanelButton extends ToolbarButton {
    */
   setOpen(value) {
     this.element.open = value;
+    return this;
+  }
+
+  /**
+   *
+   * @param {boolean} value
+   * @returns {WebPanelButton}
+   */
+  setUnloaded(value) {
+    this.setAttribute("unloaded", value);
     return this;
   }
 }

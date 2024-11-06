@@ -26,12 +26,6 @@ export class SidebarController {
   static sidebarSplitterUnpinned = new SidebarSplitterUnpinned();
   static sidebarBoxFiller = new SidebarBoxFiller();
 
-  static onClickUnpinned = (event) => {
-    if (!this.sidebarBox.element.contains(event.target)) {
-      this.close();
-    }
-  };
-
   static inject() {
     this.sidebarMain
       .appendChild(this.webPanelButtons)
@@ -50,73 +44,24 @@ export class SidebarController {
     document.body.appendChild(this.webPanelPopupNew.getXUL());
     document.body.appendChild(this.webPanelPopupEdit.getXUL());
 
-    this.webPanels.load();
+    this.webPanels.loadPrefs();
   }
 
   /**
    *
-   * @param {boolean} pinned
+   * @param {WebPanel} webPanel
    */
-  static open(pinned) {
-    this.sidebarBox.show();
-    this.sidebarSplitterPinned.show();
-    pinned ? this.pin() : this.unpin();
-  }
-
-  static close() {
-    this.sidebar.unpin();
-    this.sidebarBox.hide();
-    this.sidebarSplitterPinned.hide();
-    this.webPanels.hideActive();
-    document.removeEventListener("mousedown", this.onClickUnpinned);
-  }
-
-  /**
-   *
-   * @returns {boolean}
-   */
-  static closed() {
-    return this.sidebarBox.hidden() && this.sidebarSplitterPinned.hidden();
-  }
-
-  static pin() {
-    this.sidebarToolbar.setPinned(true);
-    this.sidebar.pin();
-    document.removeEventListener("mousedown", this.onClickUnpinned);
-  }
-
-  static unpin() {
-    this.sidebar.unpin();
-    this.sidebarToolbar.setPinned(false);
-    document.addEventListener("mousedown", this.onClickUnpinned);
-  }
-
-  /**
-   *
-   * @param {WebPanel} targetWebPanel
-   */
-  static switch(targetWebPanel) {
-    const activeWebPanel = this.webPanels.getActive();
-
-    // hide sidebar and active web panel if got the same url and sidebar is open
-    if (!this.closed() && activeWebPanel === targetWebPanel) {
-      this.close();
-      activeWebPanel.hide();
+  static switch(webPanel) {
+    if (!this.sidebarBox.closed() && !webPanel.hidden()) {
+      webPanel.hide();
+      this.sidebarBox.close();
       return;
     }
 
-    // show sidebar
-    this.open(targetWebPanel.pinned);
+    this.sidebarBox.open(webPanel.pinned);
+    webPanel.load();
 
-    // add web panel if needed
-    if (!this.webPanels.contains(targetWebPanel)) {
-      this.webPanels.appendChild(targetWebPanel);
-      targetWebPanel.startListening();
-      targetWebPanel.goHome();
-    }
-
-    // show web panel with specified url and hide others
-    this.webPanels.switch(targetWebPanel);
+    this.webPanels.switch(webPanel);
     return this;
   }
 }

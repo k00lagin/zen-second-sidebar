@@ -11,7 +11,7 @@ export class SidebarSplitterUnpinned extends Splitter {
       SidebarController.sidebarBox.setWidth(width);
       const activeWebPanel = SidebarController.webPanels.getActive();
       activeWebPanel.width = width;
-      SidebarController.webPanels.save();
+      SidebarController.webPanels.savePrefs();
     });
   }
 }

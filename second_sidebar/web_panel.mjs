@@ -9,6 +9,7 @@ export class WebPanel extends Browser {
    * @param {string} faviconURL
    * @param {boolean} pinned
    * @param {string} width
+   * @param {boolean} loadOnStartup
    * @param {boolean} unloadOnClose
    */
   constructor(
@@ -16,6 +17,7 @@ export class WebPanel extends Browser {
     faviconURL,
     pinned = false,
     width = "400",
+    loadOnStartup = false,
     unloadOnClose = false
   ) {
     super({ classList: ["web-panel"] });
@@ -25,10 +27,13 @@ export class WebPanel extends Browser {
     this.faviconURL = faviconURL;
     this.pinned = pinned;
     this.width = width;
+    this.loadOnStartup = loadOnStartup;
     this.unloadOnClose = unloadOnClose;
 
     this.button = null;
     this.listener = null;
+
+    SidebarController.webPanels.add(this);
   }
 
   /**
@@ -43,7 +48,7 @@ export class WebPanel extends Browser {
 
   startListening() {
     const update = () => {
-      this.updateButtons();
+      this.updateToolbarButtons();
 
       const activeWebPanel = SidebarController.webPanels.getActive();
       if (activeWebPanel === this) {
@@ -97,7 +102,7 @@ export class WebPanel extends Browser {
    *
    * @returns {WebPanel}
    */
-  updateButtons() {
+  updateToolbarButtons() {
     SidebarController.sidebarToolbar.backButton.setDisabled(
       !this.element.canGoBack
     );
@@ -113,6 +118,7 @@ export class WebPanel extends Browser {
    */
   show() {
     this.button.setOpen(true);
+    this.button.setUnloaded(false);
     return Browser.prototype.show.call(this);
   }
 
@@ -126,5 +132,28 @@ export class WebPanel extends Browser {
       this.remove();
     }
     return Browser.prototype.hide.call(this);
+  }
+
+  /**
+   *
+   * @returns {WebPanel}
+   */
+  remove() {
+    this.button.setUnloaded(true);
+    this.button.hidePlayingIcon();
+    return Browser.prototype.remove.call(this);
+  }
+
+  /**
+   *
+   * @returns {WebPanel}
+   */
+  load() {
+    if (!SidebarController.webPanels.contains(this)) {
+      SidebarController.webPanels.appendChild(this);
+      this.startListening();
+      this.goHome();
+    }
+    return this;
   }
 }

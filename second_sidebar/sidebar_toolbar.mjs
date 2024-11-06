@@ -4,6 +4,11 @@ import { SidebarController } from "./sidebar_controller.mjs";
 import { Toolbar } from "./xul/toolbar.mjs";
 import { ToolbarButton } from "./xul/toolbar_button.mjs";
 
+const ICON_PINNED =
+  "chrome://activity-stream/content/data/content/assets/glyph-unpin-16.svg";
+const ICON_UNPINNED =
+  "chrome://activity-stream/content/data/content/assets/glyph-pin-16.svg";
+
 export class SidebarToolbar extends Toolbar {
   constructor() {
     super({ id: "sidebar-2-toolbar" });
@@ -88,17 +93,15 @@ export class SidebarToolbar extends Toolbar {
 
       const activeWebPanel = SidebarController.webPanels.getActive();
 
-      this.setPinned(!activeWebPanel.pinned);
-
       if (activeWebPanel.pinned) {
         activeWebPanel.pinned = false;
-        SidebarController.unpin();
+        SidebarController.sidebarBox.unpin();
       } else {
         activeWebPanel.pinned = true;
-        SidebarController.pin();
+        SidebarController.sidebarBox.pin();
       }
 
-      SidebarController.webPanels.save();
+      SidebarController.webPanels.savePrefs();
     });
 
     this.appendChild(pinButton);
@@ -120,7 +123,7 @@ export class SidebarToolbar extends Toolbar {
       }
 
       const activeWebPanel = SidebarController.webPanels.getActive();
-      SidebarController.close();
+      SidebarController.sidebarBox.close();
       activeWebPanel.remove();
     });
 
@@ -140,15 +143,19 @@ export class SidebarToolbar extends Toolbar {
 
   /**
    *
-   * @param {boolean} pinned
    * @returns {SidebarToolbar}
    */
-  setPinned(pinned) {
-    const iconPinned =
-      "chrome://activity-stream/content/data/content/assets/glyph-unpin-16.svg";
-    const iconUnpinned =
-      "chrome://activity-stream/content/data/content/assets/glyph-pin-16.svg";
-    this.pinButton.setIcon(pinned ? iconPinned : iconUnpinned);
+  pin() {
+    this.pinButton.setIcon(ICON_PINNED);
+    return this;
+  }
+
+  /**
+   *
+   * @returns {SidebarToolbar}
+   */
+  unpin() {
+    this.pinButton.setIcon(ICON_UNPINNED);
     return this;
   }
 
