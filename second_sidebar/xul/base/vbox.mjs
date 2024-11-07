@@ -8,9 +8,6 @@ export class VBox extends XULElement {
    * @param {Array<string>} params.classList
    */
   constructor({ id = null, classList = [] } = {}) {
-    super("vbox", {
-      id,
-      classList: [...classList, "chromeclass-extrachrome"],
-    });
+    super("vbox", { id, classList });
   }
 }

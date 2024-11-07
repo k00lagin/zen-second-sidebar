@@ -1,6 +1,6 @@
 import { XULElement } from "./xul_element.mjs";
 
-export class HBox extends XULElement {
+export class Box extends XULElement {
   /**
    *
    * @param {object} params
@@ -8,6 +8,6 @@ export class HBox extends XULElement {
    * @param {Array<string>} params.classList
    */
   constructor({ id = null, classList = [] } = {}) {
-    super("hbox", { id, classList });
+    super("box", { id, classList });
   }
 }

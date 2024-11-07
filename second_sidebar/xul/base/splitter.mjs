@@ -8,10 +8,7 @@ export class Splitter extends XULElement {
    * @param {Array<string>} params.classList
    */
   constructor({ id = null, classList = [] } = {}) {
-    super("splitter", {
-      id,
-      classList: [...classList, "chromeclass-extrachrome"],
-    });
+    super("splitter", { id, classList });
   }
 
   /**
