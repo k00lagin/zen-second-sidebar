@@ -50,7 +50,7 @@ export class SidebarController {
       addNavButtonListener(event, (webPanel) => webPanel.reload());
     });
     this.sidebarToolbar.listenHomeButtonClick((event) => {
-      addNavButtonListener(event, (webPanel) => webPanel.home());
+      addNavButtonListener(event, (webPanel) => webPanel.goHome());
     });
 
     this.sidebarToolbar.listenPinButtonClick((event) => {
