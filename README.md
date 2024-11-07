@@ -29,6 +29,6 @@ There are many forks of Firefox, but I prefer to continue using the original bro
 ## Install
 
 1. Install [fx-autoconfig](https://github.com/MrOtherGuy/fx-autoconfig).
-2. Copy `second_sidebar/` and `second_sidebar.uc.mjs` into `chrome` folder.
+2. Copy `second_sidebar/` and `second_sidebar.uc.mjs` into `chrome/JS/` folder.
 3. [Clear](https://github.com/MrOtherGuy/fx-autoconfig?tab=readme-ov-file#deleting-startup-cache) startup-cache.
 4. Have fun!
