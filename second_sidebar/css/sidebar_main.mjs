@@ -5,7 +5,7 @@ export const SIDEBAR_MAIN_CSS = `
     gap: 8px;
     order: 7;
     overflow: scroll;
-    padding: 0 var(--space-xsmall) 0 var(--space-xsmall);
+    padding: 0 var(--space-small) 0 var(--space-small);
   }
 
   #sidebar-2-main-web-panel-buttons {

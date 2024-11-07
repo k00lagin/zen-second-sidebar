@@ -7,14 +7,14 @@ export const WEB_PANEL_POPUP_EDIT_CSS = `
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: var(--space-xsmall);
+    gap: var(--space-small);
     width: 100%;
   }
 
   #sidebar-2-web-panel-favicon-input {
     background-size: 22px;
     padding-right: 30px;
-    background-position-x: calc(100% - var(--space-xsmall));
+    background-position-x: calc(100% - var(--space-small));
     background-position-y: center;
     background-repeat: no-repeat;
   }

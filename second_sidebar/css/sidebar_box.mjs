@@ -36,9 +36,9 @@ export const SIDEBAR_BOX_CSS = `
       height: 100%;
       width: 100% !important;
       right: var(--sidebar-2-main-width);
-      padding-block-start: var(--space-xsmall);
-      padding-block-end: var(--space-xsmall);
-      padding-inline-end: var(--space-xsmall);
+      padding-block-start: var(--space-small);
+      padding-block-end: var(--space-small);
+      padding-inline-end: var(--space-small);
       z-index: 5;
 
       #sidebar-2-box-filler {

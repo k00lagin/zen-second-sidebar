@@ -6,7 +6,7 @@ export const COMMON_CSS = `
 
     --sidebar-2-main-button-icon-size: 32px;
     --sidebar-2-main-button-icon-overlay-size: 12px;
-    --sidebar-2-main-width: calc(var(--sidebar-2-main-button-icon-size) + 2 * var(--toolbarbutton-outer-padding) + 2 * var(--space-xsmall));
+    --sidebar-2-main-width: calc(var(--sidebar-2-main-button-icon-size) + 2 * var(--toolbarbutton-outer-padding) + 2 * var(--space-small));
   }
 
   #tabbrowser-tabbox {
