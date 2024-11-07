@@ -20,11 +20,14 @@ There are many forks of Firefox, but I prefer to continue using the original bro
     - Changing the web address.
     - Changing the favicon.
     - Resetting the favicon.
+    - Option to load into memory at startup.
     - Option to unload from memory after closing.
     - Moving the web panel button.
     - Deleting the web panel.
-6. Managing the page opened in the web panel: going back and forth, refreshing the page and going to the home page.
-7. Sound indicator.
+6. Unloading web panel from memory by middle-clicking on the corresponding button.
+7. Managing the page opened in the web panel: going back and forth, refreshing the page and going to the home page.
+8. Sound indicator.
+9. Indicator of unloaded web panel (dimmed icon).
 
 ## Install
 
