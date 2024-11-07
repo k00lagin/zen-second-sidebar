@@ -1,4 +1,4 @@
-import { HTMLElement } from "../html/html_element.mjs";
+import { HTMLElement } from "./html/html_element.mjs";
 import { Sidebar } from "./xul/sidebar.mjs";
 import { SidebarBox } from "./xul/sidebar_box.mjs";
 import { SidebarBoxFiller } from "./xul/sidebar_box_filler.mjs";
