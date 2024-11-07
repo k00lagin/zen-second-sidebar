@@ -1,4 +1,3 @@
-import { SidebarController } from "../sidebar_controller.mjs";
 import { XULElement } from "./xul_element.mjs";
 
 export class Browser extends XULElement {
@@ -41,11 +40,35 @@ export class Browser extends XULElement {
 
   /**
    *
+   * @returns {boolean}
+   */
+  canGoBack() {
+    try {
+      return this.element.canGoBack;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  /**
+   *
    * @returns {Browser}
    */
   goBack() {
     this.element.goBack();
     return this;
+  }
+
+  /**
+   *
+   * @returns {boolean}
+   */
+  canGoForward() {
+    try {
+      return this.element.canGoForward;
+    } catch (error) {
+      return false;
+    }
   }
 
   /**
@@ -87,5 +110,15 @@ export class Browser extends XULElement {
    */
   getTitle() {
     return this.element.contentTitle;
+  }
+
+  /**
+   *
+   * @param {object} listener
+   * @returns {Browser}
+   */
+  addProgressListener(listener) {
+    this.element.addProgressListener(listener, null);
+    return this;
   }
 }

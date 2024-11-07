@@ -1,4 +1,4 @@
-import { HBox } from "./xul/hbox.mjs";
+import { HBox } from "./base/hbox.mjs";
 
 export class SidebarBoxFiller extends HBox {
   constructor() {

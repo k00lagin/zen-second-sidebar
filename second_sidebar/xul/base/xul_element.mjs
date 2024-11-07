@@ -66,6 +66,16 @@ export class XULElement {
 
   /**
    *
+   * @param {Array<XULElement>} children
+   * @returns {XULElement}
+   */
+  appendChildren(...children) {
+    children.forEach((child) => this.appendChild(child));
+    return this;
+  }
+
+  /**
+   *
    * @param {string} name
    * @param {string|number} value
    * @returns {XULElement}
@@ -140,6 +150,15 @@ export class XULElement {
    */
   contains(element) {
     return this.element.contains(element.getXUL());
+  }
+
+  /**
+   *
+   * @param {HTMLElement} element
+   * @returns {boolean}
+   */
+  containsHTML(element) {
+    return this.element.contains(element);
   }
 
   /**

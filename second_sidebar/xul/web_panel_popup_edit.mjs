@@ -1,14 +1,12 @@
-import { Button } from "./xul/button.mjs";
-import { HBox } from "./xul/hbox.mjs";
-import { Header } from "./xul/header.mjs";
-import { Input } from "./xul/input.mjs";
-import { Panel } from "./xul/panel.mjs";
-import { PanelMultiView } from "./xul/panel_multi_view.mjs";
-import { SidebarController } from "./sidebar_controller.mjs";
-import { ToolbarButton } from "./xul/toolbar_button.mjs";
-import { ToolbarSeparator } from "./xul/toolbar_separator.mjs";
-import { WebPanelButton } from "./web_panel_button.mjs";
-import { fetchIconURL } from "./utils.mjs";
+import { Button } from "./base/button.mjs";
+import { HBox } from "./base/hbox.mjs";
+import { Header } from "./base/header.mjs";
+import { Input } from "./base/input.mjs";
+import { Panel } from "./base/panel.mjs";
+import { PanelMultiView } from "./base/panel_multi_view.mjs";
+import { ToolbarButton } from "./base/toolbar_button.mjs";
+import { ToolbarSeparator } from "./base/toolbar_separator.mjs";
+import { fetchIconURL } from "../utils/icons.mjs";
 
 export class WebPanelPopupEdit extends Panel {
   constructor() {
@@ -153,33 +151,26 @@ export class WebPanelPopupEdit extends Panel {
    * @returns {ToolbarButton}
    */
   #createMoveDownButton() {
-    const button = new ToolbarButton({
+    return new ToolbarButton({
       classList: [
         "subviewbutton",
         "subviewbutton-iconic",
         "sidebar-2-panel-button",
       ],
     }).setIcon("chrome://global/skin/icons/arrow-down.svg");
+  }
 
-    button.addEventListener("mousedown", (event) => {
+  /**
+   *
+   * @param {function(string):void} callback
+   */
+  listenMoveDownButtonClick(callback) {
+    this.moveDownButton.addEventListener("mousedown", (event) => {
       if (event.button !== 0) {
         return;
       }
-
-      if (SidebarController.webPanels.isLast(this.webPanel)) {
-        return;
-      }
-
-      SidebarController.webPanels.moveDown(this.webPanel);
-      SidebarController.webPanelButtons.moveDown(this.webPanelButton);
-
-      this.hidePopup();
-      this.openPopup(this.webPanelButton);
-
-      SidebarController.webPanels.savePrefs();
+      callback(this.uuid);
     });
-
-    return button;
   }
 
   /**
@@ -187,33 +178,26 @@ export class WebPanelPopupEdit extends Panel {
    * @returns {ToolbarButton}
    */
   #createMoveUpButton() {
-    const button = new ToolbarButton({
+    return new ToolbarButton({
       classList: [
         "subviewbutton",
         "subviewbutton-iconic",
         "sidebar-2-panel-button",
       ],
     }).setIcon("chrome://global/skin/icons/arrow-up.svg");
+  }
 
-    button.addEventListener("mousedown", (event) => {
+  /**
+   *
+   * @param {function(string):void} callback
+   */
+  listenMoveUpButtonClick(callback) {
+    this.moveUpButton.addEventListener("mousedown", (event) => {
       if (event.button !== 0) {
         return;
       }
-
-      if (SidebarController.webPanels.isFirst(this.webPanel)) {
-        return;
-      }
-
-      SidebarController.webPanels.moveUp(this.webPanel);
-      SidebarController.webPanelButtons.moveUp(this.webPanelButton);
-
-      this.hidePopup();
-      this.openPopup(this.webPanelButton);
-
-      SidebarController.webPanels.savePrefs();
+      callback(this.uuid);
     });
-
-    return button;
   }
 
   /**
@@ -289,44 +273,29 @@ export class WebPanelPopupEdit extends Panel {
    * @returns {Button}
    */
   #createSaveButton() {
-    const button = new Button({
+    return new Button({
       id: "sidebar-2-web-panel-popup-edit-save-button",
       classList: ["footer-button"],
     }).setText("Save");
+  }
 
-    button.addEventListener("mousedown", (event) => {
+  /**
+   *
+   * @param {function(string, string, string, boolean, boolean):void} callback
+   */
+  listenSaveButtonClick(callback) {
+    this.saveButton.addEventListener("mousedown", (event) => {
       if (event.button !== 0) {
         return;
       }
 
       const url = this.urlInput.getValue();
-      if (this.webPanel.url !== url) {
-        this.webPanel.changeURL(url);
-        const faviconURL = fetchIconURL(url);
-        this.webPanelButton.setIcon(faviconURL);
-        if (SidebarController.webPanels.contains(this.webPanel)) {
-          this.webPanel.goHome();
-        }
-      }
-
       const faviconURL = this.faviconURLInput.getValue();
-      if (this.webPanel.faviconURL !== faviconURL) {
-        this.webPanel.faviconURL = faviconURL;
-        this.webPanelButton.setIcon(faviconURL);
-      }
+      const loadOnStartup = this.loadOnStartupToggle.getPressed();
+      const unloadOnClose = this.unloadOnCloseToggle.getPressed();
 
-      this.webPanel.loadOnStartup = this.loadOnStartupToggle.getPressed();
-
-      this.webPanel.unloadOnClose = this.unloadOnCloseToggle.getPressed();
-      if (this.webPanel.unloadOnClose && this.webPanel.hidden()) {
-        this.webPanel.hide();
-      }
-
-      SidebarController.webPanelPopupEdit.hidePopup();
-      SidebarController.webPanels.savePrefs();
+      callback(this.uuid, url, faviconURL, loadOnStartup, unloadOnClose);
     });
-
-    return button;
   }
 
   /**
@@ -334,52 +303,47 @@ export class WebPanelPopupEdit extends Panel {
    * @returns {Button}
    */
   #createDeleteButton() {
-    const button = new Button({ classList: ["footer-button"] }).setText(
-      "Delete"
-    );
-
-    button.addEventListener("mousedown", (event) => {
-      if (event.button !== 0) {
-        return;
-      }
-      if (!this.webPanel.hidden()) {
-        SidebarController.sidebarBox.close();
-      }
-
-      SidebarController.webPanels.delete(this.webPanel);
-      this.webPanel.remove();
-      this.webPanelButton.remove();
-      SidebarController.webPanelPopupEdit.hidePopup();
-      SidebarController.webPanels.savePrefs();
-    });
-
-    return button;
+    return new Button({ classList: ["footer-button"] }).setText("Delete");
   }
 
   /**
    *
-   * @param {WebPanelButton} target
+   * @param {function(string):void} callback
    */
-  openPopup(target) {
-    this.webPanelButton = target;
-    this.webPanel = this.webPanelButton.webPanel;
+  listenDeleteButtonClick(callback) {
+    this.deleteButton.addEventListener("mousedown", (event) => {
+      if (event.button !== 0) {
+        return;
+      }
+      callback(this.uuid);
+    });
+  }
 
-    this.urlInput.setValue(this.webPanel.url);
-
-    this.faviconURLInput
-      .setValue(this.webPanel.faviconURL)
-      .setBackgroundImage(this.webPanel.faviconURL);
-
-    this.loadOnStartupToggle.setPressed(this.webPanel.loadOnStartup);
-    this.unloadOnCloseToggle.setPressed(this.webPanel.unloadOnClose);
-
-    this.moveUpButton.setDisabled(
-      SidebarController.webPanels.isFirst(this.webPanel)
-    );
-    this.moveDownButton.setDisabled(
-      SidebarController.webPanels.isLast(this.webPanel)
-    );
-
-    Panel.prototype.openPopup.call(this, target);
+  /**
+   *
+   * @param {string} uuid
+   * @param {string} url
+   * @param {string} faviconURL
+   * @param {boolean} loadOnStartup
+   * @param {boolean} unloadOnClose
+   * @param {boolean} isFirst
+   * @param {boolean} isLast
+   */
+  setDefaults(
+    uuid,
+    url,
+    faviconURL,
+    loadOnStartup,
+    unloadOnClose,
+    isFirst,
+    isLast
+  ) {
+    this.uuid = uuid;
+    this.urlInput.setValue(url);
+    this.faviconURLInput.setValue(faviconURL).setBackgroundImage(faviconURL);
+    this.loadOnStartupToggle.setPressed(loadOnStartup);
+    this.unloadOnCloseToggle.setPressed(unloadOnClose);
+    this.moveUpButton.setDisabled(isFirst);
+    this.moveDownButton.setDisabled(isLast);
   }
 }

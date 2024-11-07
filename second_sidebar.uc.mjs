@@ -1,4 +1,4 @@
-import { SidebarController } from "./second_sidebar/sidebar_controller.mjs";
+import { SidebarInjector } from "./second_sidebar/sidebar_injector.mjs";
 
 const TIMEOUT = 1000;
 
@@ -150,7 +150,7 @@ const STYLE = `
     }
 
     #browser:has(#sidebar-2[pinned="true"]) #sidebar-2-splitter-pinned {
-      display: block;
+      display: flex;
       order: 5;
       margin-inline-start: unset;
       margin-inline-end: calc(-1 * var(--splitter-width));
@@ -162,6 +162,7 @@ const STYLE = `
     }
 
     #sidebar-2-splitter-unpinned {
+      display: flex;
       pointer-events: auto;
       border: unset;
     }
@@ -246,7 +247,7 @@ const STYLE = `
 
 class SecondSidebar {
   constructor() {
-    SidebarController.inject();
+    SidebarInjector.inject();
     this.decorate();
   }
 
@@ -259,8 +260,7 @@ class SecondSidebar {
 
 var interval = setInterval(() => {
   if (document.querySelector("#browser")) {
-    window.second_sidebar = new SecondSidebar();
-    window.SecondSidebarController = SidebarController;
+    window.secondSidebar = new SecondSidebar();
     clearInterval(interval);
   }
 }, TIMEOUT);

@@ -34,6 +34,7 @@ export class Panel extends XULElement {
    * @returns {Panel}
    */
   hidePopup() {
+    console.log('Hide popup');
     this.element.hidePopup();
     return this;
   }
@@ -47,5 +48,13 @@ export class Panel extends XULElement {
   openPopup(target, position = "start_before") {
     this.element.openPopup(target.getXUL(), position);
     return this;
+  }
+
+  /**
+   *
+   * @returns {boolean}
+   */
+  isPanelOpen() {
+    return this.element.getAttribute("panelopen") === "true";
   }
 }

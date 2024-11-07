@@ -1,33 +1,29 @@
-import { Img } from "./xul/img.mjs";
-import { SidebarController } from "./sidebar_controller.mjs";
-import { ToolbarButton } from "./xul/toolbar_button.mjs";
-import { WebPanel } from "./web_panel.mjs";
+import { Img } from "./base/img.mjs";
+import { ToolbarButton } from "./base/toolbar_button.mjs";
 
 export class WebPanelButton extends ToolbarButton {
   /**
    *
-   * @param {WebPanel} webPanel
+   * @param {string} uuid
    */
-  constructor(webPanel) {
+  constructor(uuid) {
     super({ classList: ["sidebar-2-main-button"] });
-    this.webPanel = webPanel;
+    this.uuid = uuid;
+
     this.playingIcon = null;
+  }
 
-    this.setIcon(webPanel.faviconURL);
-
+  /**
+   *
+   * @param {function(MouseEvent):void} callback
+   * @returns {WebPanelButton}
+   */
+  listenClick(callback) {
     this.addEventListener("mousedown", (event) => {
       event.stopPropagation();
-      if (event.button === 0) {
-        SidebarController.switch(this.webPanel);
-      } else if (event.button === 1) {
-        SidebarController.sidebarBox.close();
-        this.webPanel.remove();
-      } else if (event.button === 2) {
-        SidebarController.webPanelPopupEdit.openPopup(this);
-      }
+      callback(event);
     });
-
-    SidebarController.webPanelButtons.appendChild(this);
+    return this;
   }
 
   /**
@@ -55,6 +51,18 @@ export class WebPanelButton extends ToolbarButton {
       this.playingIcon.setAttribute("hidden", "true");
     }
     return this;
+  }
+
+  /**
+   *
+   * @param {boolean} value
+   * @returns {WebPanelButton}
+   */
+  setPlaying(value) {
+    if (value) {
+      return this.showPlayingIcon();
+    }
+    return this.hidePlayingIcon();
   }
 
   /**
