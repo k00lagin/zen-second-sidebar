@@ -15,7 +15,7 @@ const STYLE = `
     }
 
     #tabbrowser-tabbox {
-      z-index: 4;
+      z-index: auto;
     }
 
     #sidebar-2-main {
