@@ -10,7 +10,7 @@ export class WebPanelPopupNew extends Panel {
   constructor() {
     super({
       id: "sidebar-2-web-panel-popup-new",
-      classList: ["sidebar-2-panel"],
+      classList: ["sidebar-2-popup"],
     });
     this.setType("arrow").setRole("group");
 
@@ -78,8 +78,7 @@ export class WebPanelPopupNew extends Panel {
    */
   #createSaveButton() {
     return new Button({
-      id: "sidebar-2-web-panel-popup-new-save-button",
-      classList: ["footer-button"],
+      classList: ["footer-button", "primary"],
     }).setText("Save");
   }
 

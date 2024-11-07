@@ -12,7 +12,7 @@ export class WebPanelPopupEdit extends Panel {
   constructor() {
     super({
       id: "sidebar-2-web-panel-popup-edit",
-      classList: ["sidebar-2-panel"],
+      classList: ["sidebar-2-popup"],
     });
     this.setType("arrow").setRole("group");
 
@@ -58,7 +58,7 @@ export class WebPanelPopupEdit extends Panel {
       classList: [
         "subviewbutton",
         "subviewbutton-iconic",
-        "sidebar-2-panel-button",
+        "sidebar-2-popup-button",
       ],
     }).setIcon("chrome://global/skin/icons/undo.svg");
 
@@ -155,7 +155,7 @@ export class WebPanelPopupEdit extends Panel {
       classList: [
         "subviewbutton",
         "subviewbutton-iconic",
-        "sidebar-2-panel-button",
+        "sidebar-2-popup-button",
       ],
     }).setIcon("chrome://global/skin/icons/arrow-down.svg");
   }
@@ -182,7 +182,7 @@ export class WebPanelPopupEdit extends Panel {
       classList: [
         "subviewbutton",
         "subviewbutton-iconic",
-        "sidebar-2-panel-button",
+        "sidebar-2-popup-button",
       ],
     }).setIcon("chrome://global/skin/icons/arrow-up.svg");
   }
@@ -274,8 +274,7 @@ export class WebPanelPopupEdit extends Panel {
    */
   #createSaveButton() {
     return new Button({
-      id: "sidebar-2-web-panel-popup-edit-save-button",
-      classList: ["footer-button"],
+      classList: ["footer-button", "primary"],
     }).setText("Save");
   }
 
