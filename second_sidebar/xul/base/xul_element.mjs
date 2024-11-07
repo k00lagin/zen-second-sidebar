@@ -33,8 +33,7 @@ export class XULElement {
    * @returns {XULElement}
    */
   show() {
-    this.element.hidden = false;
-    return this;
+    return this.removeAttribute("hidden");
   }
 
   /**
@@ -42,8 +41,7 @@ export class XULElement {
    * @returns {XULElement}
    */
   hide() {
-    this.element.hidden = true;
-    return this;
+    return this.setAttribute("hidden", "true");
   }
 
   /**
@@ -51,7 +49,7 @@ export class XULElement {
    * @returns {boolean}
    */
   hidden() {
-    return this.element.hidden;
+    return this.getAttribute("hidden") === "true";
   }
 
   /**
