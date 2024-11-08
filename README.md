@@ -8,7 +8,7 @@ There are many forks of Firefox, but I prefer to continue using the original bro
 
 ## Demo
 
-[![fss_panels](https://github.com/user-attachments/assets/bc63aacb-228d-4a02-9042-533d28256448)](https://github.com/user-attachments/assets/1c578202-a24d-47dd-96b7-6ed2be02fb32)
+https://github.com/user-attachments/assets/60a2da4f-2165-4d92-983a-f4a79d17e3ef
 
 ## Features
 
