@@ -2,6 +2,8 @@
 
 A Firefox userChrome.js script for adding a second sidebar with web panels like in Vivaldi/Floorp/Zen.
 
+![update](https://github.com/user-attachments/assets/2491704f-f62f-4405-8f23-8e3ab43d149c)
+
 ## Motivation
 
 There are many forks of Firefox, but I prefer to continue using the original browser. However, I have also tried other browsers such as Vivaldi, Floorp and Zen. I also miss the feature of having a decent sidebar with web panels, which is why I decided to create my own version, with blackjack and hookers.
