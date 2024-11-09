@@ -66,7 +66,6 @@ export class WebPanelController {
     const switchWebPanel = () => {
       if (this.webPanel.isActive()) {
         this.sidebarController.close();
-        this.hide();
       } else {
         this.webPanelsController.hideActive();
         if (
@@ -86,13 +85,6 @@ export class WebPanelController {
       }
     };
 
-    const unloadWebPanel = () => {
-      this.sidebarController.close();
-      this.webPanel.remove();
-      this.webPanelTab.remove();
-      this.webPanelButton.setUnloaded(true);
-    };
-
     const openWebPanelEditPopup = () => {
       this.webPanelEditController.openPopup(this);
     };
@@ -101,7 +93,7 @@ export class WebPanelController {
       if (event.button === 0) {
         switchWebPanel();
       } else if (event.button === 1) {
-        unloadWebPanel();
+        this.unload();
       } else if (event.button === 2) {
         openWebPanelEditPopup();
       }
@@ -123,9 +115,10 @@ export class WebPanelController {
   }
 
   unload() {
+    this.sidebarController.close();
     this.webPanel.remove();
-    this.webPanelButton.setUnloaded(true);
-    this.webPanelButton.hidePlayingIcon();
+    this.webPanelTab.remove();
+    this.webPanelButton.setUnloaded(true).hidePlayingIcon();
   }
 
   /**
