@@ -19,7 +19,22 @@ export class WebPanelTab extends Tab {
     super({ id, classList, element: makeTabXUL(url) });
 
     // hack to deceive AsyncTabSwitcher
+    const tabBrowser = this.getTabBrowser();
+    tabBrowser._printPreviewBrowsers.add(browser);
+  }
+
+  /**
+   *
+   * @returns {WebPanelTab}
+   */
+  remove() {
+    const tabBrowser = this.getTabBrowser();
+    tabBrowser._printPreviewBrowsers.delete(browser);
+    return Tab.prototype.remove.call(this);
+  }
+
+  getTabBrowser() {
     const browser = this.getBrowserXUL();
-    browser.getTabBrowser()._printPreviewBrowsers.add(browser);
+    return browser.getTabBrowser();
   }
 }
