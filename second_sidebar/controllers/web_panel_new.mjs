@@ -98,7 +98,6 @@ export class WebPanelNewController {
     );
 
     this.webPanelsController.injectWebPanelTab(webPanelTab);
-
     this.webPanelsController.injectWebPanel(webPanel);
     webPanelController.initWebPanel();
 

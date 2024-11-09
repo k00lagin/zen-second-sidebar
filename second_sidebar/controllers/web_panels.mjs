@@ -272,10 +272,15 @@ export class WebPanelsController {
    *
    * @param {WebPanel} webPanel
    * @param {WebPanelButton} webPanelButton
+   * @param {WebPanelTab} webPanelTab
    * @returns {WebPanelController}
    */
-  #makeWebPanelController(webPanel, webPanelButton) {
-    const webPanelController = new WebPanelController(webPanel, webPanelButton);
+  #makeWebPanelController(webPanel, webPanelButton, webPanelTab) {
+    const webPanelController = new WebPanelController(
+      webPanel,
+      webPanelButton,
+      webPanelTab
+    );
     webPanelController.setupDependencies(
       this,
       this.sidebarController,

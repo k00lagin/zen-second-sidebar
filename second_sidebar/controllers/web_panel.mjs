@@ -69,7 +69,10 @@ export class WebPanelController {
         this.hide();
       } else {
         this.webPanelsController.hideActive();
-        if (this.webPanelsController.injectWebPanel(this.webPanel)) {
+        if (
+          this.webPanelsController.injectWebPanelTab(this.webPanelTab) &&
+          this.webPanelsController.injectWebPanel(this.webPanel)
+        ) {
           this.initWebPanel();
         }
         this.sidebarController.open(
@@ -86,6 +89,7 @@ export class WebPanelController {
     const unloadWebPanel = () => {
       this.sidebarController.close();
       this.webPanel.remove();
+      this.webPanelTab.remove();
       this.webPanelButton.setUnloaded(true);
     };
 
@@ -189,6 +193,7 @@ export class WebPanelController {
 
   remove() {
     this.webPanel.remove();
+    this.webPanelTab.remove();
     this.webPanelButton.remove();
   }
 }
