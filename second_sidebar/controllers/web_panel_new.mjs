@@ -75,7 +75,11 @@ export class WebPanelNewController {
     this.hidePopup();
 
     const faviconURL = await fetchIconURL(url);
-    const webPanel = new WebPanel(crypto.randomUUID(), url, faviconURL);
+    const webPanel = this.webPanelsController.makeWebPanel({
+      uuid: crypto.randomUUID(),
+      url,
+      faviconURL,
+    });
     const webPanelButton = new WebPanelButton(webPanel.uuid).setIcon(
       webPanel.faviconURL
     );

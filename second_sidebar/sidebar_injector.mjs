@@ -1,4 +1,3 @@
-import { HTMLElement } from "./html/html_element.mjs";
 import { Sidebar } from "./xul/sidebar.mjs";
 import { SidebarBox } from "./xul/sidebar_box.mjs";
 import { SidebarBoxFiller } from "./xul/sidebar_box_filler.mjs";
@@ -67,14 +66,18 @@ export class SidebarInjector {
       elements.sidebar
     );
 
-    const browser = new HTMLElement(document.querySelector("#browser"));
+    const browser = new XULElement(null, {
+      element: document.querySelector("#browser"),
+    });
     browser.appendChildren(
       elements.sidebarSplitterPinned,
       elements.sidebarBox,
       elements.sidebarMain
     );
 
-    const body = new HTMLElement(document.querySelector("#mainPopupSet"));
+    const body = new XULElement(null, {
+      element: document.querySelector("#mainPopupSet"),
+    });
     body.appendChildren(elements.webPanelPopupNew, elements.webPanelPopupEdit);
   }
 

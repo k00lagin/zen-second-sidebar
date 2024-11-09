@@ -1,10 +1,12 @@
 import { SidebarController } from "./sidebar.mjs";
+import { Tab } from "../xul/base/tab.mjs";
 import { WebPanel } from "../xul/web_panel.mjs";
 import { WebPanelButton } from "../xul/web_panel_button.mjs";
 import { WebPanelButtons } from "../xul/web_panel_buttons.mjs";
 import { WebPanelController } from "./web_panel.mjs";
 import { WebPanelEditController } from "./web_panel_edit.mjs";
 import { WebPanels } from "../xul/web_panels.mjs";
+import { XULElement } from "../xul/base/xul_element.mjs";
 
 const PREF = "second-sidebar.web-panels";
 
@@ -195,19 +197,67 @@ export class WebPanelsController {
 
   /**
    *
+   * @param {object} params
+   * @param {string} params.uuid
+   * @param {string} params.url
+   * @param {string} params.faviconURL
+   * @param {boolean} params.pinned
+   * @param {string} params.width
+   * @param {boolean} params.loadOnStartup
+   * @param {boolean} params.unloadOnClose
+   * @returns {WebPanel}
+   */
+  makeWebPanel({
+    uuid,
+    url,
+    faviconURL,
+    pinned = false,
+    width = "400",
+    loadOnStartup = false,
+    unloadOnClose = false,
+  }) {
+    const tab = new Tab({
+      element: gBrowser.addTab(url, {
+        insertTab: false,
+        triggeringPrincipal: Services.scriptSecurityManager.createNullPrincipal(
+          {}
+        ),
+      }),
+    }).hide();
+    const body = new XULElement(null, { element: document.body });
+    body.appendChild(tab);
+
+    const browser = tab.getBrowserHTML();
+    const tabBrowser = browser.getTabBrowser();
+    tabBrowser._printPreviewBrowsers.add(browser);
+
+    return new WebPanel(
+      uuid,
+      url,
+      faviconURL,
+      pinned,
+      width,
+      loadOnStartup,
+      unloadOnClose,
+      { element: browser }
+    );
+  }
+
+  /**
+   *
    * @param {object} webPanelPref
    * @returns {WebPanel}
    */
-  #makeWebPanel(webPanelPref) {
-    return new WebPanel(
-      webPanelPref.uuid ?? crypto.randomUUID(),
-      webPanelPref.url,
-      webPanelPref.faviconURL,
-      webPanelPref.pinned ?? true,
-      webPanelPref.width ?? "400",
-      webPanelPref.loadOnStartup ?? false,
-      webPanelPref.unloadOnClose ?? false
-    ).hide();
+  #makeWebPanelFromPref(webPanelPref) {
+    return this.makeWebPanel({
+      uuid: webPanelPref.uuid ?? crypto.randomUUID(),
+      url: webPanelPref.url,
+      faviconURL: webPanelPref.faviconURL,
+      pinned: webPanelPref.pinned ?? true,
+      width: webPanelPref.width ?? "400",
+      loadOnStartup: webPanelPref.loadOnStartup ?? false,
+      unloadOnClose: webPanelPref.unloadOnClose ?? false,
+    }).hide();
   }
 
   /**
@@ -240,7 +290,7 @@ export class WebPanelsController {
   load() {
     const prefs = JSON.parse(Services.prefs.getStringPref(PREF));
     for (const webPanelPref of prefs) {
-      const webPanel = this.#makeWebPanel(webPanelPref);
+      const webPanel = this.#makeWebPanelFromPref(webPanelPref);
       const webPanelButton = this.#makeWebPanelButton(webPanel);
       const webPanelController = this.#makeWebPanelController(
         webPanel,

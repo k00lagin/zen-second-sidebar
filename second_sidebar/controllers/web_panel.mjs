@@ -102,6 +102,8 @@ export class WebPanelController {
     this.webPanel.show();
     this.webPanelButton.setOpen(true);
     this.webPanelButton.setUnloaded(false);
+    this.webPanel.element.docShellIsActive = true;
+    this.webPanel.element.preserveLayers(false);
   }
 
   unload() {
@@ -116,6 +118,8 @@ export class WebPanelController {
       this.unload();
     }
     this.webPanelButton.setOpen(false);
+    this.webPanel.element.docShellIsActive = false;
+    this.webPanel.element.preserveLayers(true);
   }
 
   /**
