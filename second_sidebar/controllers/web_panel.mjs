@@ -2,6 +2,7 @@ import { SidebarController } from "./sidebar.mjs";
 import { WebPanel } from "../xul/web_panel.mjs";
 import { WebPanelButton } from "../xul/web_panel_button.mjs";
 import { WebPanelEditController } from "./web_panel_edit.mjs";
+import { WebPanelTab } from "../xul/web_panel_tab.mjs";
 import { WebPanelsController } from "./web_panels.mjs";
 
 export class WebPanelController {
@@ -9,20 +10,25 @@ export class WebPanelController {
    *
    * @param {WebPanel} webPanel
    * @param {WebPanelButton} webPanelButton
+   * @param {WebPanelTab} webPanelTab
+   */
+  constructor(webPanel, webPanelButton, webPanelTab) {
+    this.webPanel = webPanel;
+    this.webPanelButton = webPanelButton;
+    this.webPanelTab = webPanelTab;
+  }
+
+  /**
+   *
    * @param {WebPanelsController} webPanelsController
    * @param {SidebarController} sidebarController
    * @param {WebPanelEditController} webPanelEditController
    */
-  constructor(
-    webPanel,
-    webPanelButton,
+  setupDependencies(
     webPanelsController,
     sidebarController,
     webPanelEditController
   ) {
-    this.webPanel = webPanel;
-    this.webPanelButton = webPanelButton;
-
     this.webPanelsController = webPanelsController;
     this.sidebarController = sidebarController;
     this.webPanelEditController = webPanelEditController;
@@ -99,27 +105,23 @@ export class WebPanelController {
   }
 
   show() {
-    this.webPanel.show();
+    this.webPanel.show().setDocShellIsActive(true).preserveLayers(false);
     this.webPanelButton.setOpen(true);
     this.webPanelButton.setUnloaded(false);
-    this.webPanel.element.docShellIsActive = true;
-    this.webPanel.element.preserveLayers(false);
+  }
+
+  hide() {
+    this.webPanel.hide().setDocShellIsActive(false).preserveLayers(true);
+    if (this.webPanel.unloadOnClose) {
+      this.unload();
+    }
+    this.webPanelButton.setOpen(false);
   }
 
   unload() {
     this.webPanel.remove();
     this.webPanelButton.setUnloaded(true);
     this.webPanelButton.hidePlayingIcon();
-  }
-
-  hide() {
-    this.webPanel.hide();
-    if (this.webPanel.unloadOnClose) {
-      this.unload();
-    }
-    this.webPanelButton.setOpen(false);
-    this.webPanel.element.docShellIsActive = false;
-    this.webPanel.element.preserveLayers(true);
   }
 
   /**

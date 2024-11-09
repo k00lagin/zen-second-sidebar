@@ -13,6 +13,7 @@ import { WebPanelNewButton } from "./xul/web_panel_new_button.mjs";
 import { WebPanelNewController } from "./controllers/web_panel_new.mjs";
 import { WebPanelPopupEdit } from "./xul/web_panel_popup_edit.mjs";
 import { WebPanelPopupNew } from "./xul/web_panel_popup_new.mjs";
+import { WebPanelTabs } from "./xul/web_panel_tabs.mjs";
 import { WebPanels } from "./xul/web_panels.mjs";
 import { WebPanelsController } from "./controllers/web_panels.mjs";
 import { XULElement } from "./xul/base/xul_element.mjs";
@@ -33,6 +34,7 @@ export class SidebarInjector {
   static #createElements() {
     return {
       sidebarMain: new SidebarMain(),
+      webPanelTabs: new WebPanelTabs(),
       webPanelButtons: new WebPanelButtons(),
       webPanelNewButton: new WebPanelNewButton(),
       webPanelPopupNew: new WebPanelPopupNew(),
@@ -75,10 +77,16 @@ export class SidebarInjector {
       elements.sidebarMain
     );
 
-    const body = new XULElement(null, {
+    const mainPopupSet = new XULElement(null, {
       element: document.querySelector("#mainPopupSet"),
     });
-    body.appendChildren(elements.webPanelPopupNew, elements.webPanelPopupEdit);
+    mainPopupSet.appendChildren(
+      elements.webPanelPopupNew,
+      elements.webPanelPopupEdit
+    );
+
+    const body = new XULElement(null, { element: document.body });
+    body.appendChild(elements.webPanelTabs);
   }
 
   /**
@@ -97,7 +105,8 @@ export class SidebarInjector {
     );
     this.webPanelsController = new WebPanelsController(
       elements.webPanels,
-      elements.webPanelButtons
+      elements.webPanelButtons,
+      elements.webPanelTabs
     );
     this.webPanelNewController = new WebPanelNewController(
       elements.webPanelNewButton,

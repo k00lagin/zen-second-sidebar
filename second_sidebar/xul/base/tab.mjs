@@ -16,7 +16,7 @@ export class Tab extends XULElement {
    *
    * @returns {HTMLElement}
    */
-  getBrowserHTML() {
+  getBrowserXUL() {
     return this.element.linkedBrowser;
   }
 }

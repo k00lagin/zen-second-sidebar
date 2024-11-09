@@ -122,4 +122,24 @@ export class Browser extends XULElement {
     this.element.addProgressListener(listener, null);
     return this;
   }
+
+  /**
+   *
+   * @param {boolean} value
+   * @returns {Browser}
+   */
+  setDocShellIsActive(value) {
+    this.element.docShellIsActive = value;
+    return this;
+  }
+
+  /**
+   *
+   * @param {boolean} value
+   * @returns {Browser}
+   */
+  preserveLayers(value) {
+    this.element.preserveLayers(value);
+    return this;
+  }
 }
