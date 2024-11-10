@@ -225,7 +225,7 @@ export class WebPanelsController {
       width = "400",
       loadOnStartup = false,
       unloadOnClose = false,
-    }
+    } = {}
   ) {
     return new WebPanel(
       webPanelTab,
