@@ -21,11 +21,11 @@ export class WebPanelNewController {
     });
 
     this.webPanelPopupNew.listenInputChange((url) => {
-      this.#createWebPanelAndOpen(url);
+      this.createWebPanelAndOpen(url);
     });
 
     this.webPanelPopupNew.listenSaveButtonClick((url) => {
-      this.#createWebPanelAndOpen(url);
+      this.createWebPanelAndOpen(url);
     });
 
     this.webPanelPopupNew.listenCancelButtonClick((url) => {
@@ -62,7 +62,7 @@ export class WebPanelNewController {
       .openPopup(this.webPanelNewButton);
   }
 
-  async #createWebPanelAndOpen(url) {
+  async createWebPanelAndOpen(url) {
     try {
       NetUtil.newURI(url);
     } catch (error) {

@@ -1,4 +1,5 @@
 import { COMMON_CSS } from "./css/common.mjs";
+import { CONTEXT_ITEM_CSS } from "./css/context_item.mjs";
 import { POPUP_CSS } from "./css/popup.mjs";
 import { SIDEBAR_BOX_CSS } from "./css/sidebar_box.mjs";
 import { SIDEBAR_CSS } from "./css/sidebar.mjs";
@@ -15,7 +16,8 @@ const STYLE =
   WEB_PANEL_CSS +
   POPUP_CSS +
   WEB_PANEL_POPUP_NEW_CSS +
-  WEB_PANEL_POPUP_EDIT_CSS;
+  WEB_PANEL_POPUP_EDIT_CSS +
+  CONTEXT_ITEM_CSS;
 
 export class SidebarDecorator {
   static decorate() {

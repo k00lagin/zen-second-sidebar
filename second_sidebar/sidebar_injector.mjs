@@ -1,3 +1,4 @@
+import { ContextItemController } from "./controllers/context_item.mjs";
 import { Sidebar } from "./xul/sidebar.mjs";
 import { SidebarBox } from "./xul/sidebar_box.mjs";
 import { SidebarBoxFiller } from "./xul/sidebar_box_filler.mjs";
@@ -25,6 +26,7 @@ export class SidebarInjector {
     this.#buildControllers(elements);
     this.#setupDependencies();
     this.webPanelsController.load();
+    this.contextItemController.injectContextItem();
   }
 
   /**
@@ -115,6 +117,7 @@ export class SidebarInjector {
     this.webPanelEditController = new WebPanelEditController(
       elements.webPanelPopupEdit
     );
+    this.contextItemController = new ContextItemController();
   }
 
   static #setupDependencies() {
@@ -136,5 +139,6 @@ export class SidebarInjector {
       this.webPanelsController,
       this.sidebarController
     );
+    this.contextItemController.setupDependencies(this.webPanelNewController);
   }
 }
