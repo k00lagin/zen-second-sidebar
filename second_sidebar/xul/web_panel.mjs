@@ -1,8 +1,20 @@
 import { Browser } from "./base/browser.mjs";
+import { WebPanelTab } from "./web_panel_tab.mjs";
+
+/**
+ *
+ * @param {WebPanelTab} webPanelTab
+ * @returns {HTMLElement}
+ */
+const createBrowserForTab = (webPanelTab) => {
+  const result = gBrowser._createBrowserForTab(webPanelTab.getXUL(), {});
+  return result.browser;
+};
 
 export class WebPanel extends Browser {
   /**
    *
+   * @param {WebPanelTab} webPanelTab
    * @param {string} uuid
    * @param {string} url
    * @param {string} faviconURL
@@ -10,18 +22,27 @@ export class WebPanel extends Browser {
    * @param {string} width
    * @param {boolean} loadOnStartup
    * @param {boolean} unloadOnClose
+   * @param {object} params
+   *
    */
   constructor(
+    webPanelTab,
     uuid,
     url,
     faviconURL,
-    pinned = false,
-    width = "400",
-    loadOnStartup = false,
-    unloadOnClose = false
+    pinned,
+    width,
+    loadOnStartup,
+    unloadOnClose
   ) {
-    super({ classList: ["web-panel"] });
-    this.setDisableGlobalHistory("true").setType("content").setRemote("true");
+    super({
+      classList: ["web-panel"],
+      element: createBrowserForTab(webPanelTab),
+    });
+    this.setUUID(uuid)
+      .setDisableGlobalHistory("true")
+      .setType("content")
+      .setRemote("true");
 
     this.uuid = uuid;
     this.url = url;
@@ -32,6 +53,15 @@ export class WebPanel extends Browser {
     this.unloadOnClose = unloadOnClose;
 
     this.listener = null;
+  }
+
+  /**
+   *
+   * @param {string} uuid
+   * @returns {WebPanel}
+   */
+  setUUID(uuid) {
+    return this.setAttribute("uuid", uuid);
   }
 
   /**
@@ -49,9 +79,9 @@ export class WebPanel extends Browser {
    */
   listenPlaybackStateChange(callback) {
     const mediaController = this.element.browsingContext.mediaController;
-    mediaController.addEventListener("playbackstatechange", () => {
+    mediaController.onplaybackstatechange = () => {
       callback(mediaController.isPlaying);
-    });
+    };
     return this;
   }
 

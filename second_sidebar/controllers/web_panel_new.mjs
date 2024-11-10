@@ -1,6 +1,4 @@
 import { SidebarController } from "./sidebar.mjs";
-import { WebPanel } from "../xul/web_panel.mjs";
-import { WebPanelButton } from "../xul/web_panel_button.mjs";
 import { WebPanelController } from "./web_panel.mjs";
 import { WebPanelEditController } from "./web_panel_edit.mjs";
 import { WebPanelNewButton } from "../xul/web_panel_new_button.mjs";
@@ -75,18 +73,30 @@ export class WebPanelNewController {
     this.hidePopup();
 
     const faviconURL = await fetchIconURL(url);
-    const webPanel = new WebPanel(crypto.randomUUID(), url, faviconURL);
-    const webPanelButton = new WebPanelButton(webPanel.uuid).setIcon(
-      webPanel.faviconURL
+    const uuid = crypto.randomUUID();
+
+    const webPanelTab = this.webPanelsController.makeWebPanelTab(uuid);
+    const webPanel = this.webPanelsController.makeWebPanel(
+      webPanelTab,
+      uuid,
+      url,
+      faviconURL
     );
+    const webPanelButton =
+      this.webPanelsController.makeWebPanelButton(webPanel);
+
     const webPanelController = new WebPanelController(
       webPanel,
       webPanelButton,
+      webPanelTab
+    );
+    webPanelController.setupDependencies(
       this.webPanelsController,
       this.sidebarController,
       this.webPanelEditController
     );
 
+    this.webPanelsController.injectWebPanelTab(webPanelTab);
     this.webPanelsController.injectWebPanel(webPanel);
     webPanelController.initWebPanel();
 

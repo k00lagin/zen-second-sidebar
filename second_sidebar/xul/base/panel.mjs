@@ -34,7 +34,6 @@ export class Panel extends XULElement {
    * @returns {Panel}
    */
   hidePopup() {
-    console.log('Hide popup');
     this.element.hidePopup();
     return this;
   }
