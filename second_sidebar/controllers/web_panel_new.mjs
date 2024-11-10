@@ -1,6 +1,4 @@
 import { SidebarController } from "./sidebar.mjs";
-import { WebPanel } from "../xul/web_panel.mjs";
-import { WebPanelButton } from "../xul/web_panel_button.mjs";
 import { WebPanelController } from "./web_panel.mjs";
 import { WebPanelEditController } from "./web_panel_edit.mjs";
 import { WebPanelNewButton } from "../xul/web_panel_new_button.mjs";
@@ -75,14 +73,15 @@ export class WebPanelNewController {
     this.hidePopup();
 
     const faviconURL = await fetchIconURL(url);
+    const uuid = crypto.randomUUID();
 
-    const webPanelTab = this.webPanelsController.makeWebPanelTab(url);
-    const webPanel = this.webPanelsController.makeWebPanel({
-      uuid: crypto.randomUUID(),
+    const webPanelTab = this.webPanelsController.makeWebPanelTab(uuid);
+    const webPanel = this.webPanelsController.makeWebPanel(
+      webPanelTab,
+      uuid,
       url,
-      faviconURL,
-      browserXUL: webPanelTab.getBrowserXUL(),
-    });
+      faviconURL
+    );
     const webPanelButton =
       this.webPanelsController.makeWebPanelButton(webPanel);
 

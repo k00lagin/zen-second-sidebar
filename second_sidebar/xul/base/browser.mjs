@@ -96,7 +96,7 @@ export class Browser extends XULElement {
    * @returns {Browser}
    */
   go(url) {
-    this.element.fixupAndLoadURIString(url, {
+    this.element.loadURI(NetUtil.newURI(url), {
       triggeringPrincipal: Services.scriptSecurityManager.createNullPrincipal(
         {}
       ),

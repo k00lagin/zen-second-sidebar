@@ -43,10 +43,6 @@ export class WebPanelController {
   }
 
   initWebPanel() {
-    this.webPanel.listenPlaybackStateChange((isPlaying) =>
-      this.webPanelButton.setPlaying(isPlaying)
-    );
-
     this.webPanel.listenBrowserProgressListener(() => {
       this.sidebarController.setToolbarBackButtonDisabled(
         !this.webPanel.canGoBack()
@@ -57,6 +53,10 @@ export class WebPanelController {
       if (this.webPanel.isActive()) {
         this.sidebarController.setToolbarTitle(this.webPanel.getTitle());
       }
+      // mediaController can be changed, so listen here
+      this.webPanel.listenPlaybackStateChange((isPlaying) => {
+        this.webPanelButton.setPlaying(isPlaying);
+      });
     });
 
     this.webPanel.goHome();
