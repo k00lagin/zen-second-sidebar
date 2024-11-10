@@ -103,6 +103,7 @@ export class WebPanelNewController {
     this.webPanelsController.injectWebPanelButton(webPanelButton);
     webPanelController.initWebPanelButton();
 
+    this.sidebarController.close();
     this.sidebarController.open(
       webPanel.pinned,
       webPanel.width,
