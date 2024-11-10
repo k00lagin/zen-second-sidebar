@@ -238,7 +238,9 @@ export class WebPanelsController {
   }
 
   load() {
-    const prefs = JSON.parse(Services.prefs.getStringPref(PREF));
+    const prefs = Services.prefs.prefHasUserValue(PREF)
+      ? JSON.parse(Services.prefs.getStringPref(PREF))
+      : [];
     for (const webPanelPref of prefs) {
       const webPanel = this.#makeWebPanel(webPanelPref);
       const webPanelButton = this.#makeWebPanelButton(webPanel);
