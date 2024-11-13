@@ -165,15 +165,23 @@ export class WebPanelController {
    *
    * @param {string} url
    * @param {string} faviconURL
+   * @param {boolean} mobile
    * @param {boolean} loadOnStartup
    * @param {boolean} unloadOnClose
    */
-  set(url, faviconURL, loadOnStartup, unloadOnClose) {
+  set(url, faviconURL, mobile, loadOnStartup, unloadOnClose) {
+    const needToGoHome = this.webPanel.mobile !== mobile;
+
     this.webPanel.url = url;
     this.webPanel.faviconURL = faviconURL;
+    this.webPanel.mobile = mobile;
     this.webPanel.loadOnStartup = loadOnStartup;
     this.webPanel.unloadOnClose = unloadOnClose;
     this.webPanelButton.setIcon(faviconURL);
+
+    if (needToGoHome) {
+      this.webPanel.goHome();
+    }
   }
 
   /**

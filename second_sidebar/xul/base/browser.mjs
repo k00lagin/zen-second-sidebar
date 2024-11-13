@@ -140,4 +140,17 @@ export class Browser extends XULElement {
     this.element.preserveLayers(value);
     return this;
   }
+
+  /**
+   *
+   * @param {string} userAgent
+   * @returns {Browser}
+   */
+  setCustomUserAgent(userAgent) {
+    const browsingContext = this.element.browsingContext;
+    if (browsingContext && userAgent !== browsingContext.customUserAgent) {
+      browsingContext.customUserAgent = userAgent;
+    }
+    return this;
+  }
 }

@@ -41,9 +41,15 @@ export class WebPanelEditController {
     });
 
     this.webPanelPopupEdit.listenSaveButtonClick(
-      (uuid, url, faviconURL, loadOnStartup, unloadOnClose) => {
+      (uuid, url, faviconURL, mobile, loadOnStartup, unloadOnClose) => {
         const webPanelController = this.webPanelsController.get(uuid);
-        webPanelController.set(url, faviconURL, loadOnStartup, unloadOnClose);
+        webPanelController.set(
+          url,
+          faviconURL,
+          mobile,
+          loadOnStartup,
+          unloadOnClose
+        );
         this.hidePopup();
         if (unloadOnClose && !webPanelController.isActive()) {
           webPanelController.unload();
@@ -76,6 +82,7 @@ export class WebPanelEditController {
       webPanel.uuid,
       webPanel.url,
       webPanel.faviconURL,
+      webPanel.mobile,
       webPanel.loadOnStartup,
       webPanel.unloadOnClose,
       webPanelController.isFirst(),
