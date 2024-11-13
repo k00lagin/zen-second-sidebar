@@ -97,9 +97,7 @@ export class Browser extends XULElement {
    */
   go(url) {
     this.element.loadURI(NetUtil.newURI(url), {
-      triggeringPrincipal: Services.scriptSecurityManager.createNullPrincipal(
-        {}
-      ),
+      triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal(),
     });
 
     return this;

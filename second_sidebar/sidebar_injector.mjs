@@ -99,7 +99,8 @@ export class SidebarInjector {
     this.sidebarController = new SidebarController(
       elements.sidebarBox,
       elements.sidebar,
-      elements.sidebarToolbar
+      elements.sidebarToolbar,
+      elements.sidebarSplitterUnpinned
     );
     this.sidebarSplittersController = new SidebarSplittersController(
       elements.sidebarSplitterUnpinned,

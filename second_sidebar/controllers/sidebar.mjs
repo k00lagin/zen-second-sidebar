@@ -1,5 +1,6 @@
 import { Sidebar } from "../xul/sidebar.mjs";
 import { SidebarBox } from "../xul/sidebar_box.mjs";
+import { SidebarSplitterUnpinned } from "../xul/sidebar_splitter_unpinned.mjs";
 import { SidebarToolbar } from "../xul/sidebar_toolbar.mjs";
 import { WebPanelsController } from "./web_panels.mjs";
 
@@ -9,11 +10,13 @@ export class SidebarController {
    * @param {SidebarBox} sidebarBox
    * @param {Sidebar} sidebar
    * @param {SidebarToolbar} sidebarToolbar
+   * @param {SidebarSplitterUnpinned} sidebarSplitterUnpinned
    */
-  constructor(sidebarBox, sidebar, sidebarToolbar) {
+  constructor(sidebarBox, sidebar, sidebarToolbar, sidebarSplitterUnpinned) {
     this.sidebarBox = sidebarBox;
     this.sidebar = sidebar;
     this.sidebarToolbar = sidebarToolbar;
+    this.sidebarSplitterUnpinned = sidebarSplitterUnpinned;
     this.#setupListeners();
   }
 
@@ -26,9 +29,11 @@ export class SidebarController {
   }
 
   #setupListeners() {
+    /** @param {MouseEvent} event */
     this.onClickOutsideWhileUnpinned = (event) => {
       if (
-        !this.sidebarBox.element.contains(event.target) &&
+        !this.sidebar.isInside(event.screenX, event.screenY) &&
+        !this.sidebarSplitterUnpinned.isInside(event.screenX, event.screenY) &&
         !["menuitem", "menupopup"].includes(event.target.tagName)
       ) {
         this.close();
