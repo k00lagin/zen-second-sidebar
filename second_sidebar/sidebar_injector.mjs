@@ -4,6 +4,10 @@ import { SidebarBox } from "./xul/sidebar_box.mjs";
 import { SidebarBoxFiller } from "./xul/sidebar_box_filler.mjs";
 import { SidebarController } from "./controllers/sidebar.mjs";
 import { SidebarMain } from "./xul/sidebar_main.mjs";
+import { SidebarMainController } from "./controllers/sidebar_main.mjs";
+import { SidebarMainMenuPopup } from "./xul/sidebar_main_menupopup.mjs";
+import { SidebarMainPopupSettings } from "./xul/sidebar_main_popup_settings.mjs";
+import { SidebarMainSettingsController } from "./controllers/sidebar_main_settings.mjs";
 import { SidebarSplitterPinned } from "./xul/sidebar_splitter_pinned.mjs";
 import { SidebarSplitterUnpinned } from "./xul/sidebar_splitter_unpinned.mjs";
 import { SidebarSplittersController } from "./controllers/sidebar_splitters.mjs";
@@ -48,6 +52,8 @@ export class SidebarInjector {
       sidebarSplitterPinned: new SidebarSplitterPinned(),
       sidebarSplitterUnpinned: new SidebarSplitterUnpinned(),
       sidebarBoxFiller: new SidebarBoxFiller(),
+      sidebarMainPopupSettings: new SidebarMainPopupSettings(),
+      sidebarMainMenuPopup: new SidebarMainMenuPopup(),
     };
   }
 
@@ -84,7 +90,9 @@ export class SidebarInjector {
     });
     mainPopupSet.appendChildren(
       elements.webPanelPopupNew,
-      elements.webPanelPopupEdit
+      elements.webPanelPopupEdit,
+      elements.sidebarMainMenuPopup,
+      elements.sidebarMainPopupSettings
     );
 
     const body = new XULElement(null, { element: document.body });
@@ -96,6 +104,13 @@ export class SidebarInjector {
    * @param {Object<string, XULElement>} elements
    */
   static #buildControllers(elements) {
+    this.sidebarMainController = new SidebarMainController(
+      elements.sidebarMain,
+      elements.sidebarMainMenuPopup
+    );
+    this.sidebarMainSettingsController = new SidebarMainSettingsController(
+      elements.sidebarMainPopupSettings
+    );
     this.sidebarController = new SidebarController(
       elements.sidebarBox,
       elements.sidebar,
@@ -122,6 +137,9 @@ export class SidebarInjector {
   }
 
   static #setupDependencies() {
+    this.sidebarMainController.setupDependencies(
+      this.sidebarMainSettingsController
+    );
     this.sidebarController.setupDepenedencies(this.webPanelsController);
     this.sidebarSplittersController.setupDependencies(
       this.sidebarController,
