@@ -185,9 +185,7 @@ export class SidebarController {
    * @param {Object | null} sidebarSettingsPref
    */
   loadPref(sidebarSettingsPref) {
-    if (sidebarSettingsPref === null) {
-      sidebarSettingsPref = {};
-    }
+    sidebarSettingsPref ??= {};
     this.autoHideBackButton = sidebarSettingsPref.autoHideBackButton ?? false;
     this.autoHideForwardButton =
       sidebarSettingsPref.autoHideForwardButton ?? false;
