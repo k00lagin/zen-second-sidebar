@@ -1,4 +1,5 @@
 import { ContextItemController } from "./controllers/context_item.mjs";
+import { Settings } from "./settings.mjs";
 import { Sidebar } from "./xul/sidebar.mjs";
 import { SidebarBox } from "./xul/sidebar_box.mjs";
 import { SidebarBoxFiller } from "./xul/sidebar_box_filler.mjs";
@@ -29,7 +30,7 @@ export class SidebarInjector {
     this.#injectElements(elements);
     this.#buildControllers(elements);
     this.#setupDependencies();
-    this.webPanelsController.load();
+    this.#loadPrefs();
     this.contextItemController.injectContextItem();
   }
 
@@ -140,6 +141,9 @@ export class SidebarInjector {
     this.sidebarMainController.setupDependencies(
       this.sidebarMainSettingsController
     );
+    this.sidebarMainSettingsController.setupDependencies(
+      this.sidebarController
+    );
     this.sidebarController.setupDepenedencies(this.webPanelsController);
     this.sidebarSplittersController.setupDependencies(
       this.sidebarController,
@@ -159,5 +163,10 @@ export class SidebarInjector {
       this.sidebarController
     );
     this.contextItemController.setupDependencies(this.webPanelNewController);
+  }
+
+  static #loadPrefs() {
+    this.webPanelsController.loadPref(Settings.loadWebPanelsPref());
+    this.sidebarController.loadPref(Settings.loadSidebarSettingsPref());
   }
 }

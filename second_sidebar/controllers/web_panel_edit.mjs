@@ -29,7 +29,7 @@ export class WebPanelEditController {
       this.webPanelsController.moveUp(uuid);
       this.hidePopup();
       this.openPopup(webPanelController);
-      this.webPanelsController.save();
+      this.webPanelsController.savePref();
     });
 
     this.webPanelPopupEdit.listenMoveDownButtonClick((uuid) => {
@@ -37,7 +37,7 @@ export class WebPanelEditController {
       this.webPanelsController.moveDown(uuid);
       this.hidePopup();
       this.openPopup(webPanelController);
-      this.webPanelsController.save();
+      this.webPanelsController.savePref();
     });
 
     this.webPanelPopupEdit.listenSaveButtonClick(
@@ -54,7 +54,7 @@ export class WebPanelEditController {
         if (unloadOnClose && !webPanelController.isActive()) {
           webPanelController.unload();
         }
-        this.webPanelsController.save();
+        this.webPanelsController.savePref();
       }
     );
 
@@ -66,7 +66,7 @@ export class WebPanelEditController {
       this.hidePopup();
       webPanelController.remove();
       this.webPanelsController.delete(uuid);
-      this.webPanelsController.save();
+      this.webPanelsController.savePref();
     });
   }
 

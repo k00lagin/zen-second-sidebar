@@ -22,9 +22,55 @@ export class SidebarMainPopupSettings extends Panel {
       id: "sidebar-2-main-popup-settings-buttons",
     });
 
+    this.hideBackToggle = this.#createToggle();
+    this.hideBackToggleGroup = this.#createToggleGroup(
+      this.hideBackToggle,
+      "Auto hide back button"
+    );
+    this.hideForwardToggle = this.#createToggle();
+    this.hideForwardToggleGroup = this.#createToggleGroup(
+      this.hideForwardToggle,
+      "Auto hide forward button"
+    );
     this.multiView = this.#createMultiView();
 
     this.addEventListener("popupshown", () => {});
+  }
+
+  /**
+   *
+   * @returns {Button}
+   */
+  #createToggle() {
+    const button = new Button({
+      id: "moz-toggle-button",
+      classList: ["toggle-button"],
+    });
+    button.setAttribute("part", "button");
+    button.setAttribute("type", "button");
+
+    button.addEventListener("click", (event) => {
+      if (event.button === 0) {
+        button.setPressed(!button.getPressed());
+      }
+    });
+
+    return button;
+  }
+
+  /**
+   *
+   * @param {Button} toggle
+   * @param {string} text
+   * @returns {HBox}
+   */
+  #createToggleGroup(toggle, text) {
+    const box = new HBox({
+      classList: ["sidebar-2-web-panel-popup-edit-toggle-group"],
+    });
+    const label = new Header(1).setText(text);
+    box.appendChildren(label, toggle);
+    return box;
   }
 
   /**
@@ -36,10 +82,13 @@ export class SidebarMainPopupSettings extends Panel {
     this.buttons.appendChild(this.cancelButton).appendChild(this.saveButton);
     const multiView = new PanelMultiView({
       id: "sidebar-2-main-popup-settings-multiview",
-    })
-      .appendChild(this.panelHeader)
-      .appendChild(new ToolbarSeparator())
-      .appendChild(this.buttons);
+    }).appendChildren(
+      this.panelHeader,
+      new ToolbarSeparator(),
+      this.hideBackToggleGroup,
+      this.hideForwardToggleGroup,
+      this.buttons
+    );
 
     this.appendChild(multiView);
     return multiView;
@@ -55,11 +104,18 @@ export class SidebarMainPopupSettings extends Panel {
     }).setText("Save");
   }
 
+  /**
+   *
+   * @param {function(boolean, boolean):void} callback
+   */
   listenSaveButtonClick(callback) {
     this.saveButton.addEventListener("mousedown", (event) => {
       if (event.button !== 0) {
         return;
       }
+      const autoHideBackButton = this.hideBackToggle.getPressed();
+      const autoHideForwardButton = this.hideForwardToggle.getPressed();
+      callback(autoHideBackButton, autoHideForwardButton);
     });
   }
 
@@ -71,11 +127,16 @@ export class SidebarMainPopupSettings extends Panel {
     return new Button({ classList: ["footer-button"] }).setText("Cancel");
   }
 
+  /**
+   *
+   * @param {function():void} callback
+   */
   listenCancelButtonClick(callback) {
     this.cancelButton.addEventListener("mousedown", async (event) => {
       if (event.button !== 0) {
         return;
       }
+      callback();
     });
   }
 }
