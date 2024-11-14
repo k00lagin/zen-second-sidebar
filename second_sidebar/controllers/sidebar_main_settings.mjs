@@ -35,7 +35,16 @@ export class SidebarMainSettingsController {
     );
   }
 
+  /**
+   *
+   * @param {number} screenX
+   * @param {number} screenY
+   */
   openPopup(screenX, screenY) {
     this.sidebarMainPopupSettings.openPopupAtScreen(screenX, screenY);
+    this.sidebarMainPopupSettings.setDefaults(
+      this.sidebarController.autoHideBackButton,
+      this.sidebarController.autoHideForwardButton
+    );
   }
 }

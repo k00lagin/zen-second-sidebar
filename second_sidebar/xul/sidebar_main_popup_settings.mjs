@@ -22,14 +22,14 @@ export class SidebarMainPopupSettings extends Panel {
       id: "sidebar-2-main-popup-settings-buttons",
     });
 
-    this.hideBackToggle = this.#createToggle();
-    this.hideBackToggleGroup = this.#createToggleGroup(
-      this.hideBackToggle,
+    this.autoHideBackToggle = this.#createToggle();
+    this.autoHideBackToggleGroup = this.#createToggleGroup(
+      this.autoHideBackToggle,
       "Auto hide back button"
     );
-    this.hideForwardToggle = this.#createToggle();
-    this.hideForwardToggleGroup = this.#createToggleGroup(
-      this.hideForwardToggle,
+    this.autoHideForwardToggle = this.#createToggle();
+    this.autoHideForwardToggleGroup = this.#createToggleGroup(
+      this.autoHideForwardToggle,
       "Auto hide forward button"
     );
     this.multiView = this.#createMultiView();
@@ -85,8 +85,8 @@ export class SidebarMainPopupSettings extends Panel {
     }).appendChildren(
       this.panelHeader,
       new ToolbarSeparator(),
-      this.hideBackToggleGroup,
-      this.hideForwardToggleGroup,
+      this.autoHideBackToggleGroup,
+      this.autoHideForwardToggleGroup,
       this.buttons
     );
 
@@ -113,8 +113,8 @@ export class SidebarMainPopupSettings extends Panel {
       if (event.button !== 0) {
         return;
       }
-      const autoHideBackButton = this.hideBackToggle.getPressed();
-      const autoHideForwardButton = this.hideForwardToggle.getPressed();
+      const autoHideBackButton = this.autoHideBackToggle.getPressed();
+      const autoHideForwardButton = this.autoHideForwardToggle.getPressed();
       callback(autoHideBackButton, autoHideForwardButton);
     });
   }
@@ -138,5 +138,15 @@ export class SidebarMainPopupSettings extends Panel {
       }
       callback();
     });
+  }
+
+  /**
+   *
+   * @param {boolean} autoHideBackButton
+   * @param {boolean} autoHideForwardButton
+   */
+  setDefaults(autoHideBackButton, autoHideForwardButton) {
+    this.autoHideBackToggle.setPressed(autoHideBackButton);
+    this.autoHideForwardToggle.setPressed(autoHideForwardButton);
   }
 }
