@@ -158,6 +158,15 @@ export class XULElement {
 
   /**
    *
+   * @param {string} context
+   * @returns {XULElement}
+   */
+  setContext(context) {
+    return this.setAttribute("context", context);
+  }
+
+  /**
+   *
    * @param {string} event
    * @param {function(MouseEvent):void} callback
    * @returns {XULElement}

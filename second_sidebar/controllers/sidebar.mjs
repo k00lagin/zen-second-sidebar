@@ -1,3 +1,4 @@
+import { Settings } from "../settings.mjs";
 import { Sidebar } from "../xul/sidebar.mjs";
 import { SidebarBox } from "../xul/sidebar_box.mjs";
 import { SidebarSplitterUnpinned } from "../xul/sidebar_splitter_unpinned.mjs";
@@ -18,6 +19,9 @@ export class SidebarController {
     this.sidebarToolbar = sidebarToolbar;
     this.sidebarSplitterUnpinned = sidebarSplitterUnpinned;
     this.#setupListeners();
+
+    this.autoHideBackButton = false;
+    this.autoHideForwardButton = false;
   }
 
   /**
@@ -61,7 +65,7 @@ export class SidebarController {
       addNavButtonListener(event, (webPanel) => webPanel.goHome());
     });
 
-    this.sidebarToolbar.listenPinButtonClick((event) => {
+    this.sidebarToolbar.listenPinButtonClick(() => {
       const webPanelController = this.webPanelsController.getActive();
       if (webPanelController.pinned()) {
         webPanelController.unpin();
@@ -136,7 +140,9 @@ export class SidebarController {
    * @param {boolean} value
    */
   setToolbarBackButtonDisabled(value) {
-    this.sidebarToolbar.backButton.setDisabled(value);
+    const button = this.sidebarToolbar.backButton;
+    button.setDisabled(value);
+    value && this.autoHideBackButton ? button.hide() : button.show();
   }
 
   /**
@@ -144,7 +150,9 @@ export class SidebarController {
    * @param {boolean} value
    */
   setToolbarForwardButtonDisabled(value) {
-    this.sidebarToolbar.forwardButton.setDisabled(value);
+    const button = this.sidebarToolbar.forwardButton;
+    button.setDisabled(value);
+    value && this.autoHideForwardButton ? button.hide() : button.show();
   }
 
   /**
@@ -170,5 +178,24 @@ export class SidebarController {
    */
   getSidebarBoxWidth() {
     return this.sidebarBox.getWidth();
+  }
+
+  /**
+   *
+   * @param {Object | null} sidebarSettingsPref
+   */
+  loadPref(sidebarSettingsPref) {
+    sidebarSettingsPref ??= {};
+    this.autoHideBackButton = sidebarSettingsPref.autoHideBackButton ?? false;
+    this.autoHideForwardButton =
+      sidebarSettingsPref.autoHideForwardButton ?? false;
+  }
+
+  savePref() {
+    const sidebarSettingsPref = {
+      autoHideBackButton: this.autoHideBackButton,
+      autoHideForwardButton: this.autoHideForwardButton,
+    };
+    Settings.saveSidebarSettingsPref(sidebarSettingsPref);
   }
 }

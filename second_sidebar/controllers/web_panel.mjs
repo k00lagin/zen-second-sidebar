@@ -44,14 +44,13 @@ export class WebPanelController {
 
   initWebPanel() {
     this.webPanel.listenBrowserProgressListener(() => {
-      this.sidebarController.setToolbarBackButtonDisabled(
-        !this.webPanel.canGoBack()
-      );
-      this.sidebarController.setToolbarForwardButtonDisabled(
-        !this.webPanel.canGoForward()
-      );
       if (this.webPanel.isActive()) {
-        this.sidebarController.setToolbarTitle(this.webPanel.getTitle());
+        const canGoBack = this.webPanel.canGoBack();
+        const canGoForward = this.webPanel.canGoForward();
+        const title = this.webPanel.getTitle();
+        this.sidebarController.setToolbarBackButtonDisabled(!canGoBack);
+        this.sidebarController.setToolbarForwardButtonDisabled(!canGoForward);
+        this.sidebarController.setToolbarTitle(title);
       }
       // mediaController can be changed, so listen here
       this.webPanel.listenPlaybackStateChange((isPlaying) => {

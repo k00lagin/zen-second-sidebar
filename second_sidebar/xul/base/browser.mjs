@@ -47,6 +47,7 @@ export class Browser extends XULElement {
     try {
       return this.element.canGoBack;
     } catch (error) {
+      console.log("Failed to get canGoBack:", error);
       return false;
     }
   }
@@ -68,6 +69,7 @@ export class Browser extends XULElement {
     try {
       return this.element.canGoForward;
     } catch (error) {
+      console.log("Failed to get canForward:", error);
       return false;
     }
   }
