@@ -36,8 +36,8 @@ export class SidebarController {
     /** @param {MouseEvent} event */
     this.onClickOutsideWhileUnpinned = (event) => {
       if (
-        !this.sidebar.isInside(event.screenX, event.screenY) &&
-        !this.sidebarSplitterUnpinned.isInside(event.screenX, event.screenY) &&
+        !this.sidebar.getXUL().contains(event.target) &&
+        !this.sidebarSplitterUnpinned.getXUL().contains(event.target) &&
         !["menuitem", "menupopup"].includes(event.target.tagName)
       ) {
         this.close();
@@ -182,10 +182,27 @@ export class SidebarController {
 
   /**
    *
+   * @param {string} position
+   */
+  setPosition(position) {
+    this.sidebar.setPosition(position);
+  }
+
+  /**
+   *
+   * @returns {string}
+   */
+  getPosition() {
+    return this.sidebar.getPosition();
+  }
+
+  /**
+   *
    * @param {Object | null} sidebarSettingsPref
    */
   loadPref(sidebarSettingsPref) {
     sidebarSettingsPref ??= {};
+    this.setPosition(sidebarSettingsPref.position ?? "right");
     this.autoHideBackButton = sidebarSettingsPref.autoHideBackButton ?? false;
     this.autoHideForwardButton =
       sidebarSettingsPref.autoHideForwardButton ?? false;
@@ -193,6 +210,7 @@ export class SidebarController {
 
   savePref() {
     const sidebarSettingsPref = {
+      position: this.getPosition(),
       autoHideBackButton: this.autoHideBackButton,
       autoHideForwardButton: this.autoHideForwardButton,
     };
