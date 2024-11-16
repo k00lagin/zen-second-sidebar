@@ -38,7 +38,10 @@ export class SidebarController {
       if (
         !this.sidebar.getXUL().contains(event.target) &&
         !this.sidebarSplitterUnpinned.getXUL().contains(event.target) &&
-        !["menuitem", "menupopup"].includes(event.target.tagName)
+        !["menuitem", "menupopup"].includes(event.target.tagName) &&
+        (document.contains(event.target) ||
+          event.target.baseURI ===
+            "chrome://browser/content/webext-panels.xhtml")
       ) {
         this.close();
       }
