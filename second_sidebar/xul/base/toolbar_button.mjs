@@ -42,6 +42,24 @@ export class ToolbarButton extends XULElement {
 
   /**
    *
+   * @param {string} value
+   * @returns {ToolbarButton}
+   */
+  setType(value) {
+    return this.setAttribute("type", value);
+  }
+
+  /**
+   *
+   * @param {string} value
+   * @returns {ToolbarButton}
+   */
+  setTooltipText(text) {
+    return this.setAttribute("tooltiptext", text);
+  }
+
+  /**
+   *
    * @param {boolean} value
    * @returns {ToolbarButton}
    */

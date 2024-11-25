@@ -1,6 +1,7 @@
 import { Settings } from "../settings.mjs";
 import { Sidebar } from "../xul/sidebar.mjs";
 import { SidebarBox } from "../xul/sidebar_box.mjs";
+import { SidebarMoreMenuPopup } from "../xul/sidebar_more_menupopup.mjs";
 import { SidebarSplitterUnpinned } from "../xul/sidebar_splitter_unpinned.mjs";
 import { SidebarToolbar } from "../xul/sidebar_toolbar.mjs";
 import { WebPanelsController } from "./web_panels.mjs";
@@ -11,12 +12,21 @@ export class SidebarController {
    * @param {SidebarBox} sidebarBox
    * @param {Sidebar} sidebar
    * @param {SidebarToolbar} sidebarToolbar
+   * @param {SidebarMoreMenuPopup} sidebarMoreMenuPopup
    * @param {SidebarSplitterUnpinned} sidebarSplitterUnpinned
    */
-  constructor(sidebarBox, sidebar, sidebarToolbar, sidebarSplitterUnpinned) {
+  constructor(
+    sidebarBox,
+    sidebar,
+    sidebarToolbar,
+    sidebarMoreMenuPopup,
+    sidebarSplitterUnpinned
+  ) {
     this.sidebarBox = sidebarBox;
     this.sidebar = sidebar;
     this.sidebarToolbar = sidebarToolbar;
+    this.sidebarMoreMenuPopup = sidebarMoreMenuPopup;
+    this.sidebarToolbar.setMoreButtonMenuPopup(sidebarMoreMenuPopup);
     this.sidebarSplitterUnpinned = sidebarSplitterUnpinned;
     this.#setupListeners();
 
@@ -28,11 +38,11 @@ export class SidebarController {
    *
    * @param {WebPanelsController} webPanelsController
    */
-  setupDepenedencies (webPanelsController) {
+  setupDepenedencies(webPanelsController) {
     this.webPanelsController = webPanelsController;
   }
 
-  #setupListeners () {
+  #setupListeners() {
     /** @param {MouseEvent} event */
     this.onClickOutsideWhileUnpinned = (event) => {
       if (
@@ -41,13 +51,13 @@ export class SidebarController {
         !["menuitem", "menupopup"].includes(event.target.tagName) &&
         (document.contains(event.target) ||
           event.target.baseURI ===
-          "chrome://browser/content/webext-panels.xhtml")
+            "chrome://browser/content/webext-panels.xhtml")
       ) {
         this.close();
       }
     };
 
-    const addNavButtonListener = (event, callback) => {
+    const addWebPanelButtonListener = (event, callback) => {
       if (event.button !== 0) {
         return;
       }
@@ -56,48 +66,32 @@ export class SidebarController {
     };
 
     this.sidebarToolbar.listenBackButtonClick((event) => {
-      addNavButtonListener(event, (webPanel) => webPanel.goBack());
+      addWebPanelButtonListener(event, (webPanel) => webPanel.goBack());
     });
     this.sidebarToolbar.listenForwardButtonClick((event) => {
-      addNavButtonListener(event, (webPanel) => webPanel.goForward());
+      addWebPanelButtonListener(event, (webPanel) => webPanel.goForward());
     });
     this.sidebarToolbar.listenReloadButtonClick((event) => {
-      addNavButtonListener(event, (webPanel) => webPanel.reload());
+      addWebPanelButtonListener(event, (webPanel) => webPanel.reload());
     });
     this.sidebarToolbar.listenHomeButtonClick((event) => {
-      addNavButtonListener(event, (webPanel) => webPanel.goHome());
+      addWebPanelButtonListener(event, (webPanel) => webPanel.goHome());
     });
 
-    const addNavMenuitemListener = (event, callback) => {
-      if (event.button !== 0) {
-        return;
-      }
-      const webPanelController = this.webPanelsController.getActive();
-      const webPanel = new Proxy(webPanelController.webPanel, {
-        get(target, property, receiver) {
-          if (property === 'getUrl' && !target[property]) {
-            return function() {
-              let url;
-              if (target.element) url = target.element.currentURI.spec; else url = target.url;
-              if (url === 'about:blank') url = target.url
-              return url;
-            };
-          }
-          return Reflect.get(target, property, receiver);
-        }
-      });
-      callback(webPanel);
-    };
-
-    this.sidebarToolbar.listenOpenInNewTabMeuitemClick((event) => {
-      addNavMenuitemListener(event, (webPanel) => {
-        openTrustedLinkIn(webPanel.getUrl(), event.ctrlKey ? "tabshifted" : "tab");
+    this.sidebarMoreMenuPopup.listenOpenInNewTabItemClick((event) => {
+      addWebPanelButtonListener(event, (webPanel) => {
+        openTrustedLinkIn(
+          webPanel.getCurrentUrl(),
+          event.ctrlKey ? "tabshifted" : "tab"
+        );
       });
     });
 
-    this.sidebarToolbar.listenCopyPageUrlMenuitemClick((event) => {
-      addNavMenuitemListener(event, (webPanel) => {
-        Cc["@mozilla.org/widget/clipboardhelper;1"].getService(Ci.nsIClipboardHelper).copyString(webPanel.getUrl());
+    this.sidebarMoreMenuPopup.listenCopyPageUrlItemClick((event) => {
+      addWebPanelButtonListener(event, (webPanel) => {
+        Cc["@mozilla.org/widget/clipboardhelper;1"]
+          .getService(Ci.nsIClipboardHelper)
+          .copyString(webPanel.getCurrentUrl());
       });
     });
 
@@ -128,7 +122,7 @@ export class SidebarController {
    * @param {boolean} canGoForward
    * @param {string} title
    */
-  open (pinned, width, canGoBack, canGoForward, title) {
+  open(pinned, width, canGoBack, canGoForward, title) {
     this.sidebarBox.show();
     this.setWidth(width);
     this.setToolbarBackButtonDisabled(!canGoBack);
@@ -137,7 +131,7 @@ export class SidebarController {
     pinned ? this.pin() : this.unpin();
   }
 
-  close () {
+  close() {
     this.sidebarBox.hide();
     this.unpin();
     this.webPanelsController.hideActive();
@@ -147,17 +141,17 @@ export class SidebarController {
    *
    * @returns {boolean}
    */
-  closed () {
+  closed() {
     return this.sidebarBox.hidden();
   }
 
-  pin () {
+  pin() {
     this.sidebar.pin();
     this.sidebarToolbar.setPinButtonIcon(true);
     document.removeEventListener("mousedown", this.onClickOutsideWhileUnpinned);
   }
 
-  unpin () {
+  unpin() {
     this.sidebar.unpin();
     this.sidebarToolbar.setPinButtonIcon(false);
     document.addEventListener("mousedown", this.onClickOutsideWhileUnpinned);
@@ -167,7 +161,7 @@ export class SidebarController {
    *
    * @param {string} title
    */
-  setToolbarTitle (title) {
+  setToolbarTitle(title) {
     this.sidebarToolbar.setTitle(title);
   }
 
@@ -175,7 +169,7 @@ export class SidebarController {
    *
    * @param {boolean} value
    */
-  setToolbarBackButtonDisabled (value) {
+  setToolbarBackButtonDisabled(value) {
     const button = this.sidebarToolbar.backButton;
     button.setDisabled(value);
     value && this.autoHideBackButton ? button.hide() : button.show();
@@ -185,7 +179,7 @@ export class SidebarController {
    *
    * @param {boolean} value
    */
-  setToolbarForwardButtonDisabled (value) {
+  setToolbarForwardButtonDisabled(value) {
     const button = this.sidebarToolbar.forwardButton;
     button.setDisabled(value);
     value && this.autoHideForwardButton ? button.hide() : button.show();
@@ -195,7 +189,7 @@ export class SidebarController {
    *
    * @param {number} width
    */
-  setWidth (width) {
+  setWidth(width) {
     this.sidebarBox.setWidth(width);
     this.sidebar.setWidth(width);
   }
@@ -204,7 +198,7 @@ export class SidebarController {
    *
    * @returns {number}
    */
-  getSidebarWidth () {
+  getSidebarWidth() {
     return this.sidebar.getWidth();
   }
 
@@ -212,7 +206,7 @@ export class SidebarController {
    *
    * @returns {number}
    */
-  getSidebarBoxWidth () {
+  getSidebarBoxWidth() {
     return this.sidebarBox.getWidth();
   }
 
@@ -220,7 +214,7 @@ export class SidebarController {
    *
    * @param {string} position
    */
-  setPosition (position) {
+  setPosition(position) {
     this.sidebar.setPosition(position);
   }
 
@@ -228,7 +222,7 @@ export class SidebarController {
    *
    * @returns {string}
    */
-  getPosition () {
+  getPosition() {
     return this.sidebar.getPosition();
   }
 
@@ -236,7 +230,7 @@ export class SidebarController {
    *
    * @param {Object | null} sidebarSettingsPref
    */
-  loadPref (sidebarSettingsPref) {
+  loadPref(sidebarSettingsPref) {
     sidebarSettingsPref ??= {};
     this.setPosition(sidebarSettingsPref.position ?? "right");
     this.autoHideBackButton = sidebarSettingsPref.autoHideBackButton ?? false;
@@ -244,7 +238,7 @@ export class SidebarController {
       sidebarSettingsPref.autoHideForwardButton ?? false;
   }
 
-  savePref () {
+  savePref() {
     const sidebarSettingsPref = {
       position: this.getPosition(),
       autoHideBackButton: this.autoHideBackButton,

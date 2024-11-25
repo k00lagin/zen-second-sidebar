@@ -42,6 +42,14 @@ export class WebPanelController {
     return this.webPanel.uuid;
   }
 
+  /**
+   *
+   * @returns {string}
+   */
+  getCurrentUrl() {
+    return this.webPanel.getCurrentUrl();
+  }
+
   initWebPanel() {
     this.webPanel.listenBrowserProgressListener(() => {
       if (this.webPanel.isActive()) {
