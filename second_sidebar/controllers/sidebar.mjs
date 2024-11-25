@@ -1,6 +1,7 @@
 import { Settings } from "../settings.mjs";
 import { Sidebar } from "../xul/sidebar.mjs";
 import { SidebarBox } from "../xul/sidebar_box.mjs";
+import { SidebarMoreMenuPopup } from "../xul/sidebar_more_menupopup.mjs";
 import { SidebarSplitterUnpinned } from "../xul/sidebar_splitter_unpinned.mjs";
 import { SidebarToolbar } from "../xul/sidebar_toolbar.mjs";
 import { WebPanelsController } from "./web_panels.mjs";
@@ -11,12 +12,21 @@ export class SidebarController {
    * @param {SidebarBox} sidebarBox
    * @param {Sidebar} sidebar
    * @param {SidebarToolbar} sidebarToolbar
+   * @param {SidebarMoreMenuPopup} sidebarMoreMenuPopup
    * @param {SidebarSplitterUnpinned} sidebarSplitterUnpinned
    */
-  constructor(sidebarBox, sidebar, sidebarToolbar, sidebarSplitterUnpinned) {
+  constructor(
+    sidebarBox,
+    sidebar,
+    sidebarToolbar,
+    sidebarMoreMenuPopup,
+    sidebarSplitterUnpinned
+  ) {
     this.sidebarBox = sidebarBox;
     this.sidebar = sidebar;
     this.sidebarToolbar = sidebarToolbar;
+    this.sidebarMoreMenuPopup = sidebarMoreMenuPopup;
+    this.sidebarToolbar.setMoreButtonMenuPopup(sidebarMoreMenuPopup);
     this.sidebarSplitterUnpinned = sidebarSplitterUnpinned;
     this.#setupListeners();
 
@@ -47,7 +57,7 @@ export class SidebarController {
       }
     };
 
-    const addNavButtonListener = (event, callback) => {
+    const addWebPanelButtonListener = (event, callback) => {
       if (event.button !== 0) {
         return;
       }
@@ -56,16 +66,33 @@ export class SidebarController {
     };
 
     this.sidebarToolbar.listenBackButtonClick((event) => {
-      addNavButtonListener(event, (webPanel) => webPanel.goBack());
+      addWebPanelButtonListener(event, (webPanel) => webPanel.goBack());
     });
     this.sidebarToolbar.listenForwardButtonClick((event) => {
-      addNavButtonListener(event, (webPanel) => webPanel.goForward());
+      addWebPanelButtonListener(event, (webPanel) => webPanel.goForward());
     });
     this.sidebarToolbar.listenReloadButtonClick((event) => {
-      addNavButtonListener(event, (webPanel) => webPanel.reload());
+      addWebPanelButtonListener(event, (webPanel) => webPanel.reload());
     });
     this.sidebarToolbar.listenHomeButtonClick((event) => {
-      addNavButtonListener(event, (webPanel) => webPanel.goHome());
+      addWebPanelButtonListener(event, (webPanel) => webPanel.goHome());
+    });
+
+    this.sidebarMoreMenuPopup.listenOpenInNewTabItemClick((event) => {
+      addWebPanelButtonListener(event, (webPanel) => {
+        openTrustedLinkIn(
+          webPanel.getCurrentUrl(),
+          event.ctrlKey ? "tabshifted" : "tab"
+        );
+      });
+    });
+
+    this.sidebarMoreMenuPopup.listenCopyPageUrlItemClick((event) => {
+      addWebPanelButtonListener(event, (webPanel) => {
+        Cc["@mozilla.org/widget/clipboardhelper;1"]
+          .getService(Ci.nsIClipboardHelper)
+          .copyString(webPanel.getCurrentUrl());
+      });
     });
 
     this.sidebarToolbar.listenPinButtonClick(() => {
@@ -120,13 +147,13 @@ export class SidebarController {
 
   pin() {
     this.sidebar.pin();
-    this.sidebarToolbar.setPinButtonIcon(true);
+    this.sidebarToolbar.changePinButton(true);
     document.removeEventListener("mousedown", this.onClickOutsideWhileUnpinned);
   }
 
   unpin() {
     this.sidebar.unpin();
-    this.sidebarToolbar.setPinButtonIcon(false);
+    this.sidebarToolbar.changePinButton(false);
     document.addEventListener("mousedown", this.onClickOutsideWhileUnpinned);
   }
 

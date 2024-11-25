@@ -41,6 +41,14 @@ export class Browser extends XULElement {
 
   /**
    *
+   * @returns {string}
+   */
+  getCurrentUrl() {
+    return this.element.currentURI.spec;
+  }
+
+  /**
+   *
    * @returns {boolean}
    */
   canGoBack() {

@@ -9,6 +9,7 @@ import { SidebarMainController } from "./controllers/sidebar_main.mjs";
 import { SidebarMainMenuPopup } from "./xul/sidebar_main_menupopup.mjs";
 import { SidebarMainPopupSettings } from "./xul/sidebar_main_popup_settings.mjs";
 import { SidebarMainSettingsController } from "./controllers/sidebar_main_settings.mjs";
+import { SidebarMoreMenuPopup } from "./xul/sidebar_more_menupopup.mjs";
 import { SidebarSplitterPinned } from "./xul/sidebar_splitter_pinned.mjs";
 import { SidebarSplitterUnpinned } from "./xul/sidebar_splitter_unpinned.mjs";
 import { SidebarSplittersController } from "./controllers/sidebar_splitters.mjs";
@@ -49,6 +50,7 @@ export class SidebarInjector {
       sidebarBox: new SidebarBox(),
       sidebar: new Sidebar(),
       sidebarToolbar: new SidebarToolbar(),
+      sidebarMoreMenuPopup: new SidebarMoreMenuPopup(),
       webPanels: new WebPanels(),
       sidebarSplitterPinned: new SidebarSplitterPinned(),
       sidebarSplitterUnpinned: new SidebarSplitterUnpinned(),
@@ -116,6 +118,7 @@ export class SidebarInjector {
       elements.sidebarBox,
       elements.sidebar,
       elements.sidebarToolbar,
+      elements.sidebarMoreMenuPopup,
       elements.sidebarSplitterUnpinned
     );
     this.sidebarSplittersController = new SidebarSplittersController(
