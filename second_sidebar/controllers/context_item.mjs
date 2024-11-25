@@ -1,4 +1,4 @@
-import { MenuItem } from "../xul/base/menu_item.mjs";
+import { MenuItem } from "../xul/base/menuitem.mjs";
 import { WebPanelNewController } from "./web_panel_new.mjs";
 
 export class ContextItemController {
