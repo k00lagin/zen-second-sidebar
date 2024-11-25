@@ -25,43 +25,44 @@ export class SidebarToolbar extends Toolbar {
     this.setMode("icons");
 
     // Navigation buttons
-    this.backButton = this.#createButton(ICONS.BACK);
-    this.forwardButton = this.#createButton(ICONS.FORWARD);
-    this.reloadButton = this.#createButton(ICONS.RELOAD);
-    this.homeButton = this.#createButton(ICONS.HOME);
+    this.backButton = this.#createButton("Back", ICONS.BACK);
+    this.forwardButton = this.#createButton("Forward", ICONS.FORWARD);
+    this.reloadButton = this.#createButton("Reload", ICONS.RELOAD);
+    this.homeButton = this.#createButton("Home", ICONS.HOME);
     this.navButtons = this.#createNavButtons();
 
     // Title
     this.toolbarTitle = this.#createToolbarTitle();
 
     // Sidebar buttons
-    this.moreButton = this.#createMenuButton(ICONS.MORE, "More");
+    this.moreButton = this.#createMenuButton("More", ICONS.MORE);
     this.pinButton = this.#createButton();
-    this.closeButton = this.#createButton(ICONS.CLOSE);
+    this.closeButton = this.#createButton("Unload", ICONS.CLOSE);
     this.sidebarButtons = this.#createSidebarButtons();
   }
 
   /**
    *
+   * @param {string} tooltipText?
    * @param {string?} iconUrl
    * @returns {ToolbarButton}
    */
-  #createButton(iconUrl = null) {
+  #createButton(tooltipText = null, iconUrl = null) {
     return new ToolbarButton({
       classList: ["sidebar-2-toolbar-button"],
-    }).setIcon(iconUrl);
+    })
+      .setIcon(iconUrl)
+      .setTooltipText(tooltipText);
   }
 
   /**
    *
-   * @param {string} iconUrl
    * @param {string} tooltipText
+   * @param {string} iconUrl
    * @returns {ToolbarButton}
    */
-  #createMenuButton(iconUrl, tooltipText) {
-    return this.#createButton(iconUrl)
-      .setType("menu")
-      .setTooltipText(tooltipText);
+  #createMenuButton(tooltipText, iconUrl) {
+    return this.#createButton(tooltipText, iconUrl).setType("menu");
   }
 
   /**
@@ -148,8 +149,10 @@ export class SidebarToolbar extends Toolbar {
    * @param {boolean} pinned
    * @returns {SidebarToolbar}
    */
-  setPinButtonIcon(pinned) {
-    this.pinButton.setIcon(pinned ? ICONS.PINNED : ICONS.UNPINNED);
+  changePinButton(pinned) {
+    this.pinButton
+      .setIcon(pinned ? ICONS.PINNED : ICONS.UNPINNED)
+      .setTooltipText(pinned ? "Unpin" : "Pin");
     return this;
   }
 
