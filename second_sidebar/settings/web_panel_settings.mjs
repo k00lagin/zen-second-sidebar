@@ -11,6 +11,8 @@ export class WebPanelSettings {
   #width;
   /**@type {boolean} */
   #mobile;
+  /**@type {number} */
+  #zoom;
   /**@type {boolean} */
   #loadOnStartup;
   /**@type {boolean} */
@@ -24,6 +26,7 @@ export class WebPanelSettings {
    * @param {boolean} pinned
    * @param {string} width
    * @param {boolean} mobile
+   * @param {number} zoom
    * @param {boolean} loadOnStartup
    * @param {boolean} unloadOnClose
    */
@@ -34,6 +37,7 @@ export class WebPanelSettings {
     pinned,
     width,
     mobile,
+    zoom,
     loadOnStartup,
     unloadOnClose
   ) {
@@ -43,6 +47,7 @@ export class WebPanelSettings {
     this.#pinned = pinned ?? true;
     this.#width = width ?? "400";
     this.#mobile = mobile ?? false;
+    this.#zoom = zoom ?? 1;
     this.#loadOnStartup = loadOnStartup ?? false;
     this.#unloadOnClose = unloadOnClose ?? false;
   }
@@ -71,6 +76,10 @@ export class WebPanelSettings {
     return this.#mobile;
   }
 
+  get zoom() {
+    return this.#zoom;
+  }
+
   get loadOnStartup() {
     return this.#loadOnStartup;
   }
@@ -91,6 +100,7 @@ export class WebPanelSettings {
       pinned: this.#pinned,
       width: this.#width,
       mobile: this.#mobile,
+      zoom: this.#zoom,
       loadOnStartup: this.#loadOnStartup,
       unloadOnClose: this.#unloadOnClose,
     };

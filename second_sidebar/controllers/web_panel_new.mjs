@@ -109,7 +109,8 @@ export class WebPanelNewController {
       webPanel.width,
       webPanel.canGoBack(),
       webPanel.canGoForward(),
-      webPanel.getTitle()
+      webPanel.getTitle(),
+      webPanel.getZoom()
     );
     webPanelController.show();
 

@@ -4,4 +4,8 @@ export const CONTEXT_ITEM_CSS = `
       display: none;
     }
   }
+
+  menuitem[label="Reset Zoom [100%]"] {
+    display: none;
+  }
 `;

@@ -225,6 +225,7 @@ export class WebPanelsController {
       pinned = false,
       width = "400",
       mobile = false,
+      zoom = 1,
       loadOnStartup = false,
       unloadOnClose = false,
     } = {}
@@ -237,6 +238,7 @@ export class WebPanelsController {
       pinned,
       width,
       mobile,
+      zoom,
       loadOnStartup,
       unloadOnClose
     );
@@ -258,6 +260,7 @@ export class WebPanelsController {
         pinned: webPanelSettings.pinned,
         width: webPanelSettings.width,
         mobile: webPanelSettings.mobile,
+        zoom: webPanelSettings.zoom,
         loadOnStartup: webPanelSettings.loadOnStartup,
         unloadOnClose: webPanelSettings.unloadOnClose,
         webPanelTab,

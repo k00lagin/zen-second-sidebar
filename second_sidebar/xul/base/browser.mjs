@@ -1,5 +1,7 @@
 import { XULElement } from "./xul_element.mjs";
 
+const ZOOM_DELTA = 0.1;
+
 export class Browser extends XULElement {
   /**
    *
@@ -111,6 +113,49 @@ export class Browser extends XULElement {
     });
 
     return this;
+  }
+
+  /**
+   *
+   * @returns {number}
+   */
+  getZoom() {
+    return ZoomManager.getZoomForBrowser(this.element);
+  }
+
+  /**
+   *
+   * @returns {Browser}
+   */
+  zoomIn() {
+    FullZoom.changeZoomBy(this.element, ZOOM_DELTA);
+    return this;
+  }
+
+  /**
+   *
+   * @returns {Browser}
+   */
+  zoomOut() {
+    FullZoom.changeZoomBy(this.element, -ZOOM_DELTA);
+    return this;
+  }
+
+  /**
+   *
+   * @returns {Browser}
+   */
+  setZoom(value) {
+    ZoomManager.setZoomForBrowser(this.element, value);
+    return this;
+  }
+
+  /**
+   *
+   * @returns {Browser}
+   */
+  resetZoom() {
+    return this.setZoom(1);
   }
 
   /**

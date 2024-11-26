@@ -96,6 +96,30 @@ export class SidebarController {
       });
     });
 
+    this.sidebarMoreMenuPopup.listenZoomInItemClick((event) => {
+      addWebPanelButtonListener(event, (webPanel) => {
+        webPanel.zoomIn();
+        this.updateZoomLabel(webPanel.getZoom());
+        this.webPanelsController.saveSettings();
+      });
+    });
+
+    this.sidebarMoreMenuPopup.listenZoomOutItemClick((event) => {
+      addWebPanelButtonListener(event, (webPanel) => {
+        webPanel.zoomOut();
+        this.updateZoomLabel(webPanel.getZoom());
+        this.webPanelsController.saveSettings();
+      });
+    });
+
+    this.sidebarMoreMenuPopup.listenResetZoomItemClick((event) => {
+      addWebPanelButtonListener(event, (webPanel) => {
+        webPanel.resetZoom();
+        this.updateZoomLabel(webPanel.getZoom());
+        this.webPanelsController.saveSettings();
+      });
+    });
+
     this.sidebarToolbar.listenPinButtonClick(() => {
       const webPanelController = this.webPanelsController.getActive();
       if (webPanelController.pinned()) {
@@ -105,7 +129,7 @@ export class SidebarController {
         webPanelController.pin();
         this.pin();
       }
-      this.webPanelsController.save();
+      this.webPanelsController.saveSettings();
     });
 
     this.sidebarToolbar.listenCloseButtonClick(() => {
@@ -117,18 +141,28 @@ export class SidebarController {
 
   /**
    *
+   * @param {number} zoom
+   */
+  updateZoomLabel(zoom) {
+    this.sidebarMoreMenuPopup.setResetZoomButtonLabel(zoom);
+  }
+
+  /**
+   *
    * @param {boolean} pinned
    * @param {number} width
    * @param {boolean} canGoBack
    * @param {boolean} canGoForward
    * @param {string} title
+   * @param {number} zoom
    */
-  open(pinned, width, canGoBack, canGoForward, title) {
+  open(pinned, width, canGoBack, canGoForward, title, zoom) {
     this.sidebarBox.show();
     this.setWidth(width);
     this.setToolbarBackButtonDisabled(!canGoBack);
     this.setToolbarForwardButtonDisabled(!canGoForward);
     this.setToolbarTitle(title);
+    this.updateZoomLabel(zoom);
     pinned ? this.pin() : this.unpin();
   }
 

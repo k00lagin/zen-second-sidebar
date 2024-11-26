@@ -1,7 +1,8 @@
 import { Browser } from "./base/browser.mjs";
 import { WebPanelTab } from "./web_panel_tab.mjs";
 
-const MOBILE_USER_AGENT = "Mozilla/5.0 (Linux; Android 11; SAMSUNG SM-G973U) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/14.2 Chrome/87.0.4280.141 Mobile Safari/537.36";
+const MOBILE_USER_AGENT =
+  "Mozilla/5.0 (Linux; Android 11; SAMSUNG SM-G973U) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/14.2 Chrome/87.0.4280.141 Mobile Safari/537.36";
 
 /**
  *
@@ -23,6 +24,7 @@ export class WebPanel extends Browser {
    * @param {boolean} pinned
    * @param {string} width
    * @param {boolean} mobile
+   * @param {number} zoom
    * @param {boolean} loadOnStartup
    * @param {boolean} unloadOnClose
    * @param {object} params
@@ -36,6 +38,7 @@ export class WebPanel extends Browser {
     pinned,
     width,
     mobile,
+    zoom,
     loadOnStartup,
     unloadOnClose
   ) {
@@ -54,6 +57,7 @@ export class WebPanel extends Browser {
     this.pinned = pinned;
     this.width = width;
     this.mobile = mobile;
+    this.zoom = zoom;
     this.loadOnStartup = loadOnStartup;
     this.unloadOnClose = unloadOnClose;
 
@@ -125,5 +129,46 @@ export class WebPanel extends Browser {
   goHome() {
     this.updateUserAgent();
     return this.go(this.url);
+  }
+
+  /**
+   *
+   * @returns {WebPanel}
+   */
+  zoomIn() {
+    Browser.prototype.zoomIn.call(this);
+    this.zoom = this.getZoom();
+    return this;
+  }
+
+  /**
+   *
+   * @returns {WebPanel}
+   */
+  zoomOut() {
+    Browser.prototype.zoomOut.call(this);
+    this.zoom = this.getZoom();
+    return this;
+  }
+
+  /**
+   *
+   * @param {number}
+   * @returns {WebPanel}
+   */
+  setZoom(value) {
+    Browser.prototype.setZoom.call(this, value);
+    this.zoom = this.getZoom();
+    return this;
+  }
+
+  /**
+   *
+   * @returns {WebPanel}
+   */
+  resetZoom() {
+    Browser.prototype.resetZoom.call(this);
+    this.zoom = this.getZoom();
+    return this;
   }
 }

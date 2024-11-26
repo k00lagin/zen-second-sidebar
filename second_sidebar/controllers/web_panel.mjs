@@ -53,13 +53,16 @@ export class WebPanelController {
 
   initWebPanel() {
     this.webPanel.listenBrowserProgressListener(() => {
+      this.webPanel.setZoom(this.webPanel.zoom);
       if (this.webPanel.isActive()) {
         const canGoBack = this.webPanel.canGoBack();
         const canGoForward = this.webPanel.canGoForward();
         const title = this.webPanel.getTitle();
+        const zoom = this.webPanel.getZoom();
         this.sidebarController.setToolbarBackButtonDisabled(!canGoBack);
         this.sidebarController.setToolbarForwardButtonDisabled(!canGoForward);
         this.sidebarController.setToolbarTitle(title);
+        this.sidebarController.updateZoomLabel(zoom);
       }
       // mediaController can be changed, so listen here
       this.webPanel.listenPlaybackStateChange((isPlaying) => {
@@ -87,7 +90,8 @@ export class WebPanelController {
           this.webPanel.width,
           this.webPanel.canGoBack(),
           this.webPanel.canGoForward(),
-          this.webPanel.getTitle()
+          this.webPanel.getTitle(),
+          this.webPanel.getZoom()
         );
         this.show();
       }
@@ -218,6 +222,7 @@ export class WebPanelController {
       this.webPanel.pinned,
       this.webPanel.width,
       this.webPanel.mobile,
+      this.webPanel.zoom,
       this.webPanel.loadOnStartup,
       this.webPanel.unloadOnClose
     );
