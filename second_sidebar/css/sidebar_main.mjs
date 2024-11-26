@@ -3,7 +3,8 @@ export const SIDEBAR_MAIN_CSS = `
     display: flex;
     flex-direction: column;
     gap: 8px;
-    overflow: scroll;
+    overflow-y: scroll;
+    scrollbar-width: none;
     padding: 0 var(--space-small) 0 var(--space-small);
   }
 
