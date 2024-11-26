@@ -1,4 +1,4 @@
-# Firefox Second Sidebar
+# Second Sidebar for Firefox
 
 A Firefox userChrome.js script for adding a second sidebar with web panels like in Vivaldi/Floorp/Zen.
 
@@ -31,9 +31,13 @@ https://github.com/user-attachments/assets/60a2da4f-2165-4d92-983a-f4a79d17e3ef
 8. Sound indicator.
 9. Indicator of unloaded web panel (dimmed icon).
 
-## Install
+## Install (fx-autoconfig)
 
 1. Install [fx-autoconfig](https://github.com/MrOtherGuy/fx-autoconfig).
 2. Copy `second_sidebar/` and `second_sidebar.uc.mjs` into `chrome/JS/` folder.
 3. [Clear](https://github.com/MrOtherGuy/fx-autoconfig?tab=readme-ov-file#deleting-startup-cache) startup-cache.
 4. Have fun!
+
+## If you use another loader
+
+Use a wrapper script provided by @dimdamin: https://github.com/aminought/firefox-second-sidebar/issues/5.

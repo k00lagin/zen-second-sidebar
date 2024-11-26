@@ -13,4 +13,9 @@ const run = () => {
     SidebarDecorator.decorate();
   }
 };
-UC_API.Runtime.startupFinished().then(run);
+
+if (typeof UC_API !== "undefined") {
+  UC_API.Runtime.startupFinished().then(run);
+} else {
+  delayedStartupPromise.then(run);
+}
