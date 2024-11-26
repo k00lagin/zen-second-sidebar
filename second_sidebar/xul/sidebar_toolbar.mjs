@@ -1,9 +1,11 @@
+/* eslint-disable no-unused-vars */
 import { Div } from "./base/div.mjs";
 import { HBox } from "./base/hbox.mjs";
 import { Label } from "./base/label.mjs";
 import { MenuPopup } from "./base/menupopup.mjs";
 import { Toolbar } from "./base/toolbar.mjs";
 import { ToolbarButton } from "./base/toolbar_button.mjs";
+/* eslint-enable no-unused-vars */
 
 const ICONS = {
   BACK: "chrome://browser/skin/back.svg",

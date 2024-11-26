@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 import { SidebarController } from "./sidebar.mjs";
 import { WebPanelController } from "./web_panel.mjs";
 import { WebPanelPopupEdit } from "../xul/web_panel_popup_edit.mjs";
 import { WebPanelsController } from "./web_panels.mjs";
+/* eslint-enable no-unused-vars */
 
 export class WebPanelEditController {
   /**

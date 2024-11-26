@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { SidebarController } from "./sidebar.mjs";
 import { WebPanel } from "../xul/web_panel.mjs";
 import { WebPanelButton } from "../xul/web_panel_button.mjs";
@@ -5,6 +6,7 @@ import { WebPanelEditController } from "./web_panel_edit.mjs";
 import { WebPanelSettings } from "../settings/web_panel_settings.mjs";
 import { WebPanelTab } from "../xul/web_panel_tab.mjs";
 import { WebPanelsController } from "./web_panels.mjs";
+/* eslint-enable no-unused-vars */
 
 export class WebPanelController {
   /**

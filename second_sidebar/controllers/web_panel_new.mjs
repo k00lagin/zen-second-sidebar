@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { SidebarController } from "./sidebar.mjs";
 import { WebPanelController } from "./web_panel.mjs";
 import { WebPanelEditController } from "./web_panel_edit.mjs";
@@ -5,6 +6,7 @@ import { WebPanelNewButton } from "../xul/web_panel_new_button.mjs";
 import { WebPanelPopupNew } from "../xul/web_panel_popup_new.mjs";
 import { WebPanelsController } from "./web_panels.mjs";
 import { fetchIconURL } from "../utils/icons.mjs";
+/* eslint-enable no-unused-vars */
 
 export class WebPanelNewController {
   /**
@@ -28,7 +30,7 @@ export class WebPanelNewController {
       this.createWebPanelAndOpen(url);
     });
 
-    this.webPanelPopupNew.listenCancelButtonClick((url) => {
+    this.webPanelPopupNew.listenCancelButtonClick(() => {
       this.hidePopup();
     });
   }
@@ -66,7 +68,7 @@ export class WebPanelNewController {
     try {
       NetUtil.newURI(url);
     } catch (error) {
-      console.log("Invalid url");
+      console.log("Invalid url:", error);
       return;
     }
 

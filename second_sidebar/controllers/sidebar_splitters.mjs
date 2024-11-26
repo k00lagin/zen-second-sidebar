@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 import { SidebarController } from "./sidebar.mjs";
 import { SidebarSplitterPinned } from "../xul/sidebar_splitter_pinned.mjs";
 import { SidebarSplitterUnpinned } from "../xul/sidebar_splitter_unpinned.mjs";
 import { WebPanelsController } from "./web_panels.mjs";
+/* eslint-enable no-unused-vars */
 
 export class SidebarSplittersController {
   /**

@@ -120,7 +120,7 @@ export class XULElement {
    * @param {string} name
    * @returns {XULElement}
    */
-  removeAttribute(name, value) {
+  removeAttribute(name) {
     this.element.removeAttribute(name);
     return this;
   }

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Button } from "./base/button.mjs";
 import { HBox } from "./base/hbox.mjs";
 import { Header } from "./base/header.mjs";
@@ -6,6 +7,7 @@ import { Panel } from "./base/panel.mjs";
 import { PanelMultiView } from "./base/panel_multi_view.mjs";
 import { ToolbarSeparator } from "./base/toolbar_separator.mjs";
 import { XULElement } from "./base/xul_element.mjs";
+/* eslint-enable no-unused-vars */
 
 export class SidebarMainPopupSettings extends Panel {
   constructor() {

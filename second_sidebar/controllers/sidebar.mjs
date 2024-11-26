@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Sidebar } from "../xul/sidebar.mjs";
 import { SidebarBox } from "../xul/sidebar_box.mjs";
 import { SidebarMainController } from "./sidebar_main.mjs";
@@ -6,6 +7,7 @@ import { SidebarSettings } from "../settings/sidebar_settings.mjs";
 import { SidebarSplitterUnpinned } from "../xul/sidebar_splitter_unpinned.mjs";
 import { SidebarToolbar } from "../xul/sidebar_toolbar.mjs";
 import { WebPanelsController } from "./web_panels.mjs";
+/* eslint-enable no-unused-vars */
 
 export class SidebarController {
   /**

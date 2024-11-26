@@ -1,6 +1,8 @@
+/* eslint-disable no-unused-vars */
 import { SidebarController } from "./sidebar.mjs";
 import { SidebarMainController } from "./sidebar_main.mjs";
 import { SidebarMainPopupSettings } from "../xul/sidebar_main_popup_settings.mjs";
+/* eslint-enable no-unused-vars */
 
 export class SidebarMainSettingsController {
   /**

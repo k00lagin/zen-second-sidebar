@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { SidebarController } from "./sidebar.mjs";
 import { WebPanel } from "../xul/web_panel.mjs";
 import { WebPanelButton } from "../xul/web_panel_button.mjs";
@@ -9,6 +10,7 @@ import { WebPanelTab } from "../xul/web_panel_tab.mjs";
 import { WebPanelTabs } from "../xul/web_panel_tabs.mjs";
 import { WebPanels } from "../xul/web_panels.mjs";
 import { WebPanelsSettings } from "../settings/web_panels_settings.mjs";
+/* eslint-enable no-unused-vars */
 
 const URL_TOOLTIP_LIMIT = 64;
 
