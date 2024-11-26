@@ -30,6 +30,9 @@ export class SidebarMainPopupSettings extends Panel {
       "Sidebar position"
     );
 
+    this.widthMenuList = this.#createWidthMenuList();
+    this.widthGroup = this.#createGroup(this.widthMenuList, "Sidebar width");
+
     this.hideInPopupWindowsToggle = this.#createToggle();
     this.hideInPopupWindowsGroup = this.#createGroup(
       this.hideInPopupWindowsToggle,
@@ -51,11 +54,29 @@ export class SidebarMainPopupSettings extends Panel {
     this.addEventListener("popupshown", () => {});
   }
 
+  /**
+   *
+   * @returns {MenuList}
+   */
   #createPositionMenuList() {
     const positionMenuList = new MenuList();
     positionMenuList.appendItem("Left", "left");
     positionMenuList.appendItem("Right", "right");
     return positionMenuList;
+  }
+
+  /**
+   *
+   * @returns {MenuList}
+   */
+  #createWidthMenuList() {
+    const widthMenuList = new MenuList();
+    widthMenuList.appendItem("Tiny", "xxsmall");
+    widthMenuList.appendItem("Very small", "xsmall");
+    widthMenuList.appendItem("Small", "small");
+    widthMenuList.appendItem("Medium", "medium");
+    widthMenuList.appendItem("Large", "large");
+    return widthMenuList;
   }
 
   /**
@@ -107,6 +128,7 @@ export class SidebarMainPopupSettings extends Panel {
       this.panelHeader,
       new ToolbarSeparator(),
       this.positionGroup,
+      this.widthGroup,
       this.hideInPopupWindowsGroup,
       this.autoHideBackGroup,
       this.autoHideForwardGroup,
@@ -137,11 +159,13 @@ export class SidebarMainPopupSettings extends Panel {
         return;
       }
       const position = this.positionMenuList.getValue();
+      const width = this.widthMenuList.getValue();
       const hideInPopupWindows = this.hideInPopupWindowsToggle.getPressed();
       const autoHideBackButton = this.autoHideBackToggle.getPressed();
       const autoHideForwardButton = this.autoHideForwardToggle.getPressed();
       callback(
         position,
+        width,
         hideInPopupWindows,
         autoHideBackButton,
         autoHideForwardButton
@@ -173,17 +197,20 @@ export class SidebarMainPopupSettings extends Panel {
   /**
    *
    * @param {string} position
+   * @param {string} width
    * @param {boolean} hideInPopupWindows
    * @param {boolean} autoHideBackButton
    * @param {boolean} autoHideForwardButton
    */
   setDefaults(
     position,
+    width,
     hideInPopupWindows,
     autoHideBackButton,
     autoHideForwardButton
   ) {
     this.positionMenuList.setValue(position);
+    this.widthMenuList.setValue(width);
     this.hideInPopupWindowsToggle.setPressed(hideInPopupWindows);
     this.autoHideBackToggle.setPressed(autoHideBackButton);
     this.autoHideForwardToggle.setPressed(autoHideForwardButton);

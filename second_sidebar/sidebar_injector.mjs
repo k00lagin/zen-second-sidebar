@@ -172,9 +172,10 @@ export class SidebarInjector {
       this.sidebarMainSettingsController
     );
     this.sidebarMainSettingsController.setupDependencies(
+      this.sidebarMainController,
       this.sidebarController
     );
-    this.sidebarController.setupDepenedencies(this.webPanelsController);
+    this.sidebarController.setupDepenedencies(this.sidebarMainController, this.webPanelsController);
     this.sidebarSplittersController.setupDependencies(
       this.sidebarController,
       this.webPanelsController

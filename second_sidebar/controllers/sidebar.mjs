@@ -1,5 +1,6 @@
 import { Sidebar } from "../xul/sidebar.mjs";
 import { SidebarBox } from "../xul/sidebar_box.mjs";
+import { SidebarMainController } from "./sidebar_main.mjs";
 import { SidebarMoreMenuPopup } from "../xul/sidebar_more_menupopup.mjs";
 import { SidebarSettings } from "../settings/sidebar_settings.mjs";
 import { SidebarSplitterUnpinned } from "../xul/sidebar_splitter_unpinned.mjs";
@@ -37,9 +38,11 @@ export class SidebarController {
 
   /**
    *
+   * @param {SidebarMainController} sidebarMainController
    * @param {WebPanelsController} webPanelsController
    */
-  setupDepenedencies(webPanelsController) {
+  setupDepenedencies(sidebarMainController, webPanelsController) {
+    this.sidebarMainController = sidebarMainController;
     this.webPanelsController = webPanelsController;
   }
 
@@ -267,6 +270,7 @@ export class SidebarController {
    */
   loadSettings(settings) {
     this.setPosition(settings.position);
+    this.sidebarMainController.setWidth(settings.width);
     this.hideInPopupWindows = settings.hideInPopupWindows;
     this.autoHideBackButton = settings.autoHideBackButton;
     this.autoHideForwardButton = settings.autoHideForwardButton;
@@ -275,6 +279,7 @@ export class SidebarController {
   saveSettings() {
     new SidebarSettings(
       this.getPosition(),
+      this.sidebarMainController.getWidth(),
       this.hideInPopupWindows,
       this.autoHideBackButton,
       this.autoHideForwardButton
