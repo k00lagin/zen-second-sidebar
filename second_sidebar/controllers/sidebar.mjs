@@ -21,7 +21,7 @@ export class SidebarController {
     sidebar,
     sidebarToolbar,
     sidebarMoreMenuPopup,
-    sidebarSplitterUnpinned
+    sidebarSplitterUnpinned,
   ) {
     this.sidebarBox = sidebarBox;
     this.sidebar = sidebar;
@@ -86,7 +86,7 @@ export class SidebarController {
       addWebPanelButtonListener(event, (webPanel) => {
         openTrustedLinkIn(
           webPanel.getCurrentUrl(),
-          event.ctrlKey ? "tabshifted" : "tab"
+          event.ctrlKey ? "tabshifted" : "tab",
         );
       });
     });
@@ -282,7 +282,7 @@ export class SidebarController {
       this.sidebarMainController.getWidth(),
       this.hideInPopupWindows,
       this.autoHideBackButton,
-      this.autoHideForwardButton
+      this.autoHideForwardButton,
     ).save();
   }
 }

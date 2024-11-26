@@ -94,16 +94,16 @@ export class SidebarInjector {
   static #injectElements(elements) {
     elements.sidebarMain.appendChildren(
       elements.webPanelButtons,
-      elements.webPanelNewButton
+      elements.webPanelNewButton,
     );
     elements.sidebar.appendChildren(
       elements.sidebarToolbar,
-      elements.webPanels
+      elements.webPanels,
     );
     elements.sidebarBox.appendChildren(
       elements.sidebarBoxFiller,
       elements.sidebarSplitterUnpinned,
-      elements.sidebar
+      elements.sidebar,
     );
 
     const browser = new XULElement(null, {
@@ -112,7 +112,7 @@ export class SidebarInjector {
     browser.appendChildren(
       elements.sidebarSplitterPinned,
       elements.sidebarBox,
-      elements.sidebarMain
+      elements.sidebarMain,
     );
 
     const mainPopupSet = new XULElement(null, {
@@ -122,7 +122,7 @@ export class SidebarInjector {
       elements.webPanelPopupNew,
       elements.webPanelPopupEdit,
       elements.sidebarMainMenuPopup,
-      elements.sidebarMainPopupSettings
+      elements.sidebarMainPopupSettings,
     );
 
     const body = new XULElement(null, { element: document.body });
@@ -136,62 +136,65 @@ export class SidebarInjector {
   static #buildControllers(elements) {
     this.sidebarMainController = new SidebarMainController(
       elements.sidebarMain,
-      elements.sidebarMainMenuPopup
+      elements.sidebarMainMenuPopup,
     );
     this.sidebarMainSettingsController = new SidebarMainSettingsController(
-      elements.sidebarMainPopupSettings
+      elements.sidebarMainPopupSettings,
     );
     this.sidebarController = new SidebarController(
       elements.sidebarBox,
       elements.sidebar,
       elements.sidebarToolbar,
       elements.sidebarMoreMenuPopup,
-      elements.sidebarSplitterUnpinned
+      elements.sidebarSplitterUnpinned,
     );
     this.sidebarSplittersController = new SidebarSplittersController(
       elements.sidebarSplitterUnpinned,
-      elements.sidebarSplitterPinned
+      elements.sidebarSplitterPinned,
     );
     this.webPanelsController = new WebPanelsController(
       elements.webPanels,
       elements.webPanelButtons,
-      elements.webPanelTabs
+      elements.webPanelTabs,
     );
     this.webPanelNewController = new WebPanelNewController(
       elements.webPanelNewButton,
-      elements.webPanelPopupNew
+      elements.webPanelPopupNew,
     );
     this.webPanelEditController = new WebPanelEditController(
-      elements.webPanelPopupEdit
+      elements.webPanelPopupEdit,
     );
     this.contextItemController = new ContextItemController();
   }
 
   static #setupDependencies() {
     this.sidebarMainController.setupDependencies(
-      this.sidebarMainSettingsController
+      this.sidebarMainSettingsController,
     );
     this.sidebarMainSettingsController.setupDependencies(
       this.sidebarMainController,
-      this.sidebarController
+      this.sidebarController,
     );
-    this.sidebarController.setupDepenedencies(this.sidebarMainController, this.webPanelsController);
+    this.sidebarController.setupDepenedencies(
+      this.sidebarMainController,
+      this.webPanelsController,
+    );
     this.sidebarSplittersController.setupDependencies(
       this.sidebarController,
-      this.webPanelsController
+      this.webPanelsController,
     );
     this.webPanelsController.setupDependencies(
       this.sidebarController,
-      this.webPanelEditController
+      this.webPanelEditController,
     );
     this.webPanelNewController.setupDependencies(
       this.sidebarController,
       this.webPanelsController,
-      this.webPanelEditController
+      this.webPanelEditController,
     );
     this.webPanelEditController.setupDependencies(
       this.webPanelsController,
-      this.sidebarController
+      this.sidebarController,
     );
     this.contextItemController.setupDependencies(this.webPanelNewController);
   }

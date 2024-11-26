@@ -37,16 +37,16 @@ export class WebPanelsSettings {
             webPanelPref.mobile,
             webPanelPref.zoom,
             webPanelPref.loadOnStartup,
-            webPanelPref.unloadOnClose
-          )
-      )
+            webPanelPref.unloadOnClose,
+          ),
+      ),
     );
   }
 
   save() {
     Settings.save(
       PREF,
-      this.#webPanels.map((webPanel) => webPanel.toObject())
+      this.#webPanels.map((webPanel) => webPanel.toObject()),
     );
   }
 }

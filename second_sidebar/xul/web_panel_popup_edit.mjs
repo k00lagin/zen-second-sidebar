@@ -42,19 +42,19 @@ export class WebPanelPopupEdit extends Panel {
     this.mobileToggle = this.#createToggle();
     this.mobileGroup = this.#createToggleGroup(
       this.mobileToggle,
-      "Use mobile User Agent"
+      "Use mobile User Agent",
     );
 
     this.loadOnStartupToggle = this.#createToggle();
     this.loadOnStartupGroup = this.#createToggleGroup(
       this.loadOnStartupToggle,
-      "Load into memory at startup"
+      "Load into memory at startup",
     );
 
     this.unloadOnCloseToggle = this.#createToggle();
     this.unloadOnCloseGroup = this.#createToggleGroup(
       this.unloadOnCloseToggle,
-      "Unload from memory after closing"
+      "Unload from memory after closing",
     );
 
     this.buttonsRow = this.#createButtonsRow();
@@ -107,12 +107,12 @@ export class WebPanelPopupEdit extends Panel {
       .appendChild(
         this.moveButtons
           .appendChild(this.moveUpButton)
-          .appendChild(this.moveDownButton)
+          .appendChild(this.moveDownButton),
       )
       .appendChild(
         this.storageButtons
           .appendChild(this.deleteButton)
-          .appendChild(this.saveButton)
+          .appendChild(this.saveButton),
       );
     return row;
   }
@@ -281,7 +281,7 @@ export class WebPanelPopupEdit extends Panel {
         faviconURL,
         mobile,
         loadOnStartup,
-        unloadOnClose
+        unloadOnClose,
       );
     });
   }
@@ -326,7 +326,7 @@ export class WebPanelPopupEdit extends Panel {
     loadOnStartup,
     unloadOnClose,
     isFirst,
-    isLast
+    isLast,
   ) {
     this.uuid = uuid;
     this.urlInput.setValue(url);

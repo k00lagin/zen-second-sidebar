@@ -40,7 +40,7 @@ export class WebPanel extends Browser {
     mobile,
     zoom,
     loadOnStartup,
-    unloadOnClose
+    unloadOnClose,
   ) {
     super({
       classList: ["web-panel"],

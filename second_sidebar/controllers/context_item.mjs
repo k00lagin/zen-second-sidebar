@@ -13,7 +13,7 @@ export class ContextItemController {
   injectContextItem() {
     const menupopup = document.querySelector("#contentAreaContextMenu");
     const menuitem = new MenuItem({ id: "context-openlinkinsidebar" }).setLabel(
-      "Open Link in Second Sidebar"
+      "Open Link in Second Sidebar",
     );
 
     menuitem.addEventListener("command", () => {

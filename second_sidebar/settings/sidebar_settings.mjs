@@ -27,7 +27,7 @@ export class SidebarSettings {
     width,
     hideInPopupWindows,
     autoHideBackButton,
-    autoHideForwardButton
+    autoHideForwardButton,
   ) {
     this.#position = position;
     this.#width = width;
@@ -67,7 +67,7 @@ export class SidebarSettings {
       pref.width ?? "small",
       pref.hideInPopupWindows ?? false,
       pref.autoHideBackButton ?? false,
-      pref.autoHideForwardButton ?? false
+      pref.autoHideForwardButton ?? false,
     );
   }
 

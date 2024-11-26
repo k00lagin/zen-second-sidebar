@@ -39,7 +39,7 @@ export class WebPanelSettings {
     mobile,
     zoom,
     loadOnStartup,
-    unloadOnClose
+    unloadOnClose,
   ) {
     this.#uuid = uuid ?? crypto.randomUUID();
     this.#url = url;

@@ -48,14 +48,14 @@ export class WebPanelEditController {
           faviconURL,
           mobile,
           loadOnStartup,
-          unloadOnClose
+          unloadOnClose,
         );
         this.hidePopup();
         if (unloadOnClose && !webPanelController.isActive()) {
           webPanelController.unload();
         }
         this.webPanelsController.saveSettings();
-      }
+      },
     );
 
     this.webPanelPopupEdit.listenDeleteButtonClick((uuid) => {
@@ -86,7 +86,7 @@ export class WebPanelEditController {
       webPanel.loadOnStartup,
       webPanel.unloadOnClose,
       webPanelController.isFirst(),
-      webPanelController.isLast()
+      webPanelController.isLast(),
     );
     this.webPanelPopupEdit.openPopup(webPanelButton);
   }

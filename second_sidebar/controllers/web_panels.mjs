@@ -67,7 +67,7 @@ export class WebPanelsController {
   getActive() {
     return (
       Object.values(this.webPanelControllers).find((webPanelController) =>
-        webPanelController.webPanel.isActive()
+        webPanelController.webPanel.isActive(),
       ) ?? null
     );
   }
@@ -125,7 +125,7 @@ export class WebPanelsController {
    */
   getIndex(uuid) {
     return this.webPanelControllers.findIndex(
-      (webPanelController) => webPanelController.getUUID() === uuid
+      (webPanelController) => webPanelController.getUUID() === uuid,
     );
   }
 
@@ -171,7 +171,7 @@ export class WebPanelsController {
 
       this.webPanelButtons.element.insertBefore(
         webPanelController.webPanelButton.element,
-        webPanelController.webPanelButton.element.previousSibling
+        webPanelController.webPanelButton.element.previousSibling,
       );
     }
   }
@@ -188,7 +188,7 @@ export class WebPanelsController {
 
       this.webPanelButtons.element.insertBefore(
         webPanelController.webPanelButton.element.nextSibling,
-        webPanelController.webPanelButton.element
+        webPanelController.webPanelButton.element,
       );
     }
 
@@ -230,7 +230,7 @@ export class WebPanelsController {
       zoom = 1,
       loadOnStartup = false,
       unloadOnClose = false,
-    } = {}
+    } = {},
   ) {
     return new WebPanel(
       webPanelTab,
@@ -242,7 +242,7 @@ export class WebPanelsController {
       mobile,
       zoom,
       loadOnStartup,
-      unloadOnClose
+      unloadOnClose,
     );
   }
 
@@ -266,7 +266,7 @@ export class WebPanelsController {
         loadOnStartup: webPanelSettings.loadOnStartup,
         unloadOnClose: webPanelSettings.unloadOnClose,
         webPanelTab,
-      }
+      },
     ).hide();
   }
 
@@ -281,7 +281,7 @@ export class WebPanelsController {
       .setTooltipText(
         webPanel.url.length > URL_TOOLTIP_LIMIT
           ? webPanel.url.slice(0, URL_TOOLTIP_LIMIT - 3) + "..."
-          : webPanel.url
+          : webPanel.url,
       )
       .setUnloaded(!webPanel.loadOnStartup);
   }
@@ -297,12 +297,12 @@ export class WebPanelsController {
     const webPanelController = new WebPanelController(
       webPanel,
       webPanelButton,
-      webPanelTab
+      webPanelTab,
     );
     webPanelController.setupDependencies(
       this,
       this.sidebarController,
-      this.webPanelEditController
+      this.webPanelEditController,
     );
     return webPanelController;
   }
@@ -316,7 +316,7 @@ export class WebPanelsController {
       const webPanelTab = this.makeWebPanelTab(webPanelSettings.uuid);
       const webPanel = this.#makeWebPanelFromPref(
         webPanelSettings,
-        webPanelTab
+        webPanelTab,
       );
 
       const webPanelButton = this.makeWebPanelButton(webPanel);
@@ -324,7 +324,7 @@ export class WebPanelsController {
       const webPanelController = this.#makeWebPanelController(
         webPanel,
         webPanelButton,
-        webPanelTab
+        webPanelTab,
       );
 
       if (webPanel.loadOnStartup) {
@@ -343,8 +343,8 @@ export class WebPanelsController {
   saveSettings() {
     new WebPanelsSettings(
       this.webPanelControllers.map((webPanelController) =>
-        webPanelController.dumpSettings()
-      )
+        webPanelController.dumpSettings(),
+      ),
     ).save();
   }
 }

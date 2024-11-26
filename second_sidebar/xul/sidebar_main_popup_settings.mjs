@@ -27,7 +27,7 @@ export class SidebarMainPopupSettings extends Panel {
     this.positionMenuList = this.#createPositionMenuList();
     this.positionGroup = this.#createGroup(
       this.positionMenuList,
-      "Sidebar position"
+      "Sidebar position",
     );
 
     this.widthMenuList = this.#createWidthMenuList();
@@ -36,18 +36,18 @@ export class SidebarMainPopupSettings extends Panel {
     this.hideInPopupWindowsToggle = this.#createToggle();
     this.hideInPopupWindowsGroup = this.#createGroup(
       this.hideInPopupWindowsToggle,
-      "Hide sidebar in popup windows"
+      "Hide sidebar in popup windows",
     );
 
     this.autoHideBackToggle = this.#createToggle();
     this.autoHideBackGroup = this.#createGroup(
       this.autoHideBackToggle,
-      "Auto hide back button"
+      "Auto hide back button",
     );
     this.autoHideForwardToggle = this.#createToggle();
     this.autoHideForwardGroup = this.#createGroup(
       this.autoHideForwardToggle,
-      "Auto hide forward button"
+      "Auto hide forward button",
     );
     this.multiView = this.#createMultiView();
 
@@ -132,7 +132,7 @@ export class SidebarMainPopupSettings extends Panel {
       this.hideInPopupWindowsGroup,
       this.autoHideBackGroup,
       this.autoHideForwardGroup,
-      this.buttons
+      this.buttons,
     );
 
     this.appendChild(multiView);
@@ -168,7 +168,7 @@ export class SidebarMainPopupSettings extends Panel {
         width,
         hideInPopupWindows,
         autoHideBackButton,
-        autoHideForwardButton
+        autoHideForwardButton,
       );
     });
   }
@@ -207,7 +207,7 @@ export class SidebarMainPopupSettings extends Panel {
     width,
     hideInPopupWindows,
     autoHideBackButton,
-    autoHideForwardButton
+    autoHideForwardButton,
   ) {
     this.positionMenuList.setValue(position);
     this.widthMenuList.setValue(width);

@@ -34,7 +34,7 @@ export class SidebarMainSettingsController {
         width,
         hideInPopupWindows,
         autoHideBackButton,
-        autoHideForwardButton
+        autoHideForwardButton,
       ) => {
         this.sidebarController.setPosition(position);
         this.sidebarMainController.setWidth(width);
@@ -43,7 +43,7 @@ export class SidebarMainSettingsController {
         this.sidebarController.autoHideForwardButton = autoHideForwardButton;
         this.sidebarController.saveSettings();
         this.sidebarMainPopupSettings.hidePopup();
-      }
+      },
     );
   }
 
@@ -59,7 +59,7 @@ export class SidebarMainSettingsController {
       this.sidebarMainController.getWidth(),
       this.sidebarController.hideInPopupWindows,
       this.sidebarController.autoHideBackButton,
-      this.sidebarController.autoHideForwardButton
+      this.sidebarController.autoHideForwardButton,
     );
   }
 }

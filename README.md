@@ -19,13 +19,13 @@ https://github.com/user-attachments/assets/60a2da4f-2165-4d92-983a-f4a79d17e3ef
 3. Pinning and unpinning the sidebar, each web panel has its own state. In the pinned state, the sidebar will be located statically next to the page. The unpinned sidebar appears on top of the page and closes when the focus is lost.
 4. Closing sidebar with unloading of the web panel;
 5. Editing the web panel by right-clicking on the corresponding button:
-    - Changing the web address.
-    - Changing the favicon.
-    - Resetting the favicon.
-    - Option to load into memory at startup.
-    - Option to unload from memory after closing.
-    - Moving the web panel button.
-    - Deleting the web panel.
+   - Changing the web address.
+   - Changing the favicon.
+   - Resetting the favicon.
+   - Option to load into memory at startup.
+   - Option to unload from memory after closing.
+   - Moving the web panel button.
+   - Deleting the web panel.
 6. Unloading web panel from memory by middle-clicking on the corresponding button.
 7. Managing the page opened in the web panel: going back and forth, refreshing the page and going to the home page.
 8. Sound indicator.

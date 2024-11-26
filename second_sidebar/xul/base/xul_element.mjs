@@ -15,7 +15,7 @@ export class XULElement {
       classList = [],
       create = (tag) => document.createXULElement(tag),
       element,
-    } = {}
+    } = {},
   ) {
     this.element = element ?? create(tag);
     if (id !== null) {

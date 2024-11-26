@@ -28,7 +28,7 @@ export class WebPanelController {
   setupDependencies(
     webPanelsController,
     sidebarController,
-    webPanelEditController
+    webPanelEditController,
   ) {
     this.webPanelsController = webPanelsController;
     this.sidebarController = sidebarController;
@@ -91,7 +91,7 @@ export class WebPanelController {
           this.webPanel.canGoBack(),
           this.webPanel.canGoForward(),
           this.webPanel.getTitle(),
-          this.webPanel.getZoom()
+          this.webPanel.getZoom(),
         );
         this.show();
       }
@@ -224,7 +224,7 @@ export class WebPanelController {
       this.webPanel.mobile,
       this.webPanel.zoom,
       this.webPanel.loadOnStartup,
-      this.webPanel.unloadOnClose
+      this.webPanel.unloadOnClose,
     );
   }
 }
