@@ -146,7 +146,7 @@ export class Browser extends XULElement {
    * @returns {Browser}
    */
   setZoom(value) {
-    ZoomManager.setZoomForBrowser(this.element, value);
+    FullZoom.setZoom(value, this.element);
     return this;
   }
 
