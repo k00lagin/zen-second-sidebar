@@ -35,6 +35,7 @@ export class WebPanelsSettings {
             webPanelPref.pinned,
             webPanelPref.width,
             webPanelPref.mobile,
+            webPanelPref.zoom,
             webPanelPref.loadOnStartup,
             webPanelPref.unloadOnClose
           )
