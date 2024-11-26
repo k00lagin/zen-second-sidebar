@@ -113,13 +113,13 @@ export class WebPanelController {
   }
 
   show() {
-    this.webPanel.show().setDocShellIsActive(true).preserveLayers(false);
+    this.webPanel.show().preserveLayers(false);
     this.webPanelButton.setOpen(true);
     this.webPanelButton.setUnloaded(false);
   }
 
   hide() {
-    this.webPanel.hide().setDocShellIsActive(false).preserveLayers(true);
+    this.webPanel.hide().preserveLayers(true);
     if (this.webPanel.unloadOnClose) {
       this.unload();
     }
