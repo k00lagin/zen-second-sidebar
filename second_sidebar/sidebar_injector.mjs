@@ -1,5 +1,4 @@
 import { ContextItemController } from "./controllers/context_item.mjs";
-import { Settings } from "./settings.mjs";
 import { Sidebar } from "./xul/sidebar.mjs";
 import { SidebarBox } from "./xul/sidebar_box.mjs";
 import { SidebarBoxFiller } from "./xul/sidebar_box_filler.mjs";
@@ -10,6 +9,7 @@ import { SidebarMainMenuPopup } from "./xul/sidebar_main_menupopup.mjs";
 import { SidebarMainPopupSettings } from "./xul/sidebar_main_popup_settings.mjs";
 import { SidebarMainSettingsController } from "./controllers/sidebar_main_settings.mjs";
 import { SidebarMoreMenuPopup } from "./xul/sidebar_more_menupopup.mjs";
+import { SidebarSettings } from "./settings/sidebar_settings.mjs";
 import { SidebarSplitterPinned } from "./xul/sidebar_splitter_pinned.mjs";
 import { SidebarSplitterUnpinned } from "./xul/sidebar_splitter_unpinned.mjs";
 import { SidebarSplittersController } from "./controllers/sidebar_splitters.mjs";
@@ -23,16 +23,43 @@ import { WebPanelPopupNew } from "./xul/web_panel_popup_new.mjs";
 import { WebPanelTabs } from "./xul/web_panel_tabs.mjs";
 import { WebPanels } from "./xul/web_panels.mjs";
 import { WebPanelsController } from "./controllers/web_panels.mjs";
+import { WebPanelsSettings } from "./settings/web_panels_settings.mjs";
 import { XULElement } from "./xul/base/xul_element.mjs";
 
 export class SidebarInjector {
+  /**
+   *
+   * @returns {boolean}
+   */
   static inject() {
+    this.sidebarSettings = SidebarSettings.load();
+    if (this.#isPopupWindow() && this.sidebarSettings.hideInPopupWindows) {
+      return false;
+    }
+
+    this.webPanelsSettings = WebPanelsSettings.load();
+
     const elements = this.#createElements();
     this.#injectElements(elements);
     this.#buildControllers(elements);
     this.#setupDependencies();
-    this.#loadPrefs();
+    this.#applySettings();
     this.contextItemController.injectContextItem();
+    return true;
+  }
+
+  /**
+   *
+   * @returns {boolean}
+   */
+  static #isPopupWindow() {
+    const mainWindow = new XULElement(null, {
+      element: document.querySelector("#main-window"),
+    });
+    return (
+      mainWindow.hasAttribute("chromehidden") &&
+      mainWindow.getAttribute("chromehidden").includes("extrachrome")
+    );
   }
 
   /**
@@ -168,8 +195,8 @@ export class SidebarInjector {
     this.contextItemController.setupDependencies(this.webPanelNewController);
   }
 
-  static #loadPrefs() {
-    this.webPanelsController.loadPref(Settings.loadWebPanelsPref());
-    this.sidebarController.loadPref(Settings.loadSidebarSettingsPref());
+  static #applySettings() {
+    this.sidebarController.loadSettings(this.sidebarSettings);
+    this.webPanelsController.loadSettings(this.webPanelsSettings);
   }
 }

@@ -30,6 +30,12 @@ export class SidebarMainPopupSettings extends Panel {
       "Sidebar position"
     );
 
+    this.hideInPopupWindowsToggle = this.#createToggle();
+    this.hideInPopupWindowsGroup = this.#createGroup(
+      this.hideInPopupWindowsToggle,
+      "Hide sidebar in popup windows"
+    );
+
     this.autoHideBackToggle = this.#createToggle();
     this.autoHideBackGroup = this.#createGroup(
       this.autoHideBackToggle,
@@ -101,6 +107,7 @@ export class SidebarMainPopupSettings extends Panel {
       this.panelHeader,
       new ToolbarSeparator(),
       this.positionGroup,
+      this.hideInPopupWindowsGroup,
       this.autoHideBackGroup,
       this.autoHideForwardGroup,
       this.buttons
@@ -122,7 +129,7 @@ export class SidebarMainPopupSettings extends Panel {
 
   /**
    *
-   * @param {function(boolean, boolean):void} callback
+   * @param {function(string, boolean, boolean, boolean):void} callback
    */
   listenSaveButtonClick(callback) {
     this.saveButton.addEventListener("mousedown", (event) => {
@@ -130,9 +137,15 @@ export class SidebarMainPopupSettings extends Panel {
         return;
       }
       const position = this.positionMenuList.getValue();
+      const hideInPopupWindows = this.hideInPopupWindowsToggle.getPressed();
       const autoHideBackButton = this.autoHideBackToggle.getPressed();
       const autoHideForwardButton = this.autoHideForwardToggle.getPressed();
-      callback(position, autoHideBackButton, autoHideForwardButton);
+      callback(
+        position,
+        hideInPopupWindows,
+        autoHideBackButton,
+        autoHideForwardButton
+      );
     });
   }
 
@@ -160,11 +173,18 @@ export class SidebarMainPopupSettings extends Panel {
   /**
    *
    * @param {string} position
+   * @param {boolean} hideInPopupWindows
    * @param {boolean} autoHideBackButton
    * @param {boolean} autoHideForwardButton
    */
-  setDefaults(position, autoHideBackButton, autoHideForwardButton) {
+  setDefaults(
+    position,
+    hideInPopupWindows,
+    autoHideBackButton,
+    autoHideForwardButton
+  ) {
     this.positionMenuList.setValue(position);
+    this.hideInPopupWindowsToggle.setPressed(hideInPopupWindows);
     this.autoHideBackToggle.setPressed(autoHideBackButton);
     this.autoHideForwardToggle.setPressed(autoHideForwardButton);
   }

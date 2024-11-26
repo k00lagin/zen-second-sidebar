@@ -1,15 +1,14 @@
-import { Settings } from "../settings.mjs";
 import { SidebarController } from "./sidebar.mjs";
 import { WebPanel } from "../xul/web_panel.mjs";
 import { WebPanelButton } from "../xul/web_panel_button.mjs";
 import { WebPanelButtons } from "../xul/web_panel_buttons.mjs";
 import { WebPanelController } from "./web_panel.mjs";
 import { WebPanelEditController } from "./web_panel_edit.mjs";
+import { WebPanelSettings } from "../settings/web_panel_settings.mjs";
 import { WebPanelTab } from "../xul/web_panel_tab.mjs";
 import { WebPanelTabs } from "../xul/web_panel_tabs.mjs";
 import { WebPanels } from "../xul/web_panels.mjs";
-
-const PREF = "second-sidebar.web-panels";
+import { WebPanelsSettings } from "../settings/web_panels_settings.mjs";
 
 export class WebPanelsController {
   /**
@@ -245,22 +244,22 @@ export class WebPanelsController {
 
   /**
    *
-   * @param {object} webPanelPref
+   * @param {WebPanelSettings} webPanelSettings
    * @param {WebPanelTab} webPanelTab
    * @returns {WebPanel}
    */
-  #makeWebPanelFromPref(webPanelPref, webPanelTab) {
+  #makeWebPanelFromPref(webPanelSettings, webPanelTab) {
     return this.makeWebPanel(
       webPanelTab,
-      webPanelPref.uuid ?? crypto.randomUUID(),
-      webPanelPref.url,
-      webPanelPref.faviconURL,
+      webPanelSettings.uuid,
+      webPanelSettings.url,
+      webPanelSettings.faviconURL,
       {
-        pinned: webPanelPref.pinned ?? true,
-        width: webPanelPref.width ?? "400",
-        mobile: webPanelPref.mobile ?? false,
-        loadOnStartup: webPanelPref.loadOnStartup ?? false,
-        unloadOnClose: webPanelPref.unloadOnClose ?? false,
+        pinned: webPanelSettings.pinned,
+        width: webPanelSettings.width,
+        mobile: webPanelSettings.mobile,
+        loadOnStartup: webPanelSettings.loadOnStartup,
+        unloadOnClose: webPanelSettings.unloadOnClose,
         webPanelTab,
       }
     ).hide();
@@ -300,12 +299,15 @@ export class WebPanelsController {
 
   /**
    *
-   * @param {Array<Object> | null} webPanelsPref
+   * @param {WebPanelsSettings} webPanelsSettings
    */
-  loadPref(webPanelsPref) {
-    for (const webPanelPref of webPanelsPref ?? []) {
-      const webPanelTab = this.makeWebPanelTab(webPanelPref.uuid);
-      const webPanel = this.#makeWebPanelFromPref(webPanelPref, webPanelTab);
+  loadSettings(webPanelsSettings) {
+    for (const webPanelSettings of webPanelsSettings.webPanels) {
+      const webPanelTab = this.makeWebPanelTab(webPanelSettings.uuid);
+      const webPanel = this.#makeWebPanelFromPref(
+        webPanelSettings,
+        webPanelTab
+      );
 
       const webPanelButton = this.makeWebPanelButton(webPanel);
 
@@ -328,21 +330,11 @@ export class WebPanelsController {
     }
   }
 
-  savePref() {
-    const webPanelsPref = [];
-    for (const webPanelController of this.webPanelControllers) {
-      const webPanel = webPanelController.webPanel;
-      webPanelsPref.push({
-        uuid: webPanel.uuid,
-        url: webPanel.url,
-        faviconURL: webPanel.faviconURL,
-        pinned: webPanel.pinned,
-        width: webPanel.width,
-        mobile: webPanel.mobile,
-        loadOnStartup: webPanel.loadOnStartup,
-        unloadOnClose: webPanel.unloadOnClose,
-      });
-    }
-    Settings.saveWebPanelsPref(webPanelsPref);
+  saveSettings() {
+    new WebPanelsSettings(
+      this.webPanelControllers.map((webPanelController) =>
+        webPanelController.dumpSettings()
+      )
+    ).save();
   }
 }

@@ -1,7 +1,7 @@
-import { Settings } from "../settings.mjs";
 import { Sidebar } from "../xul/sidebar.mjs";
 import { SidebarBox } from "../xul/sidebar_box.mjs";
 import { SidebarMoreMenuPopup } from "../xul/sidebar_more_menupopup.mjs";
+import { SidebarSettings } from "../settings/sidebar_settings.mjs";
 import { SidebarSplitterUnpinned } from "../xul/sidebar_splitter_unpinned.mjs";
 import { SidebarToolbar } from "../xul/sidebar_toolbar.mjs";
 import { WebPanelsController } from "./web_panels.mjs";
@@ -30,6 +30,7 @@ export class SidebarController {
     this.sidebarSplitterUnpinned = sidebarSplitterUnpinned;
     this.#setupListeners();
 
+    this.hideInPopupWindows = false;
     this.autoHideBackButton = false;
     this.autoHideForwardButton = false;
   }
@@ -228,22 +229,21 @@ export class SidebarController {
 
   /**
    *
-   * @param {Object | null} sidebarSettingsPref
+   * @param {SidebarSettings} settings
    */
-  loadPref(sidebarSettingsPref) {
-    sidebarSettingsPref ??= {};
-    this.setPosition(sidebarSettingsPref.position ?? "right");
-    this.autoHideBackButton = sidebarSettingsPref.autoHideBackButton ?? false;
-    this.autoHideForwardButton =
-      sidebarSettingsPref.autoHideForwardButton ?? false;
+  loadSettings(settings) {
+    this.setPosition(settings.position);
+    this.hideInPopupWindows = settings.hideInPopupWindows;
+    this.autoHideBackButton = settings.autoHideBackButton;
+    this.autoHideForwardButton = settings.autoHideForwardButton;
   }
 
-  savePref() {
-    const sidebarSettingsPref = {
-      position: this.getPosition(),
-      autoHideBackButton: this.autoHideBackButton,
-      autoHideForwardButton: this.autoHideForwardButton,
-    };
-    Settings.saveSidebarSettingsPref(sidebarSettingsPref);
+  saveSettings() {
+    new SidebarSettings(
+      this.getPosition(),
+      this.hideInPopupWindows,
+      this.autoHideBackButton,
+      this.autoHideForwardButton
+    ).save();
   }
 }
