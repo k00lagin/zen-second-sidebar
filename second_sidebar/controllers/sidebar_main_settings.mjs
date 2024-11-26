@@ -1,4 +1,5 @@
 import { SidebarController } from "./sidebar.mjs";
+import { SidebarMainController } from "./sidebar_main.mjs";
 import { SidebarMainPopupSettings } from "../xul/sidebar_main_popup_settings.mjs";
 
 export class SidebarMainSettingsController {
@@ -14,9 +15,11 @@ export class SidebarMainSettingsController {
 
   /**
    *
+   * @param {SidebarMainController} sidebarMainController
    * @param {SidebarController} sidebarController
    */
-  setupDependencies(sidebarController) {
+  setupDependencies(sidebarMainController, sidebarController) {
+    this.sidebarMainController = sidebarMainController;
     this.sidebarController = sidebarController;
   }
 
@@ -28,11 +31,13 @@ export class SidebarMainSettingsController {
     this.sidebarMainPopupSettings.listenSaveButtonClick(
       (
         position,
+        width,
         hideInPopupWindows,
         autoHideBackButton,
         autoHideForwardButton
       ) => {
         this.sidebarController.setPosition(position);
+        this.sidebarMainController.setWidth(width);
         this.sidebarController.hideInPopupWindows = hideInPopupWindows;
         this.sidebarController.autoHideBackButton = autoHideBackButton;
         this.sidebarController.autoHideForwardButton = autoHideForwardButton;
@@ -51,6 +56,7 @@ export class SidebarMainSettingsController {
     this.sidebarMainPopupSettings.openPopupAtScreen(screenX, screenY);
     this.sidebarMainPopupSettings.setDefaults(
       this.sidebarController.getPosition(),
+      this.sidebarMainController.getWidth(),
       this.sidebarController.hideInPopupWindows,
       this.sidebarController.autoHideBackButton,
       this.sidebarController.autoHideForwardButton

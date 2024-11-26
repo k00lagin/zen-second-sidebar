@@ -172,6 +172,26 @@ export class XULElement {
 
   /**
    *
+   * @param {string} property
+   * @returns {string}
+   */
+  getProperty(property) {
+    return this.element.style.getPropertyValue(property);
+  }
+
+  /**
+   *
+   * @param {string} property
+   * @param {string} value
+   * @returns {XULElement}
+   */
+  setProperty(property, value) {
+    this.element.style.setProperty(property, value);
+    return this;
+  }
+
+  /**
+   *
    * @param {string} event
    * @param {function(MouseEvent):void} callback
    * @returns {XULElement}

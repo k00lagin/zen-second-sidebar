@@ -5,7 +5,7 @@ export const SIDEBAR_MAIN_CSS = `
     gap: 8px;
     overflow-y: scroll;
     scrollbar-width: none;
-    padding: 0 var(--space-small) 0 var(--space-small);
+    padding: 0 var(--sidebar-2-main-padding);
   }
 
   #browser:has(#sidebar-2[position="right"]) #sidebar-2-main {
