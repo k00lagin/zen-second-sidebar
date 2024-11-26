@@ -100,6 +100,15 @@ export class XULElement {
   /**
    *
    * @param {string} name
+   * @returns {boolean}
+   */
+  hasAttribute(name) {
+    return this.element.hasAttribute(name);
+  }
+
+  /**
+   *
+   * @param {string} name
    * @returns {string|number}
    */
   getAttribute(name) {

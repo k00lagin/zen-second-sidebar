@@ -9,8 +9,8 @@ import { SidebarDecorator } from "./second_sidebar/sidebar_decorator.mjs";
 import { SidebarInjector } from "./second_sidebar/sidebar_injector.mjs";
 
 const run = () => {
-  SidebarInjector.inject();
-  SidebarDecorator.decorate();
+  if (SidebarInjector.inject()) {
+    SidebarDecorator.decorate();
+  }
 };
-
 UC_API.Runtime.startupFinished().then(run);

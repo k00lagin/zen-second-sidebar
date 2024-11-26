@@ -114,7 +114,7 @@ export class WebPanelNewController {
     webPanelController.show();
 
     this.webPanelsController.add(webPanelController);
-    this.webPanelsController.savePref();
+    this.webPanelsController.saveSettings();
   }
 
   hidePopup() {

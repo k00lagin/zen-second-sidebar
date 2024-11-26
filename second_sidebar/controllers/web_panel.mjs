@@ -2,6 +2,7 @@ import { SidebarController } from "./sidebar.mjs";
 import { WebPanel } from "../xul/web_panel.mjs";
 import { WebPanelButton } from "../xul/web_panel_button.mjs";
 import { WebPanelEditController } from "./web_panel_edit.mjs";
+import { WebPanelSettings } from "../settings/web_panel_settings.mjs";
 import { WebPanelTab } from "../xul/web_panel_tab.mjs";
 import { WebPanelsController } from "./web_panels.mjs";
 
@@ -203,5 +204,22 @@ export class WebPanelController {
     this.webPanel.remove();
     this.webPanelTab.remove();
     this.webPanelButton.remove();
+  }
+
+  /**
+   *
+   * @returns {WebPanelSettings}
+   */
+  dumpSettings() {
+    return new WebPanelSettings(
+      this.webPanel.uuid,
+      this.webPanel.url,
+      this.webPanel.faviconURL,
+      this.webPanel.pinned,
+      this.webPanel.width,
+      this.webPanel.mobile,
+      this.webPanel.loadOnStartup,
+      this.webPanel.unloadOnClose
+    );
   }
 }
