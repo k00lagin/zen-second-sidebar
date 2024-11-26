@@ -10,6 +10,8 @@ import { WebPanelTabs } from "../xul/web_panel_tabs.mjs";
 import { WebPanels } from "../xul/web_panels.mjs";
 import { WebPanelsSettings } from "../settings/web_panels_settings.mjs";
 
+const URL_TOOLTIP_LIMIT = 64;
+
 export class WebPanelsController {
   /**
    *
@@ -276,6 +278,11 @@ export class WebPanelsController {
   makeWebPanelButton(webPanel) {
     return new WebPanelButton(webPanel.uuid)
       .setIcon(webPanel.faviconURL)
+      .setTooltipText(
+        webPanel.url.length > URL_TOOLTIP_LIMIT
+          ? webPanel.url.slice(0, URL_TOOLTIP_LIMIT - 3) + "..."
+          : webPanel.url
+      )
       .setUnloaded(!webPanel.loadOnStartup);
   }
 
