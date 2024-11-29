@@ -4,11 +4,11 @@ import { MenuPopup } from "./base/menupopup.mjs";
 export class SidebarMainMenuPopup extends MenuPopup {
   constructor() {
     super({
-      id: "sidebar-2-main-menupopup",
-      classList: ["sidebar-2-menupopup"],
+      id: "sb2-main-menupopup",
+      classList: ["sb2-menupopup"],
     });
 
-    this.settingsItem = new MenuItem().setLabel("Sidebar Settings");
+    this.settingsItem = new MenuItem().setLabel("Sidebar settings");
     this.appendChild(this.settingsItem);
   }
 
