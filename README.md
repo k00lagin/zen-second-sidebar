@@ -2,7 +2,7 @@
 
 A Firefox userChrome.js script for adding a second sidebar with web panels like in Vivaldi/Floorp/Zen.
 
-![update](https://github.com/user-attachments/assets/3cdfc422-e33c-4142-8400-99222ac3b444)
+![promo_rounded](https://github.com/user-attachments/assets/d81493d3-a7f7-4798-9249-a2b9e5e3a8b7)
 
 ## Motivation
 
@@ -10,26 +10,97 @@ There are many forks of Firefox, but I prefer to continue using the original bro
 
 ## Demo
 
-https://github.com/user-attachments/assets/60a2da4f-2165-4d92-983a-f4a79d17e3ef
+https://github.com/user-attachments/assets/e11f7657-62b0-4936-994f-5c8ae13618f6
 
 ## Features
 
-1. Adding a new web panel by left-clicking on the plus sign. If you are on a web page, the current address will be automatically inserted into the address bar.
-2. Changing the width of the sidebar, each web panel has its own width.
-3. Pinning and unpinning the sidebar, each web panel has its own state. In the pinned state, the sidebar will be located statically next to the page. The unpinned sidebar appears on top of the page and closes when the focus is lost.
-4. Closing sidebar with unloading of the web panel;
-5. Editing the web panel by right-clicking on the corresponding button:
-   - Changing the web address.
-   - Changing the favicon.
-   - Resetting the favicon.
-   - Option to load into memory at startup.
-   - Option to unload from memory after closing.
-   - Moving the web panel button.
-   - Deleting the web panel.
-6. Unloading web panel from memory by middle-clicking on the corresponding button.
-7. Managing the page opened in the web panel: going back and forth, refreshing the page and going to the home page.
-8. Sound indicator.
-9. Indicator of unloaded web panel (dimmed icon).
+<table>
+   <tr>
+      <td>
+      <h3>Adding new web panel</h3>
+         <ol>
+            <li>Left-click on the Plus button.</li>
+            <li>Enter the web address. The current address will be automatically inserted into the field.</li>
+            <li>Press Enter or click on the "Create" button.</li>
+            <li>A new web panel will be created with default settings.</li>
+         </ol>
+      </td>
+      <td><img src="https://github.com/user-attachments/assets/da636324-3408-4c6b-b625-84d6a0090e88" width="400px" /></td>
+   </tr>
+   <tr>
+      <td>
+         <h3>Changing width of the web panel</h3>
+         After creating a web panel, you might want to consider changing its width. To achieve this, position the mouse cursor at the edge of the web panel opposite the sidebar and then drag it.
+      </td>
+      <td><img src="https://github.com/user-attachments/assets/6c47c56d-4d7c-467f-83b8-018cc3547370" width="400px" /></td>
+   </tr>
+   <tr>
+      <td>
+         <h3>Pinning and unpinning the web panel</h3>
+         Depending on your needs, you can pin the web panel to the side of the web page or make it appear on top of the content.
+      </td>
+      <td><img src="https://github.com/user-attachments/assets/048fd1e2-d50e-4ffc-beba-dc33d06e7251" width="400px" /></td>
+   </tr>
+   <tr>
+      <td>
+         <h3>Mobile view and zooming</h3>
+         There is an option to open the website using the mobile user agent. There are also buttons to zoom in and out of the content.
+      </td>
+      <td><img src="https://github.com/user-attachments/assets/fad1d08e-f906-47d1-990d-9e6568e1512b" width="400px" /></td>
+   </tr>
+   <tr>
+      <td>
+         <h3>Unloading the web panel from memory</h3>
+         To save memory, you can manually unload the web panel using two methods: the toolbar button or the context menu.
+      </td>
+      <td><img src="https://github.com/user-attachments/assets/d41a7e0b-f751-45a4-9403-653254417ee1" width="400px" /></td>
+   </tr>
+   <tr>
+      <td>
+         <h3>Web panel settings</h3>
+         Here you can change the following:
+         <ol>
+            <li>Page address. After changing the relevant field, please wait one second for the changes to be temporarily applied. They will be saved or canceled depending on your next action.
+</li>
+            <li>Favicon address. The same as for the page address.</li>
+            <li>Web panel type: floating or pinned.</li>
+            <li>Use mobile User Agent.</li>
+            <li>Load into memory at startup: automatic loading of the web panel. </li>
+            <li>Unload from memory after closing.</li>
+            <li>Hide toolbar: "headless" web panel.</li>
+            <li>Zoom.</li>
+            <li>Position of the web panel button.</li>
+         </ol>
+         All changes are applied instantly, but can be rolled back by clicking the "Cancel" button or by losing focus. They are saved only after clicking the "Save" button.
+      </td>
+      <td><img src="https://github.com/user-attachments/assets/78d01e86-26cf-4726-8dae-8f8588a30c2e" width="400px" /></td>
+   </tr>
+   <tr>
+      <td>
+         <h3>Deleting the web panel</h3>
+         There is confirmation of the deletion, so you don't need to worry about accidentally deleting the web panel.
+      </td>
+      <td><img src="https://github.com/user-attachments/assets/f564e590-a7ab-4a66-aa50-d7e8169a3f89" width="400px" /></td>
+   </tr>
+   <tr>
+      <td>
+         <h3>Sidebar settings</h3>
+         Here you can change the following:
+         <ol>
+            <li>Sidebar position: left or right.</li>
+            <li>Sidebar buttons position: top or bottom.</li>
+            <li>Plus button position: above web panel buttons or below them.</li>
+            <li>Sidebar width with predefined values.</li>
+            <li>Sidebar buttons size in pixels.</li>
+            <li>Floating web panel offset.</li>
+            <li>Hide sidebar in popup windows.</li>
+            <li>Auto-hide of back and forward buttons from toolbar.</li>
+         </ol>
+         All changes are applied instantly, but can be rolled back by clicking the "Cancel" button or by losing focus. They are saved only after clicking the "Save" button.
+      </td>
+      <td><img src="https://github.com/user-attachments/assets/21fc96c3-8cf5-463a-a2ba-f3ca75a70132" width="400px" /></td>
+   </tr>
+</table>
 
 ## Install (fx-autoconfig)
 
@@ -41,3 +112,6 @@ https://github.com/user-attachments/assets/60a2da4f-2165-4d92-983a-f4a79d17e3ef
 ## If you use another loader
 
 Use a wrapper script provided by @dimdamin: https://github.com/aminought/firefox-second-sidebar/issues/5.
+
+
+
