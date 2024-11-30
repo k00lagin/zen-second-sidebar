@@ -112,6 +112,3 @@ https://github.com/user-attachments/assets/e11f7657-62b0-4936-994f-5c8ae13618f6
 ## If you use another loader
 
 Use a wrapper script provided by @dimdamin: https://github.com/aminought/firefox-second-sidebar/issues/5.
-
-
-
