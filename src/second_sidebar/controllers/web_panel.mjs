@@ -1,9 +1,5 @@
 /* eslint-disable no-unused-vars */
-import {
-  isLeftMouseButton,
-  isMiddleMouseButton,
-  isRightMouseButton,
-} from "../utils/buttons.mjs";
+import { isLeftMouseButton, isMiddleMouseButton } from "../utils/buttons.mjs";
 
 import { SidebarController } from "./sidebar.mjs";
 import { WebPanel } from "../xul/web_panel.mjs";
@@ -121,12 +117,7 @@ export class WebPanelController {
   initWebPanel() {
     this.hackAsyncTabSwitcher();
 
-    this.webPanel.addEventListener("visibilitychange", (event) => {
-      console.log("visibilitychange", event);
-    });
-    this.webPanel.listenBrowserProgressListener((event) => {
-      console.log(event);
-      console.log(this.getCurrentUrl());
+    this.webPanel.listenBrowserProgressListener(() => {
       this.webPanel.setZoom(this.webPanel.zoom);
       if (this.webPanel.isActive()) {
         const canGoBack = this.webPanel.canGoBack();
