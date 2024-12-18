@@ -101,4 +101,19 @@ export class WebPanelButton extends Widget {
     );
     return Widget.prototype.setTooltipText.call(this, text);
   }
+
+  /**
+   *
+   * @param {string} value
+   * @returns {WebPanelButton}
+   */
+  setUserContextId(value) {
+    if (this.button) {
+      let identity = ContextualIdentityService.getPublicIdentityFromId(value);
+      if (identity) {
+        this.element.style = `border-left: 2px solid ${identity.color};`;
+      }
+    }
+    return this;
+  }
 }
