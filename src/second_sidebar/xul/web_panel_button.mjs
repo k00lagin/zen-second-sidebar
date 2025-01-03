@@ -111,7 +111,7 @@ export class WebPanelButton extends Widget {
     if (this.button) {
       let identity = ContextualIdentityService.getPublicIdentityFromId(value);
       if (identity) {
-        this.element.style = `border-left: 2px solid ${identity.color};`;
+        this.button.setProperty("border-left", `2px solid ${identity.color}`);
       }
     }
     return this;
