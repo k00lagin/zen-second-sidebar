@@ -1,25 +1,25 @@
 import { Img } from "./base/img.mjs";
-import { ToolbarButton } from "./base/toolbar_button.mjs";
+import { Widget } from "./base/widget.mjs";
 import { ellipsis } from "../utils/string.mjs";
 
+const URL_LABEL_LIMIT = 24;
 const URL_TOOLTIP_LIMIT = 64;
 
-export class WebPanelButton extends ToolbarButton {
+export class WebPanelButton extends Widget {
   /**
    *
    * @param {string} uuid
+   * @param {string?} position
    */
-  constructor(uuid) {
-    super({ classList: ["sb2-main-button", "toolbarbutton-1"] });
-    this.setAttribute("uuid", uuid).setContext(
-      "sb2-web-panel-button-menupopup",
-    );
+  constructor(uuid, position = null) {
+    super({
+      id: uuid,
+      classList: ["sb2-main-button", "sb2-main-web-panel-button"],
+      context: "sb2-web-panel-button-menupopup",
+      position,
+    });
 
     this.playingIcon = null;
-  }
-
-  get uuid() {
-    return this.getAttribute("uuid");
   }
 
   /**
@@ -28,7 +28,7 @@ export class WebPanelButton extends ToolbarButton {
    * @returns {WebPanelButton}
    */
   listenClick(callback) {
-    this.addEventListener("mousedown", (event) => {
+    this.setOnClick((event) => {
       event.stopPropagation();
       callback(event);
     });
@@ -40,14 +40,16 @@ export class WebPanelButton extends ToolbarButton {
    * @returns {WebPanelButton}
    */
   showPlayingIcon() {
-    if (this.playingIcon === null) {
-      this.playingIcon = new Img({ classList: ["tab-icon-overlay"] })
-        .setAttribute("role", "presentation")
-        .setAttribute("soundplaying", "")
-        .setAttribute("pinned", "");
-      this.appendChild(this.playingIcon);
+    if (this.button) {
+      if (this.playingIcon === null) {
+        this.playingIcon = new Img({ classList: ["tab-icon-overlay"] })
+          .setAttribute("role", "presentation")
+          .setAttribute("soundplaying", "")
+          .setAttribute("pinned", "");
+        this.button.appendChild(this.playingIcon);
+      }
+      this.playingIcon.removeAttribute("hidden");
     }
-    this.playingIcon.removeAttribute("hidden");
     return this;
   }
 
@@ -56,7 +58,7 @@ export class WebPanelButton extends ToolbarButton {
    * @returns {WebPanelButton}
    */
   hidePlayingIcon() {
-    if (this.playingIcon !== null) {
+    if (this.button && this.playingIcon !== null) {
       this.playingIcon.setAttribute("hidden", "true");
     }
     return this;
@@ -76,38 +78,15 @@ export class WebPanelButton extends ToolbarButton {
 
   /**
    *
-   * @returns {boolean}
-   */
-  isOpen() {
-    return this.element.open;
-  }
-
-  /**
-   *
-   * @param {boolean} value
+   * @param {string} text
    * @returns {WebPanelButton}
    */
-  setOpen(value) {
-    this.element.open = value;
-    return this;
-  }
-
-  /**
-   *
-   * @param {boolean} value
-   * @returns {WebPanelButton}
-   */
-  setUnloaded(value) {
-    this.setAttribute("unloaded", value);
-    return this;
-  }
-
-  /**
-   *
-   * @returns {boolean}
-   */
-  isUnloaded() {
-    return this.getAttribute("unloaded") === "true";
+  setLabel(text) {
+    text = ellipsis(
+      text.replace("https://", "").replace("http://", ""),
+      URL_LABEL_LIMIT,
+    );
+    return Widget.prototype.setLabel.call(this, text);
   }
 
   /**
@@ -116,7 +95,10 @@ export class WebPanelButton extends ToolbarButton {
    * @returns {WebPanelButton}
    */
   setTooltipText(text) {
-    text = ellipsis(text, URL_TOOLTIP_LIMIT);
-    return ToolbarButton.prototype.setTooltipText.call(this, text);
+    text = ellipsis(
+      text.replace("https://", "").replace("http://", ""),
+      URL_TOOLTIP_LIMIT,
+    );
+    return Widget.prototype.setTooltipText.call(this, text);
   }
 }

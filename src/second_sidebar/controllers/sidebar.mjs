@@ -2,13 +2,13 @@
 import { Sidebar } from "../xul/sidebar.mjs";
 import { SidebarBox } from "../xul/sidebar_box.mjs";
 import { SidebarMainController } from "./sidebar_main.mjs";
+import { SidebarMainPopupSettings } from "../xul/sidebar_main_popup_settings.mjs";
 import { SidebarSettings } from "../settings/sidebar_settings.mjs";
 import { SidebarSplitterUnpinned } from "../xul/sidebar_splitter_unpinned.mjs";
 import { SidebarToolbar } from "../xul/sidebar_toolbar.mjs";
 import { ToolbarButton } from "../xul/base/toolbar_button.mjs";
 import { WebPanelNewController } from "./web_panel_new.mjs";
 import { WebPanelPopupEdit } from "../xul/web_panel_popup_edit.mjs";
-import { WebPanelPopupMore } from "../xul/web_panel_popup_more.mjs";
 import { WebPanelsController } from "./web_panels.mjs";
 import { XULElement } from "../xul/base/xul_element.mjs";
 import { isLeftMouseButton } from "../utils/buttons.mjs";
@@ -22,6 +22,7 @@ export class SidebarController {
    * @param {SidebarToolbar} sidebarToolbar
    * @param {SidebarSplitterUnpinned} sidebarSplitterUnpinned
    * @param {WebPanelPopupEdit} webPanelPopupEdit
+   * @param {SidebarMainPopupSettings} sidebarMainPopupSettings
    * @param {XULElement} browser
    */
   constructor(
@@ -30,6 +31,7 @@ export class SidebarController {
     sidebarToolbar,
     sidebarSplitterUnpinned,
     webPanelPopupEdit,
+    sidebarMainPopupSettings,
     browser,
   ) {
     this.sidebarBox = sidebarBox;
@@ -37,6 +39,7 @@ export class SidebarController {
     this.sidebarToolbar = sidebarToolbar;
     this.sidebarSplitterUnpinned = sidebarSplitterUnpinned;
     this.webPanelPopupEdit = webPanelPopupEdit;
+    this.sidebarMainPopupSettings = sidebarMainPopupSettings;
     this.browser = browser;
     this.#setupListeners();
 
@@ -66,9 +69,11 @@ export class SidebarController {
     this.onClickOutsideWhileUnpinned = (event) => {
       const target = new XULElement(null, { element: event.target });
       if (
+        isLeftMouseButton(event) &&
         !this.sidebar.contains(target) &&
         !this.sidebarSplitterUnpinned.contains(target) &&
         !this.webPanelPopupEdit.contains(target) &&
+        !this.sidebarMainPopupSettings.contains(target) &&
         !["menuitem", "menupopup"].includes(event.target.tagName) &&
         (document.contains(event.target) ||
           event.target.baseURI ===
@@ -134,6 +139,7 @@ export class SidebarController {
     this.setToolbarForwardButtonDisabled(!canGoForward);
     this.setToolbarTitle(title);
     this.setHideToolbar(hideToolbar);
+    this.updateAbsolutePosition();
     pinned ? this.pin() : this.unpin();
   }
 
@@ -154,13 +160,13 @@ export class SidebarController {
   pin() {
     this.sidebar.pin();
     this.sidebarToolbar.changePinButton(true);
-    document.removeEventListener("mousedown", this.onClickOutsideWhileUnpinned);
+    document.removeEventListener("click", this.onClickOutsideWhileUnpinned);
   }
 
   unpin() {
     this.sidebar.unpin();
     this.sidebarToolbar.changePinButton(false);
-    document.addEventListener("mousedown", this.onClickOutsideWhileUnpinned);
+    document.addEventListener("click", this.onClickOutsideWhileUnpinned);
   }
 
   /**
@@ -207,6 +213,7 @@ export class SidebarController {
   setWidth(width) {
     this.sidebarBox.setWidth(width);
     this.sidebar.setWidth(width);
+    this.updateAbsolutePosition();
   }
 
   /**
@@ -231,6 +238,7 @@ export class SidebarController {
    */
   setPosition(position) {
     this.sidebar.setPosition(position);
+    this.updateAbsolutePosition();
   }
 
   /**
@@ -267,6 +275,32 @@ export class SidebarController {
       "--sb2-box-unpinned-padding",
       `var(--space-${value})`,
     );
+    this.updateAbsolutePosition();
+  }
+
+  updateAbsolutePosition() {
+    const sidebarMainWidth = this.sidebarMainController.getWidth();
+    this.getPosition() === "left"
+      ? this.setAbsoluteLeft(sidebarMainWidth)
+      : this.setAbsoluteRight(sidebarMainWidth);
+  }
+
+  /**
+   *
+   * @param {string} value
+   */
+  setAbsoluteRight(value) {
+    this.sidebarBox.setProperty("left", "unset");
+    this.sidebarBox.setProperty("right", value);
+  }
+
+  /**
+   *
+   * @param {string} value
+   */
+  setAbsoluteLeft(value) {
+    this.sidebarBox.setProperty("left", value);
+    this.sidebarBox.setProperty("right", "unset");
   }
 
   /**
@@ -275,12 +309,10 @@ export class SidebarController {
    */
   loadSettings(settings) {
     this.setPosition(settings.position);
-    this.sidebarMainController.setWebPanelButtonsPosition(
-      settings.webPanelButtonsPosition,
-    );
-    this.webPanelNewController.setPosition(settings.plusButtonPosition);
     this.sidebarMainController.setPadding(settings.padding);
-    this.sidebarMainController.setFaviconSize(settings.faviconSize);
+    this.webPanelNewController.setNewWebPanelPosition(
+      settings.newWebPanelPosition,
+    );
     this.setUnpinnedPadding(settings.unpinnedPadding);
     this.hideInPopupWindows = settings.hideInPopupWindows;
     this.autoHideBackButton = settings.autoHideBackButton;
@@ -294,10 +326,8 @@ export class SidebarController {
   dumpSettings() {
     return new SidebarSettings(
       this.getPosition(),
-      this.sidebarMainController.getWebPanelButtonsPosition(),
-      this.webPanelNewController.getPosition(),
       this.sidebarMainController.getPadding(),
-      this.sidebarMainController.getFaviconSize(),
+      this.webPanelNewController.getNewWebPanelPosition(),
       this.getUnpinnedPadding(),
       this.hideInPopupWindows,
       this.autoHideBackButton,

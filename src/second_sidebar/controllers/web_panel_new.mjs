@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 import { SidebarController } from "./sidebar.mjs";
-import { WebPanelController } from "./web_panel.mjs";
 import { WebPanelEditController } from "./web_panel_edit.mjs";
 import { WebPanelNewButton } from "../xul/web_panel_new_button.mjs";
 import { WebPanelPopupNew } from "../xul/web_panel_popup_new.mjs";
 import { WebPanelsController } from "./web_panels.mjs";
 import { fetchIconURL } from "../utils/icons.mjs";
+import { isLeftMouseButton } from "../utils/buttons.mjs";
 /* eslint-enable no-unused-vars */
 
 export class WebPanelNewController {
@@ -18,8 +18,10 @@ export class WebPanelNewController {
     this.webPanelNewButton = webPanelNewButton;
     this.webPanelPopupNew = webPanelPopupNew;
 
-    this.webPanelNewButton.listenClick(() => {
-      this.openPopup();
+    this.webPanelNewButton.listenClick((event) => {
+      if (isLeftMouseButton(event)) {
+        this.openPopup();
+      }
     });
 
     this.webPanelPopupNew.listenInputChange((url) => {
@@ -61,7 +63,7 @@ export class WebPanelNewController {
 
     this.webPanelPopupNew
       .setInputValue(suggest)
-      .openPopup(this.webPanelNewButton);
+      .openPopup(this.webPanelNewButton.button);
   }
 
   async createWebPanelAndOpen(url) {
@@ -84,8 +86,10 @@ export class WebPanelNewController {
       url,
       faviconURL,
     );
-    const webPanelButton =
-      this.webPanelsController.makeWebPanelButton(webPanel);
+    const webPanelButton = this.webPanelsController.makeWebPanelButton(
+      webPanel,
+      this.newWebPanelPosition,
+    );
 
     const webPanelController = this.webPanelsController.makeWebPanelController(
       webPanel,
@@ -102,10 +106,6 @@ export class WebPanelNewController {
     this.webPanelsController.injectWebPanel(webPanel);
     webPanelController.initWebPanel();
 
-    this.webPanelsController.injectWebPanelButton(
-      webPanelButton,
-      this.getPosition(),
-    );
     webPanelController.initWebPanelButton();
 
     this.sidebarController.close();
@@ -132,17 +132,15 @@ export class WebPanelNewController {
    *
    * @returns {string}
    */
-  getPosition() {
-    return this.webPanelNewButton.getProperty("order") === "-1"
-      ? "start"
-      : "end";
+  getNewWebPanelPosition() {
+    return this.newWebPanelPosition;
   }
 
   /**
    *
    * @param {string} value
    */
-  setPosition(value) {
-    this.webPanelNewButton.setProperty("order", value === "start" ? -1 : 1);
+  setNewWebPanelPosition(value) {
+    this.newWebPanelPosition = value;
   }
 }

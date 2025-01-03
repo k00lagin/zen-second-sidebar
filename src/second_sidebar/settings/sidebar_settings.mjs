@@ -6,13 +6,9 @@ export class SidebarSettings {
   /**@type {string} */
   #position;
   /**@type {string} */
-  #webPanelButtonsPosition;
-  /**@type {string} */
-  #plusButtonPosition;
-  /**@type {string} */
   #padding;
-  /**@type {number} */
-  #faviconSize;
+  /**@type {string} */
+  #newWebPanelPosition;
   /**@type {string} */
   #unpinnedPadding;
   /**@type {boolean} */
@@ -25,10 +21,8 @@ export class SidebarSettings {
   /**
    *
    * @param {string} position
-   * @param {string} webPanelButtonsPosition
-   * @param {string} plusButtonPosition
    * @param {string} padding
-   * @param {string} faviconSize
+   * @param {string} newWebPanelPosition
    * @param {string} unpinnedPadding
    * @param {boolean} hideInPopupWindows
    * @param {boolean} autoHideBackButton
@@ -36,20 +30,16 @@ export class SidebarSettings {
    */
   constructor(
     position,
-    webPanelButtonsPosition,
-    plusButtonPosition,
     padding,
-    faviconSize,
+    newWebPanelPosition,
     unpinnedPadding,
     hideInPopupWindows,
     autoHideBackButton,
     autoHideForwardButton,
   ) {
     this.#position = position;
-    this.#webPanelButtonsPosition = webPanelButtonsPosition;
-    this.#plusButtonPosition = plusButtonPosition;
     this.#padding = padding;
-    this.#faviconSize = faviconSize;
+    this.#newWebPanelPosition = newWebPanelPosition;
     this.#unpinnedPadding = unpinnedPadding;
     this.#hideInPopupWindows = hideInPopupWindows;
     this.#autoHideBackButton = autoHideBackButton;
@@ -60,20 +50,12 @@ export class SidebarSettings {
     return this.#position;
   }
 
-  get webPanelButtonsPosition() {
-    return this.#webPanelButtonsPosition;
-  }
-
-  get plusButtonPosition() {
-    return this.#plusButtonPosition;
-  }
-
   get padding() {
     return this.#padding;
   }
 
-  get faviconSize() {
-    return this.#faviconSize;
+  get newWebPanelPosition() {
+    return this.#newWebPanelPosition;
   }
 
   get unpinnedPadding() {
@@ -100,10 +82,8 @@ export class SidebarSettings {
     const pref = Settings.load(PREF) ?? {};
     return new SidebarSettings(
       pref.position ?? "right",
-      pref.webPanelButtonsPosition ?? "start",
-      pref.plusButtonPosition ?? "end",
       pref.padding ?? "small",
-      pref.faviconSize ?? 32,
+      pref.newWebPanelPosition ?? "before",
       pref.unpinnedPadding ?? "small",
       pref.hideInPopupWindows ?? false,
       pref.autoHideBackButton ?? false,
@@ -114,10 +94,8 @@ export class SidebarSettings {
   save() {
     Settings.save(PREF, {
       position: this.#position,
-      webPanelButtonsPosition: this.#webPanelButtonsPosition,
-      plusButtonPosition: this.#plusButtonPosition,
       padding: this.#padding,
-      faviconSize: this.#faviconSize,
+      newWebPanelPosition: this.#newWebPanelPosition,
       unpinnedPadding: this.#unpinnedPadding,
       hideInPopupWindows: this.#hideInPopupWindows,
       autoHideBackButton: this.#autoHideBackButton,

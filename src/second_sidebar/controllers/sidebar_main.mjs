@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { SidebarController } from "./sidebar.mjs";
 import { SidebarMain } from "../xul/sidebar_main.mjs";
 import { SidebarMainMenuPopup } from "../xul/sidebar_main_menupopup.mjs";
 import { SidebarMainSettingsController } from "./sidebar_main_settings.mjs";
@@ -23,9 +24,11 @@ export class SidebarMainController {
   /**
    *
    * @param {SidebarMainSettingsController} sidebarMainSettingsController
+   * @param {SidebarController} sidebarController
    */
-  setupDependencies(sidebarMainSettingsController) {
+  setupDependencies(sidebarMainSettingsController, sidebarController) {
     this.sidebarMainSettingsController = sidebarMainSettingsController;
+    this.sidebarController = sidebarController;
   }
 
   #setupListeners() {
@@ -34,6 +37,10 @@ export class SidebarMainController {
         event.screenX,
         event.screenY,
       );
+    });
+
+    this.sidebarMainMenuPopup.listenCustomizeItemClick(() => {
+      gCustomizeMode.enter();
     });
   }
 
@@ -52,38 +59,14 @@ export class SidebarMainController {
    */
   setPadding(value) {
     this.browser.setProperty("--sb2-main-padding", `var(--space-${value})`);
-  }
-
-  /**
-   *
-   * @returns {number}
-   */
-  getFaviconSize() {
-    const value = this.browser.getProperty("--sb2-main-button-icon-size");
-    return value.match(/(\d+)px/)[1];
-  }
-
-  /**
-   *
-   * @param {number} value
-   */
-  setFaviconSize(value) {
-    this.browser.setProperty("--sb2-main-button-icon-size", value + "px");
+    this.sidebarController.updateAbsolutePosition();
   }
 
   /**
    *
    * @returns {string}
    */
-  getWebPanelButtonsPosition() {
-    return this.browser.getProperty("--sb2-main-web-panel-buttons-position");
-  }
-
-  /**
-   *
-   * @param {string} value
-   */
-  setWebPanelButtonsPosition(value) {
-    this.browser.setProperty("--sb2-main-web-panel-buttons-position", value);
+  getWidth() {
+    return Math.round(this.sidebarMain.getBoundingClientRect().width) + "px";
   }
 }
