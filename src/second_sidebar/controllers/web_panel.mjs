@@ -94,6 +94,7 @@ export class WebPanelController {
       this.webPanelsController.injectWebPanelTab(webPanelTab);
       this.webPanelsController.injectWebPanel(webPanel);
       this.initWebPanel();
+      this.webPanel.setDocShellIsActive(true).preserveLayers(false);
     } else {
       webPanel.hide();
       this.webPanelButton.setUnloaded(true);
