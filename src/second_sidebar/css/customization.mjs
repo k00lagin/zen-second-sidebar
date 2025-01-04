@@ -18,5 +18,10 @@ export const CUSTOMIZATION_CSS = `
         display: none;
       }
     }
+
+    toolbarpaletteitem::after {
+      overflow-x: scroll;
+      text-overflow: ellipsis;
+    }
   }
 `;
