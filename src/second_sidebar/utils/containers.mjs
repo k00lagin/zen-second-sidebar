@@ -4,6 +4,7 @@ import { MenuList } from "../xul/base/menulist.mjs";
 
 export const DEFAULT_USER_CONTEXT_ID =
   Services.scriptSecurityManager.DEFAULT_USER_CONTEXT_ID;
+const CONTAINER_CLASS = "sb2-container";
 
 /**
  *
@@ -22,7 +23,11 @@ export function getContainerColor(userContextId) {
  * @param {HTMLElement} element
  */
 export function applyContainerColor(userContextId, element) {
-  element.classList.add("sb2-container");
+  if (String(userContextId) === String(DEFAULT_USER_CONTEXT_ID)) {
+    element.classList.remove(CONTAINER_CLASS);
+  } else {
+    element.classList.add(CONTAINER_CLASS);
+  }
   element.style.setProperty(
     "--sb2-container-color-part",
     getContainerColor(userContextId),
