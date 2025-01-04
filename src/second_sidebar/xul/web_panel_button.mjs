@@ -1,6 +1,7 @@
 import { Img } from "./base/img.mjs";
 import { Widget } from "./base/widget.mjs";
 import { ellipsis } from "../utils/string.mjs";
+import { makeContainerStyles } from "../utils/containers.mjs";
 
 const URL_LABEL_LIMIT = 24;
 const URL_TOOLTIP_LIMIT = 64;
@@ -105,20 +106,20 @@ export class WebPanelButton extends Widget {
 
   /**
    *
-   * @param {string} value
+   * @param {string} userContextId
    * @returns {WebPanelButton}
    */
-  setUserContextId(value) {
+  setUserContextId(userContextId) {
     return this.doWhenButtonReady(() => {
-      let identity = ContextualIdentityService.getPublicIdentityFromId(value);
-      let shadow = "unset";
-      let padding = "unset";
-      if (identity) {
-        shadow = `2px 0px 0px 0px ${identity.color} inset`;
-        padding = "0 0 0 var(--toolbarbutton-inner-padding)";
-      }
-      this.button.setProperty("--sb2-main-button-identity-shadow", shadow);
-      this.button.setProperty("--sb2-main-button-identity-padding", padding);
+      const styles = makeContainerStyles(userContextId);
+      this.button.setProperty(
+        "--sb2-main-button-identity-shadow",
+        styles["box-shadow"],
+      );
+      this.button.setProperty(
+        "--sb2-main-button-identity-padding",
+        styles["padding"],
+      );
     });
   }
 }

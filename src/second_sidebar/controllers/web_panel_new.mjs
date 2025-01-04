@@ -65,9 +65,7 @@ export class WebPanelNewController {
       suggest = currentURI.spec;
     }
 
-    this.webPanelPopupNew
-      .setInputValue(suggest)
-      .openPopup(this.webPanelNewButton.button);
+    this.webPanelPopupNew.openPopup(this.webPanelNewButton.button, suggest);
   }
 
   /**

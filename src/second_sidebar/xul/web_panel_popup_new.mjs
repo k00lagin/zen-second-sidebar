@@ -1,9 +1,13 @@
 import {
+  DEFAULT_USER_CONTEXT_ID,
+  fillContainerMenuList,
+} from "../utils/containers.mjs";
+import {
   createCancelButton,
   createCreateButton,
   createInput,
-  createPopupGroup,
   createPopupHeader,
+  createPopupRow,
 } from "../utils/xul.mjs";
 
 import { HBox } from "./base/hbox.mjs";
@@ -22,7 +26,7 @@ export class WebPanelPopupNew extends Panel {
     this.setType("arrow").setRole("group");
 
     this.input = createInput();
-    this.containerList = this.#createContainerList();
+    this.containerMenuList = new MenuList();
 
     this.saveButton = createCreateButton();
     this.cancelButton = createCancelButton();
@@ -38,8 +42,7 @@ export class WebPanelPopupNew extends Panel {
       new PanelMultiView().appendChildren(
         createPopupHeader("New Web Panel"),
         new ToolbarSeparator(),
-        this.input,
-        createPopupGroup("Container", this.containerList),
+        createPopupRow(this.input, this.containerMenuList),
         new HBox({
           id: "sb2-web-panel-new-buttons",
         }).appendChildren(this.cancelButton, this.saveButton),
@@ -66,30 +69,13 @@ export class WebPanelPopupNew extends Panel {
 
   /**
    *
-   * @returns {MenuList}
-   */
-  #createContainerList() {
-    // const containers = await browser.contextualIdentities.query({});
-    const containerMenuList = new MenuList();
-    const containers = ContextualIdentityService.getPublicUserContextIds();
-    containerMenuList.appendItem("Unset", "0");
-    for (const container of containers) {
-      const label = ContextualIdentityService.getUserContextLabel(container);
-      containerMenuList.appendItem(label, container);
-    }
-
-    return containerMenuList;
-  }
-
-  /**
-   *
    * @param {function(string):void} callback
    * @returns {WebPanelPopupNew}
    */
   listenSaveButtonClick(callback) {
     this.saveButton.addEventListener("click", (event) => {
       if (isLeftMouseButton(event)) {
-        callback(this.input.getValue(), this.containerList.getValue());
+        callback(this.input.getValue(), this.containerMenuList.getValue());
       }
     });
   }
@@ -109,11 +95,15 @@ export class WebPanelPopupNew extends Panel {
 
   /**
    *
-   * @param {string} value
+   * @param {XULElement | Widget} target
+   * @param {string} suggest
    * @returns {WebPanelPopupNew}
    */
-  setInputValue(value) {
-    this.input.setValue(value);
-    return this;
+  openPopup(target, suggest) {
+    this.input.setValue(suggest);
+    fillContainerMenuList(this.containerMenuList);
+    this.containerMenuList.setValue(DEFAULT_USER_CONTEXT_ID);
+
+    return Panel.prototype.openPopup.call(this, target);
   }
 }

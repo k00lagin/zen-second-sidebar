@@ -82,6 +82,7 @@ export class WebPanelController {
       },
     );
 
+    this.unhackAsyncTabSwitcher();
     this.webPanelTab.remove();
     this.webPanel.remove();
 
@@ -95,6 +96,7 @@ export class WebPanelController {
       this.initWebPanel();
     } else {
       webPanel.hide();
+      this.webPanelButton.setUnloaded(true);
     }
   }
 

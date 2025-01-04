@@ -3,12 +3,17 @@ import {
   createInput,
   createPopupGroup,
   createPopupHeader,
+  createPopupRow,
   createSaveButton,
   createSubviewButton,
   createSubviewIconicButton,
   createZoomButtons,
   updateZoomButtons,
 } from "../utils/xul.mjs";
+import {
+  fillContainerMenuList,
+  makeContainerStyles,
+} from "../utils/containers.mjs";
 
 /* eslint-disable no-unused-vars */
 import { HBox } from "./base/hbox.mjs";
@@ -47,7 +52,7 @@ export class WebPanelPopupEdit extends Panel {
       "Request Favicon",
     );
     this.pinnedMenuList = this.#createPinTypeMenuList();
-    this.containerMenuList = this.#createContainerMenuList();
+    this.containerMenuList = new MenuList();
     this.mobileToggle = new Toggle();
     this.loadOnStartupToggle = new Toggle();
     this.unloadOnCloseToggle = new Toggle();
@@ -90,36 +95,15 @@ export class WebPanelPopupEdit extends Panel {
     return pinTypeMenuList;
   }
 
-  /**
-   *
-   * @returns {MenuList}
-   */
-  #createContainerMenuList() {
-    const containerMenuList = new MenuList();
-    const containers = ContextualIdentityService.getPublicUserContextIds();
-    containerMenuList.appendItem(
-      "No Container",
-      Services.scriptSecurityManager.DEFAULT_USER_CONTEXT_ID,
-    );
-    for (const container of containers) {
-      const label = ContextualIdentityService.getUserContextLabel(container);
-      containerMenuList.appendItem(label, container);
-    }
-    return containerMenuList;
-  }
-
   #compose() {
     this.appendChild(
       new PanelMultiView().appendChildren(
         createPopupHeader("Edit Web Panel"),
         new ToolbarSeparator(),
         new Header(1).setText("Page web address"),
-        this.urlInput,
-        createPopupGroup("Container", this.containerMenuList),
+        createPopupRow(this.urlInput, this.containerMenuList),
         new Header(1).setText("Favicon web address"),
-        new HBox({
-          id: "sb2-web-panel-edit-favicon-row",
-        }).appendChildren(this.faviconURLInput, this.faviconResetButton),
+        createPopupRow(this.faviconURLInput, this.faviconResetButton),
         new ToolbarSeparator(),
         createPopupGroup("Web panel type", this.pinnedMenuList),
         createPopupGroup("Use mobile User Agent", this.mobileToggle),
@@ -269,6 +253,7 @@ export class WebPanelPopupEdit extends Panel {
   /**
    *
    * @param {WebPanelController} webPanelController
+   * @returns {WebPanelPopupEdit}
    */
   openPopup(webPanelController) {
     const settings = webPanelController.dumpSettings();
@@ -276,7 +261,12 @@ export class WebPanelPopupEdit extends Panel {
     this.urlInput.setValue(settings.url);
     this.faviconURLInput.setValue(settings.faviconURL);
     this.pinnedMenuList.setValue(settings.pinned);
+
+    fillContainerMenuList(this.containerMenuList);
     this.containerMenuList.setValue(settings.userContextId);
+    const styles = makeContainerStyles(settings.userContextId);
+    this.containerMenuList.setProperty("box-shadow", styles["box-shadow"]);
+
     this.mobileToggle.setPressed(settings.mobile);
     this.loadOnStartupToggle.setPressed(settings.loadOnStartup);
     this.unloadOnCloseToggle.setPressed(settings.unloadOnClose);
@@ -302,7 +292,10 @@ export class WebPanelPopupEdit extends Panel {
     };
     this.addEventListener("popuphidden", this.restoreWebPanelButtonState);
 
-    Panel.prototype.openPopup.call(this, webPanelController.webPanelButton);
+    return Panel.prototype.openPopup.call(
+      this,
+      webPanelController.webPanelButton,
+    );
   }
 
   #cancelChanges() {
