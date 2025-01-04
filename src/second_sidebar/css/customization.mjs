@@ -11,9 +11,12 @@ export const CUSTOMIZATION_CSS = `
     right: 0;
     border-radius: var(--arrowpanel-border-radius);
     box-shadow: 0px 0px 16px 1px var(--arrowpanel-border-color);
-  }
 
-  #customization-panel-container {
-    flex: unset;
+    #customization-panel-container {
+      flex: unset;
+      .panel-arrow {
+        display: none;
+      }
+    }
   }
 `;
