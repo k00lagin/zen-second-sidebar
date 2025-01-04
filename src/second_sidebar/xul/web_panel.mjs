@@ -32,7 +32,7 @@ export class WebPanel extends Browser {
    * @param {boolean} loadOnStartup
    * @param {boolean} unloadOnClose
    * @param {boolean} hideToolbar
-   * @param {object} params
+   * @param {number} userContextId
    *
    */
   constructor(
@@ -149,7 +149,6 @@ export class WebPanel extends Browser {
     }
     this.updateUserAgent();
     this.updateUserContextId(this.userContextId);
-    //this.updateUserContextId(this.userContextId);
     return this.go(this.url);
   }
 

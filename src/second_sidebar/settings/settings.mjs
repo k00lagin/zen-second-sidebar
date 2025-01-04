@@ -5,10 +5,6 @@ export class Settings {
    * @returns {Object | Array<Object> | null}
    */
   static load(pref) {
-    console.log(
-      `Loading pref "${pref}"`,
-      JSON.parse(Services.prefs.getStringPref(pref)),
-    );
     const value = Services.prefs.prefHasUserValue(pref)
       ? JSON.parse(Services.prefs.getStringPref(pref))
       : null;

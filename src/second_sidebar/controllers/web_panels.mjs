@@ -232,11 +232,11 @@ export class WebPanelsController {
    */
   makeWebPanelButton(webPanel, position = null) {
     return new WebPanelButton(webPanel.uuid, position)
+      .setUserContextId(webPanel.userContextId)
       .setIcon(webPanel.faviconURL)
       .setLabel(webPanel.url)
       .setTooltipText(webPanel.url)
-      .setUnloaded(!webPanel.loadOnStartup)
-      .setUserContextId(webPanel.userContextId);
+      .setUnloaded(!webPanel.loadOnStartup);
   }
 
   /**

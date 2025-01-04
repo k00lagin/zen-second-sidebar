@@ -19,7 +19,6 @@ export class WebPanelSettings {
   #unloadOnClose;
   /**@type {boolean} */
   #hideToolbar;
-
   /**@type {string} */
   #userContextId;
 
@@ -60,7 +59,7 @@ export class WebPanelSettings {
     this.#loadOnStartup = loadOnStartup ?? false;
     this.#unloadOnClose = unloadOnClose ?? false;
     this.#hideToolbar = hideToolbar ?? false;
-    this.#userContextId = userContextId;
+    this.#userContextId = userContextId ?? 0;
   }
 
   get uuid() {

@@ -40,7 +40,7 @@ export class WebPanelButton extends Widget {
    * @returns {WebPanelButton}
    */
   showPlayingIcon() {
-    if (this.button) {
+    this.doWhenButtonReady(() => {
       if (this.playingIcon === null) {
         this.playingIcon = new Img({ classList: ["tab-icon-overlay"] })
           .setAttribute("role", "presentation")
@@ -49,7 +49,7 @@ export class WebPanelButton extends Widget {
         this.button.appendChild(this.playingIcon);
       }
       this.playingIcon.removeAttribute("hidden");
-    }
+    });
     return this;
   }
 
@@ -58,10 +58,11 @@ export class WebPanelButton extends Widget {
    * @returns {WebPanelButton}
    */
   hidePlayingIcon() {
-    if (this.button && this.playingIcon !== null) {
-      this.playingIcon.setAttribute("hidden", "true");
-    }
-    return this;
+    return this.doWhenButtonReady(() => {
+      if (this.playingIcon !== null) {
+        this.playingIcon.setAttribute("hidden", "true");
+      }
+    });
   }
 
   /**
@@ -108,12 +109,18 @@ export class WebPanelButton extends Widget {
    * @returns {WebPanelButton}
    */
   setUserContextId(value) {
-    if (this.button) {
+    return this.doWhenButtonReady(() => {
       let identity = ContextualIdentityService.getPublicIdentityFromId(value);
       if (identity) {
-        this.button.setProperty("border-left", `2px solid ${identity.color}`);
+        this.button.setProperty(
+          "--sb2-main-button-identity-shadow",
+          `2px 0px 0px 0px ${identity.color} inset`,
+        );
+        this.button.setProperty(
+          "--sb2-main-button-identity-padding",
+          "0 0 0 var(--toolbarbutton-inner-padding)",
+        );
       }
-    }
-    return this;
+    });
   }
 }
