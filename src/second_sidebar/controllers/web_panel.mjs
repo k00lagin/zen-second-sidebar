@@ -48,11 +48,7 @@ export class WebPanelController {
   getURL() {
     return this.webPanel.url;
   }
-  /**
-   *
-   * @returns {string}
-   */
-  getUserContextId() {}
+
   /**
    *
    * @param {string} value
@@ -64,11 +60,42 @@ export class WebPanelController {
 
   /**
    *
-   * @param {string} value
+   * @param {string} userContextId
    */
-  setUserContextId(value) {
-    this.webPanelTab.setUserContextId(value);
-    this.webPanel.setUserContextId(value);
+  setUserContextId(userContextId) {
+    const isActive = this.isActive();
+
+    const webPanelTab = new WebPanelTab(this.getUUID(), userContextId);
+    const webPanel = new WebPanel(
+      webPanelTab,
+      this.getUUID(),
+      this.webPanel.url,
+      this.webPanel.faviconURL,
+      {
+        pinned: this.webPanel.pinned,
+        width: this.webPanel.width,
+        mobile: this.webPanel.mobile,
+        zoom: this.webPanel.zoom,
+        loadOnStartup: this.webPanel.loadOnStartup,
+        unloadOnClose: this.webPanel.unloadOnClose,
+        hideToolbar: this.webPanel.hideToolbar,
+      },
+    );
+
+    this.webPanelTab.remove();
+    this.webPanel.remove();
+
+    this.webPanelTab = webPanelTab;
+    this.webPanel = webPanel;
+    this.webPanelButton.setUserContextId(userContextId);
+
+    if (isActive) {
+      this.webPanelsController.injectWebPanelTab(webPanelTab);
+      this.webPanelsController.injectWebPanel(webPanel);
+      this.initWebPanel();
+    } else {
+      webPanel.hide();
+    }
   }
 
   /**
@@ -104,8 +131,8 @@ export class WebPanelController {
   }
 
   hackAsyncTabSwitcher() {
+    // prevent AsyncTabSwitcher to unload web panels
     const tabBrowser = this.webPanel.getTabBrowser();
-
     tabBrowser._printPreviewBrowsers.add(this.webPanel.getXUL());
   }
 
@@ -352,6 +379,35 @@ export class WebPanelController {
 
   /**
    *
+   * @param {WebPanelSettings} webPanelSettings
+   * @returns {WebPanelController}
+   */
+  static fromSettings(webPanelSettings) {
+    const webPanelTab = new WebPanelTab(
+      webPanelSettings.uuid,
+      webPanelSettings.userContextId,
+    );
+
+    const webPanel = new WebPanel(
+      webPanelTab,
+      webPanelSettings.uuid,
+      webPanelSettings.url,
+      webPanelSettings.faviconURL,
+      webPanelSettings,
+    ).hide();
+
+    const webPanelButton = new WebPanelButton(webPanel.uuid)
+      .setUserContextId(webPanelSettings.userContextId)
+      .setIcon(webPanelSettings.faviconURL)
+      .setLabel(webPanelSettings.url)
+      .setTooltipText(webPanelSettings.url)
+      .setUnloaded(!webPanelSettings.loadOnStartup);
+
+    return new WebPanelController(webPanel, webPanelButton, webPanelTab);
+  }
+
+  /**
+   *
    * @returns {WebPanelSettings}
    */
   dumpSettings() {
@@ -366,7 +422,7 @@ export class WebPanelController {
       this.webPanel.loadOnStartup,
       this.webPanel.unloadOnClose,
       this.webPanel.hideToolbar,
-      this.webPanel.userContextId,
+      this.webPanelTab.getUserContextId(),
     );
   }
 }

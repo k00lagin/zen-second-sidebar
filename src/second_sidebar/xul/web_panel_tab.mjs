@@ -4,14 +4,14 @@ export class WebPanelTab extends Tab {
   /**
    *
    * @param {string} uuid
+   * @param {string} userContextId
    * @param {object} params
    * @param {string?} params.id
    * @param {Array<string>} params.classList
    */
-  constructor(uuid, { id = null, userContextId = 0, classList = [] } = {}) {
-    super({ id, classList, userContextId });
+  constructor(uuid, userContextId, { id = null, classList = [] } = {}) {
+    super(userContextId, { id, classList });
     this.setUUID(uuid);
-    this.setUserContextId(userContextId);
   }
 
   /**
@@ -21,13 +21,5 @@ export class WebPanelTab extends Tab {
    */
   setUUID(uuid) {
     return this.setAttribute("uuid", uuid);
-  }
-  /**
-   *
-   * @param {string} uuid
-   * @returns {WebPanelTab}
-   */
-  setUserContextId(userContextId) {
-    return this.setAttribute("userContextId", userContextId);
   }
 }

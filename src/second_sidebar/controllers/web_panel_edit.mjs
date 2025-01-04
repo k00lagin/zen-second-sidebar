@@ -13,7 +13,6 @@ export class WebPanelEditController {
   constructor(webPanelPopupEdit) {
     this.webPanelPopupEdit = webPanelPopupEdit;
     this.#setupListeners();
-    this.needsRecreate = false;
   }
 
   /**
@@ -61,10 +60,9 @@ export class WebPanelEditController {
             : this.sidebarController.unpin();
         }
       },
-      container: (uuid, container) => {
+      userContextId: (uuid, userContextId) => {
         const webPanelController = this.webPanelsController.get(uuid);
-        webPanelController.setUserContextId(container);
-        this.needsRecreate = true;
+        webPanelController.setUserContextId(userContextId);
       },
       mobile: (uuid, mobile) => {
         const webPanelController = this.webPanelsController.get(uuid);
@@ -109,27 +107,6 @@ export class WebPanelEditController {
 
       this.webPanelsController.saveSettings();
       this.hidePopup();
-
-      // if( this.needsRecreate){
-      //   webPanelController.unload();
-      //   const webPanel = this.webPanelsController.makeWebPanel(
-      //     webPanelController.webPanelTab,
-      //     webPanelController.webPanel.uuid,
-      //     webPanelController.webPanel.url,
-      //     webPanelController.webPanel.faviconURLL,{
-      //     userContextId: webPanelController.webPanel.userContextId,
-      //     }
-      //   );
-
-      //   this.webPanelsController.delete(uuid)
-
-      //   this.webPanelsController.makeWebPanelController(
-      //     webPanel,
-      //     webPanelController.webPanelButton,
-      //     webPanelController.webPanelTab
-      //   )
-
-      // }
     });
   }
 

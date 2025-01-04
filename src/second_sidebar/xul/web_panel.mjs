@@ -11,9 +11,7 @@ const MOBILE_USER_AGENT =
  * @param {WebPanelTab} webPanelTab
  * @returns {HTMLElement}
  */
-const createBrowserForTab = (webPanelTab, userContextId) => {
-  webPanelTab.element.userContextId = userContextId;
-
+const createBrowserForTab = (webPanelTab) => {
   const result = gBrowser._createBrowserForTab(webPanelTab.getXUL(), {});
   return result.browser;
 };
@@ -25,14 +23,14 @@ export class WebPanel extends Browser {
    * @param {string} uuid
    * @param {string} url
    * @param {string} faviconURL
-   * @param {boolean} pinned
-   * @param {string} width
-   * @param {boolean} mobile
-   * @param {number} zoom
-   * @param {boolean} loadOnStartup
-   * @param {boolean} unloadOnClose
-   * @param {boolean} hideToolbar
-   * @param {number} userContextId
+   * @param {object} params
+   * @param {boolean} params.pinned
+   * @param {string} params.width
+   * @param {boolean} params.mobile
+   * @param {number} params.zoom
+   * @param {boolean} params.loadOnStartup
+   * @param {boolean} params.unloadOnClose
+   * @param {boolean} params.hideToolbar
    *
    */
   constructor(
@@ -40,24 +38,24 @@ export class WebPanel extends Browser {
     uuid,
     url,
     faviconURL,
-    pinned,
-    width,
-    mobile,
-    zoom,
-    loadOnStartup,
-    unloadOnClose,
-    hideToolbar,
-    userContextId,
+    {
+      pinned = false,
+      width = "400",
+      mobile = false,
+      zoom = 1,
+      loadOnStartup = false,
+      unloadOnClose = false,
+      hideToolbar = false,
+    } = {},
   ) {
     super({
       classList: ["web-panel"],
-      element: createBrowserForTab(webPanelTab, userContextId),
+      element: createBrowserForTab(webPanelTab),
     });
     this.setUUID(uuid)
       .setDisableGlobalHistory("true")
       .setType("content")
-      .setRemote("true")
-      .setUserContextId(userContextId);
+      .setRemote("true");
 
     this.uuid = uuid;
     this.url = url;
@@ -69,7 +67,6 @@ export class WebPanel extends Browser {
     this.loadOnStartup = loadOnStartup;
     this.unloadOnClose = unloadOnClose;
     this.hideToolbar = hideToolbar;
-    this.userContextId = userContextId;
     this.listener = null;
   }
 
@@ -88,14 +85,6 @@ export class WebPanel extends Browser {
    */
   updateUserAgent() {
     return this.setCustomUserAgent(this.mobile ? MOBILE_USER_AGENT : "");
-  }
-
-  /**
-   *
-   * @returns {WebPanel}
-   */
-  updateUserContextId(contextId) {
-    return this.setUserContextId(contextId);
   }
 
   /**
@@ -148,7 +137,6 @@ export class WebPanel extends Browser {
       this.setZoom(this.zoom);
     }
     this.updateUserAgent();
-    this.updateUserContextId(this.userContextId);
     return this.go(this.url);
   }
 

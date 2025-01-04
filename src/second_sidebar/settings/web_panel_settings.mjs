@@ -59,7 +59,8 @@ export class WebPanelSettings {
     this.#loadOnStartup = loadOnStartup ?? false;
     this.#unloadOnClose = unloadOnClose ?? false;
     this.#hideToolbar = hideToolbar ?? false;
-    this.#userContextId = userContextId ?? 0;
+    this.#userContextId =
+      userContextId ?? Services.scriptSecurityManager.DEFAULT_USER_CONTEXT_ID;
   }
 
   get uuid() {

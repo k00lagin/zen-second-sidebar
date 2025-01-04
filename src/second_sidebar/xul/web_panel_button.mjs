@@ -111,16 +111,14 @@ export class WebPanelButton extends Widget {
   setUserContextId(value) {
     return this.doWhenButtonReady(() => {
       let identity = ContextualIdentityService.getPublicIdentityFromId(value);
+      let shadow = "unset";
+      let padding = "unset";
       if (identity) {
-        this.button.setProperty(
-          "--sb2-main-button-identity-shadow",
-          `2px 0px 0px 0px ${identity.color} inset`,
-        );
-        this.button.setProperty(
-          "--sb2-main-button-identity-padding",
-          "0 0 0 var(--toolbarbutton-inner-padding)",
-        );
+        shadow = `2px 0px 0px 0px ${identity.color} inset`;
+        padding = "0 0 0 var(--toolbarbutton-inner-padding)";
       }
+      this.button.setProperty("--sb2-main-button-identity-shadow", shadow);
+      this.button.setProperty("--sb2-main-button-identity-padding", padding);
     });
   }
 }

@@ -25,15 +25,7 @@ export class Browser extends XULElement {
   setDisableGlobalHistory(value) {
     return this.setAttribute("disableglobalhistory", value);
   }
-  /**
-   *
-   * @param {string} value
-   * @returns {Browser}
-   */
-  setUserContextId(value) {
-    this.userContextId = value;
-    return this.setAttribute("userContextId", value);
-  }
+
   /**
    *
    * @param {string} value
