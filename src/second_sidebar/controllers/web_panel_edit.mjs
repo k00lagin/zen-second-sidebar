@@ -60,6 +60,10 @@ export class WebPanelEditController {
             : this.sidebarController.unpin();
         }
       },
+      userContextId: (uuid, userContextId) => {
+        const webPanelController = this.webPanelsController.get(uuid);
+        webPanelController.setUserContextId(userContextId);
+      },
       mobile: (uuid, mobile) => {
         const webPanelController = this.webPanelsController.get(uuid);
         webPanelController.setMobile(mobile);
@@ -100,6 +104,7 @@ export class WebPanelEditController {
       ) {
         webPanelController.unload();
       }
+
       this.webPanelsController.saveSettings();
       this.hidePopup();
     });

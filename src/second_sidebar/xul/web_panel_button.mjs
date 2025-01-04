@@ -1,5 +1,6 @@
 import { Img } from "./base/img.mjs";
 import { Widget } from "./base/widget.mjs";
+import { applyContainerColor } from "../utils/containers.mjs";
 import { ellipsis } from "../utils/string.mjs";
 
 const URL_LABEL_LIMIT = 24;
@@ -40,7 +41,7 @@ export class WebPanelButton extends Widget {
    * @returns {WebPanelButton}
    */
   showPlayingIcon() {
-    if (this.button) {
+    this.doWhenButtonReady(() => {
       if (this.playingIcon === null) {
         this.playingIcon = new Img({ classList: ["tab-icon-overlay"] })
           .setAttribute("role", "presentation")
@@ -49,7 +50,7 @@ export class WebPanelButton extends Widget {
         this.button.appendChild(this.playingIcon);
       }
       this.playingIcon.removeAttribute("hidden");
-    }
+    });
     return this;
   }
 
@@ -58,10 +59,11 @@ export class WebPanelButton extends Widget {
    * @returns {WebPanelButton}
    */
   hidePlayingIcon() {
-    if (this.button && this.playingIcon !== null) {
-      this.playingIcon.setAttribute("hidden", "true");
-    }
-    return this;
+    return this.doWhenButtonReady(() => {
+      if (this.playingIcon !== null) {
+        this.playingIcon.setAttribute("hidden", "true");
+      }
+    });
   }
 
   /**
@@ -100,5 +102,18 @@ export class WebPanelButton extends Widget {
       URL_TOOLTIP_LIMIT,
     );
     return Widget.prototype.setTooltipText.call(this, text);
+  }
+
+  /**
+   *
+   * @param {string} userContextId
+   * @returns {WebPanelButton}
+   */
+  setUserContextId(userContextId) {
+    return this.doWhenButtonReady(() =>
+      this.doWhenButtonImageReady(() =>
+        applyContainerColor(userContextId, this.button.getImageXUL()),
+      ),
+    );
   }
 }

@@ -39,4 +39,21 @@ export class MenuList extends XULElement {
     this.element.appendItem(label, value);
     return this;
   }
+
+  /**
+   *
+   * @returns {MenuList}
+   */
+  removeAllItems() {
+    this.element.removeAllItems();
+    return this;
+  }
+
+  /**
+   *
+   * @returns {HTMLElement}
+   */
+  getLastMenuItemXUL() {
+    return this.element.menupopup.lastChild;
+  }
 }

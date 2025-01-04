@@ -23,14 +23,14 @@ export class WebPanel extends Browser {
    * @param {string} uuid
    * @param {string} url
    * @param {string} faviconURL
-   * @param {boolean} pinned
-   * @param {string} width
-   * @param {boolean} mobile
-   * @param {number} zoom
-   * @param {boolean} loadOnStartup
-   * @param {boolean} unloadOnClose
-   * @param {boolean} hideToolbar
    * @param {object} params
+   * @param {boolean} params.pinned
+   * @param {string} params.width
+   * @param {boolean} params.mobile
+   * @param {number} params.zoom
+   * @param {boolean} params.loadOnStartup
+   * @param {boolean} params.unloadOnClose
+   * @param {boolean} params.hideToolbar
    *
    */
   constructor(
@@ -38,13 +38,15 @@ export class WebPanel extends Browser {
     uuid,
     url,
     faviconURL,
-    pinned,
-    width,
-    mobile,
-    zoom,
-    loadOnStartup,
-    unloadOnClose,
-    hideToolbar,
+    {
+      pinned = false,
+      width = "400",
+      mobile = false,
+      zoom = 1,
+      loadOnStartup = false,
+      unloadOnClose = false,
+      hideToolbar = false,
+    } = {},
   ) {
     super({
       classList: ["web-panel"],
@@ -65,7 +67,6 @@ export class WebPanel extends Browser {
     this.loadOnStartup = loadOnStartup;
     this.unloadOnClose = unloadOnClose;
     this.hideToolbar = hideToolbar;
-
     this.listener = null;
   }
 

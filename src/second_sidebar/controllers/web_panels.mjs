@@ -142,142 +142,20 @@ export class WebPanelsController {
 
   /**
    *
-   * @param {string} uuid
-   * @returns {WebPanelTab}
-   */
-  makeWebPanelTab(uuid) {
-    return new WebPanelTab(uuid);
-  }
-
-  /**
-   *
-   * @param {WebPanelTab} webPanelTab
-   * @param {string} uuid
-   * @param {string} url
-   * @param {string} faviconURL
-   * @param {object} params
-   * @param {boolean} params.pinned
-   * @param {string} params.width
-   * @param {boolean} params.mobile
-   * @param {boolean} params.loadOnStartup
-   * @param {boolean} params.unloadOnClose
-   * @param {boolean} params.hideToolbar
-   * @returns {WebPanel}
-   */
-  makeWebPanel(
-    webPanelTab,
-    uuid,
-    url,
-    faviconURL,
-    {
-      pinned = false,
-      width = "400",
-      mobile = false,
-      zoom = 1,
-      loadOnStartup = false,
-      unloadOnClose = false,
-      hideToolbar = false,
-    } = {},
-  ) {
-    const webPanel = new WebPanel(
-      webPanelTab,
-      uuid,
-      url,
-      faviconURL,
-      pinned,
-      width,
-      mobile,
-      zoom,
-      loadOnStartup,
-      unloadOnClose,
-      hideToolbar,
-    );
-    return webPanel;
-  }
-
-  /**
-   *
-   * @param {WebPanelSettings} webPanelSettings
-   * @param {WebPanelTab} webPanelTab
-   * @returns {WebPanel}
-   */
-  #makeWebPanelFromPref(webPanelSettings, webPanelTab) {
-    return this.makeWebPanel(
-      webPanelTab,
-      webPanelSettings.uuid,
-      webPanelSettings.url,
-      webPanelSettings.faviconURL,
-      {
-        pinned: webPanelSettings.pinned,
-        width: webPanelSettings.width,
-        mobile: webPanelSettings.mobile,
-        zoom: webPanelSettings.zoom,
-        loadOnStartup: webPanelSettings.loadOnStartup,
-        unloadOnClose: webPanelSettings.unloadOnClose,
-        hideToolbar: webPanelSettings.hideToolbar,
-        webPanelTab,
-      },
-    ).hide();
-  }
-
-  /**
-   *
-   * @param {WebPanel} webPanel
-   * @param {string?} position
-   * @returns {WebPanelButton}
-   */
-  makeWebPanelButton(webPanel, position = null) {
-    return new WebPanelButton(webPanel.uuid, position)
-      .setIcon(webPanel.faviconURL)
-      .setLabel(webPanel.url)
-      .setTooltipText(webPanel.url)
-      .setUnloaded(!webPanel.loadOnStartup);
-  }
-
-  /**
-   *
-   * @param {WebPanel} webPanel
-   * @param {WebPanelButton} webPanelButton
-   * @param {WebPanelTab} webPanelTab
-   * @returns {WebPanelController}
-   */
-  makeWebPanelController(webPanel, webPanelButton, webPanelTab) {
-    const webPanelController = new WebPanelController(
-      webPanel,
-      webPanelButton,
-      webPanelTab,
-    );
-    webPanelController.setupDependencies(this, this.sidebarController);
-    return webPanelController;
-  }
-
-  /**
-   *
    * @param {WebPanelsSettings} webPanelsSettings
    */
   loadSettings(webPanelsSettings) {
     console.log("Loading web panels");
     for (const webPanelSettings of webPanelsSettings.webPanels) {
-      const webPanelTab = this.makeWebPanelTab(webPanelSettings.uuid);
-      const webPanel = this.#makeWebPanelFromPref(
-        webPanelSettings,
-        webPanelTab,
-      );
+      const webPanelController =
+        WebPanelController.fromSettings(webPanelSettings);
+      webPanelController.setupDependencies(this, this.sidebarController);
 
-      const webPanelButton = this.makeWebPanelButton(webPanel);
-
-      const webPanelController = this.makeWebPanelController(
-        webPanel,
-        webPanelButton,
-        webPanelTab,
-      );
-
-      if (webPanel.loadOnStartup) {
-        this.injectWebPanelTab(webPanelTab);
-        this.injectWebPanel(webPanel);
+      if (webPanelSettings.loadOnStartup) {
+        this.injectWebPanelTab(webPanelController.webPanelTab);
+        this.injectWebPanel(webPanelController.webPanel);
         webPanelController.initWebPanel();
       }
-
       webPanelController.initWebPanelButton();
 
       this.add(webPanelController);

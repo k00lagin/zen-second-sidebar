@@ -1,3 +1,5 @@
+import { DEFAULT_USER_CONTEXT_ID } from "../utils/containers.mjs";
+
 export class WebPanelSettings {
   /**@type {string} */
   #uuid;
@@ -19,6 +21,8 @@ export class WebPanelSettings {
   #unloadOnClose;
   /**@type {boolean} */
   #hideToolbar;
+  /**@type {string} */
+  #userContextId;
 
   /**
    *
@@ -32,6 +36,7 @@ export class WebPanelSettings {
    * @param {boolean} loadOnStartup
    * @param {boolean} unloadOnClose
    * @param {boolean} hideToolbar
+   * @param {string} userContextId
    */
   constructor(
     uuid,
@@ -44,6 +49,7 @@ export class WebPanelSettings {
     loadOnStartup,
     unloadOnClose,
     hideToolbar,
+    userContextId,
   ) {
     this.#uuid = uuid ?? crypto.randomUUID();
     this.#url = url;
@@ -55,6 +61,7 @@ export class WebPanelSettings {
     this.#loadOnStartup = loadOnStartup ?? false;
     this.#unloadOnClose = unloadOnClose ?? false;
     this.#hideToolbar = hideToolbar ?? false;
+    this.#userContextId = userContextId ?? DEFAULT_USER_CONTEXT_ID;
   }
 
   get uuid() {
@@ -97,6 +104,10 @@ export class WebPanelSettings {
     return this.#hideToolbar;
   }
 
+  get userContextId() {
+    return this.#userContextId;
+  }
+
   /**
    *
    * @returns {object}
@@ -113,6 +124,7 @@ export class WebPanelSettings {
       loadOnStartup: this.#loadOnStartup,
       unloadOnClose: this.#unloadOnClose,
       hideToolbar: this.#hideToolbar,
+      userContextId: this.#userContextId,
     };
   }
 }

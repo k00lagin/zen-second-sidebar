@@ -1,8 +1,12 @@
 /* eslint-disable no-unused-vars */
 import { SidebarController } from "./sidebar.mjs";
+import { WebPanel } from "../xul/web_panel.mjs";
+import { WebPanelButton } from "../xul/web_panel_button.mjs";
+import { WebPanelController } from "./web_panel.mjs";
 import { WebPanelEditController } from "./web_panel_edit.mjs";
 import { WebPanelNewButton } from "../xul/web_panel_new_button.mjs";
 import { WebPanelPopupNew } from "../xul/web_panel_popup_new.mjs";
+import { WebPanelTab } from "../xul/web_panel_tab.mjs";
 import { WebPanelsController } from "./web_panels.mjs";
 import { fetchIconURL } from "../utils/icons.mjs";
 import { isLeftMouseButton } from "../utils/buttons.mjs";
@@ -28,8 +32,8 @@ export class WebPanelNewController {
       this.createWebPanelAndOpen(url);
     });
 
-    this.webPanelPopupNew.listenSaveButtonClick((url) => {
-      this.createWebPanelAndOpen(url);
+    this.webPanelPopupNew.listenSaveButtonClick((url, userContextId) => {
+      this.createWebPanelAndOpen(url, userContextId);
     });
 
     this.webPanelPopupNew.listenCancelButtonClick(() => {
@@ -61,12 +65,15 @@ export class WebPanelNewController {
       suggest = currentURI.spec;
     }
 
-    this.webPanelPopupNew
-      .setInputValue(suggest)
-      .openPopup(this.webPanelNewButton.button);
+    this.webPanelPopupNew.openPopup(this.webPanelNewButton.button, suggest);
   }
 
-  async createWebPanelAndOpen(url) {
+  /**
+   *
+   * @param {string} url
+   * @param {string} userContextId
+   */
+  async createWebPanelAndOpen(url, userContextId) {
     try {
       NetUtil.newURI(url);
     } catch (error) {
@@ -79,23 +86,23 @@ export class WebPanelNewController {
     const faviconURL = await fetchIconURL(url);
     const uuid = crypto.randomUUID();
 
-    const webPanelTab = this.webPanelsController.makeWebPanelTab(uuid);
-    const webPanel = this.webPanelsController.makeWebPanel(
-      webPanelTab,
-      uuid,
-      url,
-      faviconURL,
-    );
-    const webPanelButton = this.webPanelsController.makeWebPanelButton(
-      webPanel,
+    const webPanelTab = new WebPanelTab(uuid, userContextId);
+    const webPanel = new WebPanel(webPanelTab, uuid, url, faviconURL);
+    const webPanelButton = new WebPanelButton(
+      webPanel.uuid,
       this.newWebPanelPosition,
-    );
+    )
+      .setUserContextId(userContextId)
+      .setIcon(faviconURL)
+      .setLabel(url)
+      .setTooltipText(url);
 
-    const webPanelController = this.webPanelsController.makeWebPanelController(
+    const webPanelController = new WebPanelController(
       webPanel,
       webPanelButton,
       webPanelTab,
     );
+
     webPanelController.setupDependencies(
       this.webPanelsController,
       this.sidebarController,
@@ -105,7 +112,6 @@ export class WebPanelNewController {
     this.webPanelsController.injectWebPanelTab(webPanelTab);
     this.webPanelsController.injectWebPanel(webPanel);
     webPanelController.initWebPanel();
-
     webPanelController.initWebPanelButton();
 
     this.sidebarController.close();

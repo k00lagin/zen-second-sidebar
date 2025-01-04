@@ -167,7 +167,7 @@ export class Browser extends XULElement {
    * @returns {Browser}
    */
   addProgressListener(listener) {
-    this.element.addProgressListener(listener, null);
+    this.element.addProgressListener(listener);
     return this;
   }
 

@@ -3,13 +3,15 @@ import { XULElement } from "./xul_element.mjs";
 export class Tab extends XULElement {
   /**
    *
+   * @param {string} userContextId
    * @param {object} params
    * @param {string?} params.id
    * @param {Array<string>} params.classList
    * @param {HTMLElement?} params.element
    */
-  constructor({ id = null, classList = [], element } = {}) {
+  constructor(userContextId, { id = null, classList = [], element } = {}) {
     super("tab", { id, classList, element });
+    this.element.userContextId = userContextId;
   }
 
   /**
@@ -18,5 +20,13 @@ export class Tab extends XULElement {
    */
   getBrowserXUL() {
     return this.element.linkedBrowser;
+  }
+
+  /**
+   *
+   * @returns {string}
+   */
+  getUserContextId() {
+    return this.element.userContextId;
   }
 }

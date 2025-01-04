@@ -164,3 +164,14 @@ export function createPopupGroup(text, element) {
     classList: ["sb2-popup-group"],
   }).appendChildren(new Label().setText(text), element);
 }
+
+/**
+ *
+ * @param {XULElement[]} elements
+ * @returns {HBox}
+ */
+export function createPopupRow(...elements) {
+  return new HBox({
+    classList: ["sb2-popup-row"],
+  }).appendChildren(...elements);
+}

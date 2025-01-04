@@ -1,8 +1,13 @@
 import {
+  applyContainerColor,
+  fillContainerMenuList,
+} from "../utils/containers.mjs";
+import {
   createCancelButton,
   createInput,
   createPopupGroup,
   createPopupHeader,
+  createPopupRow,
   createSaveButton,
   createSubviewButton,
   createSubviewIconicButton,
@@ -47,6 +52,7 @@ export class WebPanelPopupEdit extends Panel {
       "Request Favicon",
     );
     this.pinnedMenuList = this.#createPinTypeMenuList();
+    this.containerMenuList = new MenuList({ id: "sb2-container-menu-list" });
     this.mobileToggle = new Toggle();
     this.loadOnStartupToggle = new Toggle();
     this.unloadOnCloseToggle = new Toggle();
@@ -96,10 +102,9 @@ export class WebPanelPopupEdit extends Panel {
         new ToolbarSeparator(),
         new Header(1).setText("Page web address"),
         this.urlInput,
+        createPopupGroup("Multi-Account Container", this.containerMenuList),
         new Header(1).setText("Favicon web address"),
-        new HBox({
-          id: "sb2-web-panel-edit-favicon-row",
-        }).appendChildren(this.faviconURLInput, this.faviconResetButton),
+        createPopupRow(this.faviconURLInput, this.faviconResetButton),
         new ToolbarSeparator(),
         createPopupGroup("Web panel type", this.pinnedMenuList),
         createPopupGroup("Use mobile User Agent", this.mobileToggle),
@@ -135,6 +140,7 @@ export class WebPanelPopupEdit extends Panel {
    * @param {function(string, string, number):void} callbacks.faviconURL
    * @param {function(string, boolean):void} callbacks.mobile
    * @param {function(string, boolean):void} callbacks.pinned
+   * @param {function(string, string):void} callbacks.userContextId
    * @param {function(string, boolean):void} callbacks.loadOnStartup
    * @param {function(string, boolean):void} callbacks.unloadOnClose
    * @param {function(string, boolean):void} callbacks.hideToolbar
@@ -144,6 +150,7 @@ export class WebPanelPopupEdit extends Panel {
     url,
     faviconURL,
     pinned,
+    userContextId,
     mobile,
     loadOnStartup,
     unloadOnClose,
@@ -154,6 +161,7 @@ export class WebPanelPopupEdit extends Panel {
     this.onFaviconUrlChange = faviconURL;
     this.onMobileChange = mobile;
     this.onPinnedChange = pinned;
+    this.onUserContextIdChange = userContextId;
     this.onLoadOnStartupChange = loadOnStartup;
     this.onUnloadOnCloseChange = unloadOnClose;
     this.onHideToolbar = hideToolbar;
@@ -167,6 +175,9 @@ export class WebPanelPopupEdit extends Panel {
     });
     this.pinnedMenuList.addEventListener("command", () => {
       pinned(this.settings.uuid, this.pinnedMenuList.getValue() === "true");
+    });
+    this.containerMenuList.addEventListener("command", () => {
+      userContextId(this.settings.uuid, this.containerMenuList.getValue());
     });
     this.mobileToggle.addEventListener("toggle", () => {
       mobile(this.settings.uuid, this.mobileToggle.getPressed());
@@ -238,6 +249,7 @@ export class WebPanelPopupEdit extends Panel {
   /**
    *
    * @param {WebPanelController} webPanelController
+   * @returns {WebPanelPopupEdit}
    */
   openPopup(webPanelController) {
     const settings = webPanelController.dumpSettings();
@@ -245,6 +257,14 @@ export class WebPanelPopupEdit extends Panel {
     this.urlInput.setValue(settings.url);
     this.faviconURLInput.setValue(settings.faviconURL);
     this.pinnedMenuList.setValue(settings.pinned);
+
+    fillContainerMenuList(this.containerMenuList);
+    this.containerMenuList.setValue(settings.userContextId);
+    applyContainerColor(
+      settings.userContextId,
+      this.containerMenuList.getXUL(),
+    );
+
     this.mobileToggle.setPressed(settings.mobile);
     this.loadOnStartupToggle.setPressed(settings.loadOnStartup);
     this.unloadOnCloseToggle.setPressed(settings.unloadOnClose);
@@ -264,13 +284,19 @@ export class WebPanelPopupEdit extends Panel {
     };
     this.addEventListener("popuphidden", this.cancelOnPopupHidden);
 
-    this.restoreWebPanelButtonState = () => {
+    this.restoreWebPanelButtonState = (event) => {
+      if (event.target.id !== this.id) {
+        return;
+      }
       webPanelController.webPanelButton.setOpen(webPanelController.isActive());
       this.removeEventListener("popuphidden", this.restoreWebPanelButtonState);
     };
     this.addEventListener("popuphidden", this.restoreWebPanelButtonState);
 
-    Panel.prototype.openPopup.call(this, webPanelController.webPanelButton);
+    return Panel.prototype.openPopup.call(
+      this,
+      webPanelController.webPanelButton,
+    );
   }
 
   #cancelChanges() {
@@ -282,6 +308,12 @@ export class WebPanelPopupEdit extends Panel {
     }
     if ((this.pinnedMenuList.getValue() === "true") !== this.settings.pinned) {
       this.onPinnedChange(this.settings.uuid, this.settings.pinned);
+    }
+    if (this.containerMenuList.getValue() !== this.settings.userContextId) {
+      this.onUserContextIdChange(
+        this.settings.uuid,
+        this.settings.userContextId,
+      );
     }
     if (this.mobileToggle.getPressed() !== this.settings.mobile) {
       this.onMobileChange(this.settings.uuid, this.settings.mobile);

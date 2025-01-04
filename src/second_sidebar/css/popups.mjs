@@ -4,6 +4,7 @@ export const POPUPS_CSS = `
       display: flex;
       flex-direction: column;
       align-items: unset;
+      gap: var(--space-xsmall);
       width: 100%;
       padding: var(--space-xsmall) 0;
 
@@ -13,13 +14,6 @@ export const POPUPS_CSS = `
 
       toolbarseparator, input {
         width: -moz-available;
-      }
-
-      .sb2-popup-group {
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        min-height: 33px;
       }
 
       .sb2-button-iconic .toolbarbutton-text {
@@ -46,11 +40,11 @@ export const POPUPS_CSS = `
   }
 
   #sb2-main-popup-settings,
+  #sb2-web-panel-new,
   #sb2-web-panel-edit {
     width: 400px;
   }
 
-  #sb2-web-panel-new,
   #sb2-web-panel-delete {
     width: 300px;
   }
@@ -64,7 +58,14 @@ export const POPUPS_CSS = `
     margin-top: var(--space-small);
   }
 
-  #sb2-web-panel-edit-favicon-row {
+  .sb2-popup-group {
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    min-height: 33px;
+  }
+
+  .sb2-popup-row {
     display: flex;
     flex-direction: row;
     align-items: center;
