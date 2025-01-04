@@ -52,7 +52,7 @@ export class WebPanelPopupEdit extends Panel {
       "Request Favicon",
     );
     this.pinnedMenuList = this.#createPinTypeMenuList();
-    this.containerMenuList = new MenuList();
+    this.containerMenuList = new MenuList({ id: "sb2-container-menu-list" });
     this.mobileToggle = new Toggle();
     this.loadOnStartupToggle = new Toggle();
     this.unloadOnCloseToggle = new Toggle();
@@ -101,7 +101,8 @@ export class WebPanelPopupEdit extends Panel {
         createPopupHeader("Edit Web Panel"),
         new ToolbarSeparator(),
         new Header(1).setText("Page web address"),
-        createPopupRow(this.urlInput, this.containerMenuList),
+        this.urlInput,
+        createPopupGroup("Multi-Account Container", this.containerMenuList),
         new Header(1).setText("Favicon web address"),
         createPopupRow(this.faviconURLInput, this.faviconResetButton),
         new ToolbarSeparator(),

@@ -1,13 +1,14 @@
 import {
   DEFAULT_USER_CONTEXT_ID,
+  applyContainerColor,
   fillContainerMenuList,
 } from "../utils/containers.mjs";
 import {
   createCancelButton,
   createCreateButton,
   createInput,
+  createPopupGroup,
   createPopupHeader,
-  createPopupRow,
 } from "../utils/xul.mjs";
 
 import { HBox } from "./base/hbox.mjs";
@@ -26,7 +27,7 @@ export class WebPanelPopupNew extends Panel {
     this.setType("arrow").setRole("group");
 
     this.input = createInput();
-    this.containerMenuList = new MenuList();
+    this.containerMenuList = new MenuList({ id: "sb2-container-menu-list" });
 
     this.saveButton = createCreateButton();
     this.cancelButton = createCancelButton();
@@ -42,7 +43,8 @@ export class WebPanelPopupNew extends Panel {
       new PanelMultiView().appendChildren(
         createPopupHeader("New Web Panel"),
         new ToolbarSeparator(),
-        createPopupRow(this.input, this.containerMenuList),
+        this.input,
+        createPopupGroup("Multi-Account Container", this.containerMenuList),
         new HBox({
           id: "sb2-web-panel-new-buttons",
         }).appendChildren(this.cancelButton, this.saveButton),
@@ -101,8 +103,13 @@ export class WebPanelPopupNew extends Panel {
    */
   openPopup(target, suggest) {
     this.input.setValue(suggest);
+
     fillContainerMenuList(this.containerMenuList);
     this.containerMenuList.setValue(DEFAULT_USER_CONTEXT_ID);
+    applyContainerColor(
+      DEFAULT_USER_CONTEXT_ID,
+      this.containerMenuList.getXUL(),
+    );
 
     return Panel.prototype.openPopup.call(this, target);
   }

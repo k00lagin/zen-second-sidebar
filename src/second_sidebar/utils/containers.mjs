@@ -57,32 +57,31 @@ export function fillContainerMenuList(containerMenuList) {
  * @param {string} containerBorder
  */
 export function changeContainerBorder(containerBorder) {
-  let bordersPart = "";
-  let padding = "";
+  let shadowParts = Array(4).fill("0px");
+  let paddingParts = Array(4).fill("var(--toolbarbutton-inner-padding)");
 
   if (containerBorder === "left") {
-    bordersPart = "2px 0px 0px 0px";
-    padding = "0 0 0 var(--toolbarbutton-inner-padding)";
+    shadowParts[0] = "2px";
+    paddingParts[1] = "0";
   } else if (containerBorder === "right") {
-    bordersPart = "-2px 0px 0px 0px";
-    padding = "0 var(--toolbarbutton-inner-padding) 0 0";
+    shadowParts[0] = "-2px";
+    paddingParts[3] = "0";
   } else if (containerBorder === "top") {
-    bordersPart = "0px 2px 0px 0px";
-    padding = "var(--toolbarbutton-inner-padding) 0 0 0";
+    shadowParts[1] = "2px";
+    paddingParts[2] = "0";
   } else if (containerBorder === "bottom") {
-    bordersPart = "0px -2px 0px 0px";
-    padding = "0 0 var(--toolbarbutton-inner-padding) 0";
+    shadowParts[1] = "-2px";
+    paddingParts[0] = "0";
   } else if (containerBorder === "around") {
-    bordersPart = "0px 0px 0px 2px";
-    padding = "var(--toolbarbutton-inner-padding)";
+    shadowParts[3] = "2px";
   }
 
   document.documentElement.style.setProperty(
     "--sb2-container-borders-part",
-    bordersPart,
+    shadowParts.join(" "),
   );
   document.documentElement.style.setProperty(
     "--sb2-container-padding",
-    padding,
+    paddingParts.join(" "),
   );
 }

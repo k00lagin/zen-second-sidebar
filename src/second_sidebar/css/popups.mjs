@@ -4,6 +4,7 @@ export const POPUPS_CSS = `
       display: flex;
       flex-direction: column;
       align-items: unset;
+      gap: var(--space-xsmall);
       width: 100%;
       padding: var(--space-xsmall) 0;
 
@@ -13,13 +14,6 @@ export const POPUPS_CSS = `
 
       toolbarseparator, input {
         width: -moz-available;
-      }
-
-      .sb2-popup-group {
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        min-height: 33px;
       }
 
       .sb2-button-iconic .toolbarbutton-text {
@@ -62,6 +56,13 @@ export const POPUPS_CSS = `
     justify-content: end;
     width: 100%;
     margin-top: var(--space-small);
+  }
+
+  .sb2-popup-group {
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    min-height: 33px;
   }
 
   .sb2-popup-row {
