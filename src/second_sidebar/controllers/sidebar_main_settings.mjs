@@ -56,6 +56,9 @@ export class SidebarMainSettingsController {
           value,
         );
       },
+      containerBorder: (value) => {
+        this.sidebarController.setContainerBorder(value);
+      },
     });
 
     this.sidebarMainPopupSettings.listenCancelButtonClick(() =>

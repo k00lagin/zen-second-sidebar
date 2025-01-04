@@ -205,4 +205,20 @@ export class Widget {
     }, 100);
     return this;
   }
+
+  /**
+   *
+   * @param {function():void} callback
+   * @returns {Widget}
+   */
+  doWhenButtonImageReady(callback) {
+    const interval = setInterval(() => {
+      if (!this.button.getImageXUL()) {
+        return;
+      }
+      clearInterval(interval);
+      callback();
+    }, 100);
+    return this;
+  }
 }

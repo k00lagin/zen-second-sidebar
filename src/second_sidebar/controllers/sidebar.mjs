@@ -11,6 +11,7 @@ import { WebPanelNewController } from "./web_panel_new.mjs";
 import { WebPanelPopupEdit } from "../xul/web_panel_popup_edit.mjs";
 import { WebPanelsController } from "./web_panels.mjs";
 import { XULElement } from "../xul/base/xul_element.mjs";
+import { changeContainerBorder } from "../utils/containers.mjs";
 import { isLeftMouseButton } from "../utils/buttons.mjs";
 /* eslint-enable no-unused-vars */
 
@@ -46,6 +47,7 @@ export class SidebarController {
     this.hideInPopupWindows = false;
     this.autoHideBackButton = false;
     this.autoHideForwardButton = false;
+    this.containerBorder = "left";
   }
 
   /**
@@ -305,6 +307,23 @@ export class SidebarController {
 
   /**
    *
+   * @returns {string}
+   */
+  getContainerBorder() {
+    return this.containerBorder;
+  }
+
+  /**
+   *
+   * @param {string} value
+   */
+  setContainerBorder(value) {
+    this.containerBorder = value;
+    changeContainerBorder(value);
+  }
+
+  /**
+   *
    * @param {SidebarSettings} settings
    */
   loadSettings(settings) {
@@ -317,6 +336,7 @@ export class SidebarController {
     this.hideInPopupWindows = settings.hideInPopupWindows;
     this.autoHideBackButton = settings.autoHideBackButton;
     this.autoHideForwardButton = settings.autoHideForwardButton;
+    this.setContainerBorder(settings.containerBorder);
   }
 
   /**
@@ -332,6 +352,7 @@ export class SidebarController {
       this.hideInPopupWindows,
       this.autoHideBackButton,
       this.autoHideForwardButton,
+      this.containerBorder,
     );
   }
 

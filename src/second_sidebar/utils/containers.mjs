@@ -10,18 +10,23 @@ export const DEFAULT_USER_CONTEXT_ID =
  * @param {string} userContextId
  * @returns {object}
  */
-export function makeContainerStyles(userContextId) {
+export function getContainerColor(userContextId) {
   const identity =
     ContextualIdentityService.getPublicIdentityFromId(userContextId);
-  const styles = {
-    "box-shadow": "unset",
-    padding: "unset",
-  };
-  if (identity) {
-    styles["box-shadow"] = `2px 0px 0px 0px ${identity.color} inset`;
-    styles["padding"] = "0 0 0 var(--toolbarbutton-inner-padding)";
-  }
-  return styles;
+  return identity ? identity.color : "transparent";
+}
+
+/**
+ *
+ * @param {string} userContextId
+ * @param {HTMLElement} element
+ */
+export function applyContainerColor(userContextId, element) {
+  element.classList.add("sb2-container");
+  element.style.setProperty(
+    "--sb2-container-color-part",
+    getContainerColor(userContextId),
+  );
 }
 
 /**
@@ -37,14 +42,47 @@ export function fillContainerMenuList(containerMenuList) {
     const label = ContextualIdentityService.getUserContextLabel(userContextId);
     containerMenuList.appendItem(label, userContextId);
 
-    const styles = makeContainerStyles(userContextId);
     const lastMenuItem = containerMenuList.getLastMenuItemXUL();
-    lastMenuItem.style.boxShadow = styles["box-shadow"];
+    applyContainerColor(userContextId, lastMenuItem);
   }
 
   containerMenuList.addEventListener("command", () => {
     const userContextId = containerMenuList.getValue();
-    const styles = makeContainerStyles(userContextId);
-    containerMenuList.setProperty("box-shadow", styles["box-shadow"]);
+    applyContainerColor(userContextId, containerMenuList.getXUL());
   });
+}
+
+/**
+ *
+ * @param {string} containerBorder
+ */
+export function changeContainerBorder(containerBorder) {
+  let bordersPart = "";
+  let padding = "";
+
+  if (containerBorder === "left") {
+    bordersPart = "2px 0px 0px 0px";
+    padding = "0 0 0 var(--toolbarbutton-inner-padding)";
+  } else if (containerBorder === "right") {
+    bordersPart = "-2px 0px 0px 0px";
+    padding = "0 var(--toolbarbutton-inner-padding) 0 0";
+  } else if (containerBorder === "top") {
+    bordersPart = "0px 2px 0px 0px";
+    padding = "var(--toolbarbutton-inner-padding) 0 0 0";
+  } else if (containerBorder === "bottom") {
+    bordersPart = "0px -2px 0px 0px";
+    padding = "0 0 var(--toolbarbutton-inner-padding) 0";
+  } else if (containerBorder === "around") {
+    bordersPart = "0px 0px 0px 2px";
+    padding = "var(--toolbarbutton-inner-padding)";
+  }
+
+  document.documentElement.style.setProperty(
+    "--sb2-container-borders-part",
+    bordersPart,
+  );
+  document.documentElement.style.setProperty(
+    "--sb2-container-padding",
+    padding,
+  );
 }

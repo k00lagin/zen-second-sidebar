@@ -1,4 +1,8 @@
 import {
+  applyContainerColor,
+  fillContainerMenuList,
+} from "../utils/containers.mjs";
+import {
   createCancelButton,
   createInput,
   createPopupGroup,
@@ -10,10 +14,6 @@ import {
   createZoomButtons,
   updateZoomButtons,
 } from "../utils/xul.mjs";
-import {
-  fillContainerMenuList,
-  makeContainerStyles,
-} from "../utils/containers.mjs";
 
 /* eslint-disable no-unused-vars */
 import { HBox } from "./base/hbox.mjs";
@@ -264,8 +264,10 @@ export class WebPanelPopupEdit extends Panel {
 
     fillContainerMenuList(this.containerMenuList);
     this.containerMenuList.setValue(settings.userContextId);
-    const styles = makeContainerStyles(settings.userContextId);
-    this.containerMenuList.setProperty("box-shadow", styles["box-shadow"]);
+    applyContainerColor(
+      settings.userContextId,
+      this.containerMenuList.getXUL(),
+    );
 
     this.mobileToggle.setPressed(settings.mobile);
     this.loadOnStartupToggle.setPressed(settings.loadOnStartup);

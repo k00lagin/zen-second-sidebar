@@ -1,7 +1,7 @@
 import { Img } from "./base/img.mjs";
 import { Widget } from "./base/widget.mjs";
+import { applyContainerColor } from "../utils/containers.mjs";
 import { ellipsis } from "../utils/string.mjs";
-import { makeContainerStyles } from "../utils/containers.mjs";
 
 const URL_LABEL_LIMIT = 24;
 const URL_TOOLTIP_LIMIT = 64;
@@ -110,16 +110,10 @@ export class WebPanelButton extends Widget {
    * @returns {WebPanelButton}
    */
   setUserContextId(userContextId) {
-    return this.doWhenButtonReady(() => {
-      const styles = makeContainerStyles(userContextId);
-      this.button.setProperty(
-        "--sb2-main-button-identity-shadow",
-        styles["box-shadow"],
-      );
-      this.button.setProperty(
-        "--sb2-main-button-identity-padding",
-        styles["padding"],
-      );
-    });
+    return this.doWhenButtonReady(() =>
+      this.doWhenButtonImageReady(() =>
+        applyContainerColor(userContextId, this.button.getImageXUL()),
+      ),
+    );
   }
 }

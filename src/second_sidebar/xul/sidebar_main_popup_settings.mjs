@@ -33,6 +33,7 @@ export class SidebarMainPopupSettings extends Panel {
     this.autoHideBackToggle = new Toggle();
     this.autoHideForwardToggle = new Toggle();
     this.unpinnedPaddingMenuList = this.#createPaddingMenuList();
+    this.containerBorderMenuList = this.#createContainerBorderMenuList();
     this.saveButton = createSaveButton();
     this.cancelButton = createCancelButton();
     this.#compose();
@@ -76,6 +77,20 @@ export class SidebarMainPopupSettings extends Panel {
     return menuList;
   }
 
+  /**
+   *
+   * @returns {MenuList}
+   */
+  #createContainerBorderMenuList() {
+    const menuList = new MenuList();
+    menuList.appendItem("Left", "left");
+    menuList.appendItem("Right", "right");
+    menuList.appendItem("Top", "top");
+    menuList.appendItem("Bottom", "bottom");
+    menuList.appendItem("Around", "around");
+    return menuList;
+  }
+
   #compose() {
     this.appendChild(
       new PanelMultiView().appendChildren(
@@ -91,6 +106,10 @@ export class SidebarMainPopupSettings extends Panel {
         createPopupGroup(
           "New web panel position",
           this.newWebPanelPositionMenuList,
+        ),
+        createPopupGroup(
+          "Container indicator position",
+          this.containerBorderMenuList,
         ),
         new ToolbarSeparator(),
         createPopupGroup(
@@ -119,6 +138,7 @@ export class SidebarMainPopupSettings extends Panel {
    * @param {function(boolean):void} callbacks.hideInPopupWindows
    * @param {function(boolean):void} callbacks.autoHideBackButton
    * @param {function(boolean):void} callbacks.autoHideForwardButton
+   * @param {function(boolean):void} callbacks.containerBorder
    */
   listenChanges({
     position,
@@ -128,6 +148,7 @@ export class SidebarMainPopupSettings extends Panel {
     hideInPopupWindows,
     autoHideBackButton,
     autoHideForwardButton,
+    containerBorder,
   }) {
     this.onPositionChange = position;
     this.onPaddingChange = padding;
@@ -136,6 +157,7 @@ export class SidebarMainPopupSettings extends Panel {
     this.onHideInPopupWindowsChange = hideInPopupWindows;
     this.onAutoHideBackButtonChange = autoHideBackButton;
     this.onAutoHideForwardButtonChange = autoHideForwardButton;
+    this.onContainerBorderChange = containerBorder;
 
     this.positionMenuList.addEventListener("command", () =>
       position(this.positionMenuList.getValue()),
@@ -157,6 +179,9 @@ export class SidebarMainPopupSettings extends Panel {
     );
     this.autoHideForwardToggle.addEventListener("toggle", () =>
       autoHideForwardButton(this.autoHideForwardToggle.getPressed()),
+    );
+    this.containerBorderMenuList.addEventListener("command", () =>
+      containerBorder(this.containerBorderMenuList.getValue()),
     );
   }
 
@@ -199,6 +224,7 @@ export class SidebarMainPopupSettings extends Panel {
     this.hideInPopupWindowsToggle.setPressed(settings.hideInPopupWindows);
     this.autoHideBackToggle.setPressed(settings.autoHideBackButton);
     this.autoHideForwardToggle.setPressed(settings.autoHideForwardButton);
+    this.containerBorderMenuList.setValue(settings.containerBorder);
 
     this.settings = settings;
 
@@ -248,6 +274,11 @@ export class SidebarMainPopupSettings extends Panel {
       this.settings.autoHideForwardButton
     ) {
       this.onAutoHideForwardButtonChange(this.settings.autoHideForwardButton);
+    }
+    if (
+      this.containerBorderMenuList.getValue() !== this.settings.containerBorder
+    ) {
+      this.onContainerBorderChange(this.settings.containerBorder);
     }
   }
 }

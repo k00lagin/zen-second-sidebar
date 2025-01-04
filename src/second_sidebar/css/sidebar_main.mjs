@@ -43,10 +43,6 @@ export const SIDEBAR_MAIN_CSS = `
     position: relative;
     padding: 0;
 
-    image {
-      box-shadow: var(--sb2-main-button-identity-shadow);
-    }
-
     .tab-icon-overlay {
       position: absolute !important;
       width: var(--sb2-main-button-icon-overlay-size) !important;
@@ -70,17 +66,5 @@ export const SIDEBAR_MAIN_CSS = `
 
   #widget-overflow-fixed-list .sb2-main-button {
     padding: var(--arrowpanel-menuitem-padding);
-    
-    image {
-      padding: var(--sb2-main-button-identity-padding);
-      border-radius: var(--toolbarbutton-border-radius);
-      box-sizing: content-box;
-    }
-  }
-
-  #customization-palette .sb2-main-button image {
-    padding: var(--sb2-main-button-identity-padding);
-    border-radius: var(--toolbarbutton-border-radius);
-    box-sizing: content-box;
   }
 `;

@@ -137,4 +137,12 @@ export class ToolbarButton extends XULElement {
   isChecked() {
     return this.getAttribute("checked") === "true";
   }
+
+  /**
+   *
+   * @returns {HTMLElement}
+   */
+  getImageXUL() {
+    return this.element.querySelector("image");
+  }
 }
