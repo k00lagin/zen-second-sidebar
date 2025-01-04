@@ -284,7 +284,10 @@ export class WebPanelPopupEdit extends Panel {
     };
     this.addEventListener("popuphidden", this.cancelOnPopupHidden);
 
-    this.restoreWebPanelButtonState = () => {
+    this.restoreWebPanelButtonState = (event) => {
+      if (event.target.id !== this.id) {
+        return;
+      }
       webPanelController.webPanelButton.setOpen(webPanelController.isActive());
       this.removeEventListener("popuphidden", this.restoreWebPanelButtonState);
     };
