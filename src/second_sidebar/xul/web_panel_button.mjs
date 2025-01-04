@@ -85,7 +85,7 @@ export class WebPanelButton extends Widget {
    */
   setLabel(text) {
     text = ellipsis(
-      text.replace(/http:\/\/|https:\/\/|\/$/, ""),
+      text.replace(/http:\/\/|https:\/\/|\/$/g, ""),
       URL_LABEL_LIMIT,
     );
     return Widget.prototype.setLabel.call(this, text);
