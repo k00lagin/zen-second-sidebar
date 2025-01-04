@@ -309,7 +309,10 @@ export class WebPanelPopupEdit extends Panel {
     if ((this.pinnedMenuList.getValue() === "true") !== this.settings.pinned) {
       this.onPinnedChange(this.settings.uuid, this.settings.pinned);
     }
-    if (this.containerMenuList.getValue() !== this.settings.userContextId) {
+    if (
+      String(this.containerMenuList.getValue()) !==
+      String(this.settings.userContextId)
+    ) {
       this.onUserContextIdChange(
         this.settings.uuid,
         this.settings.userContextId,
