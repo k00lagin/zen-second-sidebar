@@ -73,7 +73,7 @@ export function changeContainerBorder(containerBorder) {
     shadowParts[1] = "-2px";
     paddingParts[0] = "0";
   } else if (containerBorder === "around") {
-    shadowParts[3] = "2px";
+    shadowParts[3] = "1px";
   }
 
   document.documentElement.style.setProperty(
