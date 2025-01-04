@@ -11,12 +11,12 @@ export class SidebarMainController {
    *
    * @param {SidebarMain} sidebarMain
    * @param {SidebarMainMenuPopup} sidebarMainMenuPopup
-   * @param {XULElement} browser
+   * @param {XULElement} root
    */
-  constructor(sidebarMain, sidebarMainMenuPopup, browser) {
+  constructor(sidebarMain, sidebarMainMenuPopup, root) {
     this.sidebarMain = sidebarMain;
     this.sidebarMainMenuPopup = sidebarMainMenuPopup;
-    this.browser = browser;
+    this.root = root;
 
     this.#setupListeners();
   }
@@ -49,7 +49,7 @@ export class SidebarMainController {
    * @returns {string}
    */
   getPadding() {
-    const value = this.browser.getProperty("--sb2-main-padding");
+    const value = this.root.getProperty("--sb2-main-padding");
     return value.match(/var\(--space-([^)]+)\)/)[1];
   }
 
@@ -58,7 +58,7 @@ export class SidebarMainController {
    * @param {string} value
    */
   setPadding(value) {
-    this.browser.setProperty("--sb2-main-padding", `var(--space-${value})`);
+    this.root.setProperty("--sb2-main-padding", `var(--space-${value})`);
     this.sidebarController.updateAbsolutePosition();
   }
 

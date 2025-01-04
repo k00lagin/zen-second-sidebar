@@ -24,7 +24,7 @@ export class SidebarController {
    * @param {SidebarSplitterUnpinned} sidebarSplitterUnpinned
    * @param {WebPanelPopupEdit} webPanelPopupEdit
    * @param {SidebarMainPopupSettings} sidebarMainPopupSettings
-   * @param {XULElement} browser
+   * @param {XULElement} root
    */
   constructor(
     sidebarBox,
@@ -33,7 +33,7 @@ export class SidebarController {
     sidebarSplitterUnpinned,
     webPanelPopupEdit,
     sidebarMainPopupSettings,
-    browser,
+    root,
   ) {
     this.sidebarBox = sidebarBox;
     this.sidebar = sidebar;
@@ -41,7 +41,7 @@ export class SidebarController {
     this.sidebarSplitterUnpinned = sidebarSplitterUnpinned;
     this.webPanelPopupEdit = webPanelPopupEdit;
     this.sidebarMainPopupSettings = sidebarMainPopupSettings;
-    this.browser = browser;
+    this.root = root;
     this.#setupListeners();
 
     this.hideInPopupWindows = false;
@@ -264,7 +264,7 @@ export class SidebarController {
    * @returns {string}
    */
   getUnpinnedPadding() {
-    const value = this.browser.getProperty("--sb2-box-unpinned-padding");
+    const value = this.root.getProperty("--sb2-box-unpinned-padding");
     return value.match(/var\(--space-([^)]+)\)/)[1];
   }
 
@@ -273,7 +273,7 @@ export class SidebarController {
    * @param {string} value
    */
   setUnpinnedPadding(value) {
-    this.browser.setProperty(
+    document.documentElement.style.setProperty(
       "--sb2-box-unpinned-padding",
       `var(--space-${value})`,
     );

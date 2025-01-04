@@ -85,8 +85,8 @@ export class SidebarInjector {
    */
   static #createElements() {
     return {
-      browser: new XULElement(null, {
-        element: document.querySelector("#browser"),
+      root: new XULElement(null, {
+        element: document.documentElement,
       }),
       sidebarMain: new SidebarMain(),
       webPanelTabs: new WebPanelTabs(),
@@ -157,7 +157,7 @@ export class SidebarInjector {
     this.sidebarMainController = new SidebarMainController(
       elements.sidebarMain,
       elements.sidebarMainMenuPopup,
-      elements.browser,
+      elements.root,
     );
     this.sidebarMainSettingsController = new SidebarMainSettingsController(
       elements.sidebarMainPopupSettings,
@@ -169,7 +169,7 @@ export class SidebarInjector {
       elements.sidebarSplitterUnpinned,
       elements.webPanelPopupEdit,
       elements.sidebarMainPopupSettings,
-      elements.browser,
+      elements.root,
     );
     this.sidebarSplittersController = new SidebarSplittersController(
       elements.sidebarSplitterUnpinned,
