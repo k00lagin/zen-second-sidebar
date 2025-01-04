@@ -30,16 +30,6 @@ export class XULElement {
     return this.element.id;
   }
 
-  /**
-   *
-   * @param {string} class_
-   * @returns {XULElement}
-   */
-  addClass(class_) {
-    this.element.classList.add(class_);
-    return this;
-  }
-
   getXUL() {
     return this.element;
   }

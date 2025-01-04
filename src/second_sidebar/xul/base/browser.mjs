@@ -167,20 +167,7 @@ export class Browser extends XULElement {
    * @returns {Browser}
    */
   addProgressListener(listener) {
-    this.element.addProgressListener(
-      listener,
-      Components.interfaces.nsIWebProgress.NOTIFY_ALL,
-    );
-    return this;
-  }
-
-  /**
-   *
-   * @param {object} listener
-   * @returns {Browser}
-   */
-  addEventListener(type, callback) {
-    this.element.addEventListener(type, callback);
+    this.element.addProgressListener(listener);
     return this;
   }
 

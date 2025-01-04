@@ -168,12 +168,7 @@ export class WebPanelPopupEdit extends Panel {
     this.onZoom = zoom;
 
     this.urlInput.addEventListener("input", () => {
-      url(
-        this.settings.uuid,
-        this.urlInput.getValue(),
-        this.containerMenuList.getValue(),
-        1000,
-      );
+      url(this.settings.uuid, this.urlInput.getValue(), 1000);
     });
     this.faviconURLInput.addEventListener("input", () => {
       faviconURL(this.settings.uuid, this.faviconURLInput.getValue(), 1000);
