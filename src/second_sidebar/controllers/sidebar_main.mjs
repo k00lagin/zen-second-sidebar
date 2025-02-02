@@ -4,6 +4,7 @@ import { SidebarMain } from "../xul/sidebar_main.mjs";
 import { SidebarMainMenuPopup } from "../xul/sidebar_main_menupopup.mjs";
 import { SidebarMainSettingsController } from "./sidebar_main_settings.mjs";
 import { XULElement } from "../xul/base/xul_element.mjs";
+import { isRightMouseButton } from "../utils/buttons.mjs";
 /* eslint-enable no-unused-vars */
 
 export class SidebarMainController {
@@ -32,11 +33,15 @@ export class SidebarMainController {
   }
 
   #setupListeners() {
-    this.sidebarMainMenuPopup.listenSettingsItemClick((event) => {
-      this.sidebarMainSettingsController.openPopup(
-        event.screenX,
-        event.screenY,
-      );
+    this.sidebarMain.addEventListener("mousedown", (event) => {
+      if (isRightMouseButton(event)) {
+        this.mouseX = event.clientX;
+        this.mouseY = event.clientY;
+      }
+    });
+
+    this.sidebarMainMenuPopup.listenSettingsItemClick(() => {
+      this.sidebarMainSettingsController.openPopup(this.mouseX, this.mouseY);
     });
 
     this.sidebarMainMenuPopup.listenCustomizeItemClick(() => {
