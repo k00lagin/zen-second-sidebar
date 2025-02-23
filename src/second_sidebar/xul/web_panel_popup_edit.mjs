@@ -284,8 +284,6 @@ export class WebPanelPopupEdit extends Panel {
     this.zoom = settings.zoom;
 
     this.settings = settings;
-    this.insertedBeforeXUL = webPanelController.getInsertedBeforeXUL();
-    this.currentInsertedBeforeXUL = this.insertedBeforeXUL;
 
     this.cancelOnPopupHidden = () => {
       if (this.getState() !== "closed") {
@@ -300,15 +298,12 @@ export class WebPanelPopupEdit extends Panel {
       if (event.target.id !== this.id) {
         return;
       }
-      webPanelController.webPanelButton.setOpen(webPanelController.isActive());
+      webPanelController.button.setOpen(webPanelController.isActive());
       this.removeEventListener("popuphidden", this.restoreWebPanelButtonState);
     };
     this.addEventListener("popuphidden", this.restoreWebPanelButtonState);
 
-    return Panel.prototype.openPopup.call(
-      this,
-      webPanelController.webPanelButton,
-    );
+    return Panel.prototype.openPopup.call(this, webPanelController.button);
   }
 
   #cancelChanges() {

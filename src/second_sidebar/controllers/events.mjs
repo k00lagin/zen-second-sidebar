@@ -1,5 +1,6 @@
 import { WindowManagerWrapper } from "../wrappers/window_manager.mjs";
 import { WindowWatcherWrapper } from "../wrappers/window_watcher.mjs";
+import { WindowWrapper } from "../wrappers/window.mjs";
 
 export const WebPanelEvents = {
   EDIT_WEB_PANEL_URL: "edit_web_panel_url",
@@ -14,7 +15,7 @@ export const WebPanelEvents = {
   EDIT_WEB_PANEL_ZOOM_IN: "edit_web_panel_zoom_in",
   EDIT_WEB_PANEL_ZOOM: "edit_web_panel_zoom",
   CREATE_WEB_PANEL: "create_web_panel",
-  OPEN_WEB_PANEL: "open_web_panel",
+  SWITCH_WEB_PANEL: "switch_web_panel",
   DELETE_WEB_PANEL: "delete_web_panel",
   SAVE_WEB_PANELS: "save_web_panels",
   OPEN_NEW_WEB_PANEL_POPUP: "open_new_web_panel_popup",
@@ -44,7 +45,7 @@ export const sendEvent = (type, detail = {}) => {
   const customEvent = new CustomEvent(type, {
     detail: {
       ...detail,
-      isWindowActive: window === lastWindow,
+      isActiveWindow: window === lastWindow,
     },
   });
   lastWindow.dispatchEvent(customEvent);
@@ -61,7 +62,7 @@ export const sendEvents = (type, detail = {}) => {
     const customEvent = new CustomEvent(type, {
       detail: {
         ...detail,
-        isWindowActive: window === lastWindow,
+        isActiveWindow: WindowWrapper.isEqual(window, lastWindow),
       },
     });
     window.dispatchEvent(customEvent);
@@ -74,7 +75,7 @@ export const sendEvents = (type, detail = {}) => {
  * @param {function(Event):void} callback
  */
 export const listenEvent = (type, callback) => {
-  window.addEventListener(type, (event) => {
+  new WindowWrapper().addEventListener(type, (event) => {
     console.log(`Got event ${event.type}:`, event.detail);
     callback(event);
   });

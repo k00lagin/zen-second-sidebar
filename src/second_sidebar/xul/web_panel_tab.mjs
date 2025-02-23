@@ -1,25 +1,58 @@
 import { Tab } from "./base/tab.mjs";
+import { WebPanelBrowser } from "./web_panel_browser.mjs";
 
 export class WebPanelTab extends Tab {
   /**
    *
-   * @param {string} uuid
-   * @param {string} userContextId
-   * @param {object} params
-   * @param {string?} params.id
-   * @param {Array<string>} params.classList
+   * @param {HTMLElement} element
    */
-  constructor(uuid, userContextId, { id = null, classList = [] } = {}) {
-    super(userContextId, { id, classList });
-    this.setUUID(uuid);
+  constructor(element) {
+    super({ element });
   }
 
   /**
    *
-   * @param {string} uuid
+   * @param {Tab} tab
    * @returns {WebPanelTab}
    */
-  setUUID(uuid) {
-    return this.setAttribute("uuid", uuid);
+  static fromTab(tab) {
+    return new WebPanelTab(tab.getXUL());
+  }
+
+  /**
+   * @returns {WebPanelBrowser}
+   */
+  get linkedBrowser() {
+    return new WebPanelBrowser(this.element.linkedBrowser);
+  }
+
+  /**
+   * @returns {string?}
+   */
+  get uuid() {
+    return this.getAttribute("uuid");
+  }
+
+  /**
+   * @param {string} uuid
+   */
+  set uuid(uuid) {
+    this.setAttribute("uuid", uuid);
+  }
+
+  /**
+   *
+   * @returns {boolean}
+   */
+  isEmpty() {
+    return !this.uuid;
+  }
+
+  /**
+   *
+   * @param {function():void} callback
+   */
+  addTabCloseListener(callback) {
+    this.addEventListener("TabClose", () => callback());
   }
 }

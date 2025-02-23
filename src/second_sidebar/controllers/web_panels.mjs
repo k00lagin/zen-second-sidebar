@@ -1,47 +1,55 @@
-/* eslint-disable no-unused-vars */
 import { WebPanelEvents, listenEvent } from "./events.mjs";
 import { isLeftMouseButton, isMiddleMouseButton } from "../utils/buttons.mjs";
 
 import { NetUtilWrapper } from "../wrappers/net_utils.mjs";
 import { SidebarControllers } from "../sidebar_controllers.mjs";
-import { SidebarMain } from "../xul/sidebar_main.mjs";
-import { WebPanel } from "../xul/web_panel.mjs";
-import { WebPanelButton } from "../xul/web_panel_button.mjs";
+import { SidebarElements } from "../sidebar_elements.mjs";
 import { WebPanelController } from "./web_panel.mjs";
-import { WebPanelMenuPopup } from "../xul/web_panel_menupopup.mjs";
-import { WebPanelTab } from "../xul/web_panel_tab.mjs";
-import { WebPanelTabs } from "../xul/web_panel_tabs.mjs";
-import { WebPanels } from "../xul/web_panels.mjs";
+import { WebPanelSettings } from "../settings/web_panel_settings.mjs";
 import { WebPanelsSettings } from "../settings/web_panels_settings.mjs";
 import { fetchIconURL } from "../utils/icons.mjs";
 import { gCustomizeModeWrapper } from "../wrappers/g_customize_mode.mjs";
 
-/* eslint-enable no-unused-vars */
-
 export class WebPanelsController {
-  /**
-   *
-   * @param {WebPanels} webPanels
-   * @param {SidebarMain} sidebarMain
-   * @param {WebPanelTabs} webPanelTabs
-   * @param {WebPanelMenuPopup} webPanelMenuPopup
-   */
-  constructor(webPanels, sidebarMain, webPanelTabs, webPanelMenuPopup) {
-    this.webPanels = webPanels;
-    this.sidebarMain = sidebarMain;
-    this.webPanelTabs = webPanelTabs;
-    this.webPanelMenuPopup = webPanelMenuPopup;
+  constructor() {
+    this.sidebarMain = SidebarElements.sidebarMain;
+    this.sidebarBox = SidebarElements.sidebarBox;
+    this.webPanelsBrowser = SidebarElements.webPanelsBrowser;
+    this.webPanelMenuPopup = SidebarElements.webPanelMenuPopup;
 
-    /**@type {Object<string, WebPanelController>} */
-    this.webPanelControllers = {};
-
+    /**@type {Map<string, WebPanelController>} */
+    this.webPanelControllers = new Map();
     this.#setupListeners();
   }
 
   #setupListeners() {
-    this.webPanelMenuPopup.setWebPanelsController(this);
+    this.webPanelsBrowser.waitInitialization(() => {
+      this.webPanelsBrowser.addPageTitleChangeListener((tab) => {
+        if (tab.selected) {
+          SidebarControllers.sidebarController.setToolbarTitle(
+            tab.linkedBrowser.getTitle(),
+          );
+        }
+      });
+      this.webPanelsBrowser.addTabSelectListener(() => {
+        const activeWebPanelTab = this.webPanelsBrowser.getActiveWebPanelTab();
+        if (activeWebPanelTab.isEmpty()) {
+          SidebarControllers.sidebarController.close();
+        }
+        for (const [uuid, webPanelController] of this.webPanelControllers) {
+          if (uuid === activeWebPanelTab.uuid) {
+            webPanelController.open();
+          } else {
+            webPanelController.close();
+          }
+        }
+      });
+    });
 
     this.webPanelMenuPopup.listenUnloadItemClick((webPanelController) => {
+      if (webPanelController.isActive()) {
+        SidebarControllers.sidebarController.close();
+      }
       webPanelController.unload();
     });
 
@@ -62,17 +70,17 @@ export class WebPanelsController {
       const url = event.detail.url;
       const userContextId = event.detail.userContextId;
       const newWebPanelPosition = event.detail.newWebPanelPosition;
-      const isWindowActive = event.detail.isWindowActive;
+      const isActiveWindow = event.detail.isActiveWindow;
 
       const webPanelController = await this.createWebPanelController(
         uuid,
         url,
         userContextId,
         newWebPanelPosition,
-        isWindowActive,
+        isActiveWindow,
       );
-      if (isWindowActive) {
-        webPanelController.openWebPanel();
+      if (isActiveWindow) {
+        webPanelController.switchWebPanel();
       }
     });
 
@@ -126,7 +134,6 @@ export class WebPanelsController {
     listenEvent(WebPanelEvents.EDIT_WEB_PANEL_USER_CONTEXT_ID, (event) => {
       const uuid = event.detail.uuid;
       const userContextId = event.detail.userContextId;
-
       const webPanelController = this.get(uuid);
       webPanelController.setUserContextId(userContextId);
     });
@@ -187,13 +194,13 @@ export class WebPanelsController {
     });
 
     listenEvent(WebPanelEvents.SAVE_WEB_PANELS, (event) => {
-      const isWindowActive = event.detail.isWindowActive;
-      if (isWindowActive) {
+      const isActiveWindow = event.detail.isActiveWindow;
+      if (isActiveWindow) {
         this.saveSettings();
       }
     });
 
-    listenEvent(WebPanelEvents.OPEN_WEB_PANEL, (event) => {
+    listenEvent(WebPanelEvents.SWITCH_WEB_PANEL, (event) => {
       const uuid = event.detail.uuid;
       const mouseEvent = event.detail.event;
 
@@ -201,6 +208,9 @@ export class WebPanelsController {
       if (isLeftMouseButton(mouseEvent)) {
         webPanelController.switchWebPanel();
       } else if (isMiddleMouseButton(mouseEvent)) {
+        if (webPanelController.isActive()) {
+          SidebarControllers.sidebarController.close();
+        }
         webPanelController.unload();
       }
     });
@@ -215,7 +225,7 @@ export class WebPanelsController {
       webPanelController.remove();
       this.delete(uuid);
 
-      if (event.detail.isWindowActive) {
+      if (event.detail.isActiveWindow) {
         this.saveSettings();
       }
     });
@@ -227,7 +237,7 @@ export class WebPanelsController {
    * @param {string} url
    * @param {string} userContextId
    * @param {string} newWebPanelPosition
-   * @param {boolean} isWindowActive
+   * @param {boolean} isActiveWindow
    * @returns {WebPanelController}
    */
   async createWebPanelController(
@@ -235,7 +245,7 @@ export class WebPanelsController {
     url,
     userContextId,
     newWebPanelPosition,
-    isWindowActive,
+    isActiveWindow,
   ) {
     try {
       NetUtilWrapper.newURI(url);
@@ -245,31 +255,18 @@ export class WebPanelsController {
     }
     const faviconURL = await fetchIconURL(url);
 
-    const webPanelTab = new WebPanelTab(uuid, userContextId);
-    const webPanel = new WebPanel(webPanelTab, uuid, url, faviconURL).hide();
-    const webPanelButton = new WebPanelButton(
-      webPanel.uuid,
-      newWebPanelPosition,
-    )
-      .setUserContextId(userContextId)
-      .setIcon(faviconURL)
-      .setLabel(url)
-      .setTooltipText(url);
-
-    const webPanelController = new WebPanelController(
-      webPanel,
-      webPanelButton,
-      webPanelTab,
-    );
+    const webPanelSettings = new WebPanelSettings(uuid, url, faviconURL, {
+      userContextId,
+    });
+    const webPanelController = new WebPanelController(webPanelSettings, {
+      loaded: isActiveWindow,
+      position: newWebPanelPosition,
+    });
     this.add(webPanelController);
 
-    if (isWindowActive) {
+    if (isActiveWindow) {
       this.saveSettings();
-      this.injectWebPanelTab(webPanelTab);
-      this.injectWebPanel(webPanel);
-      webPanelController.initWebPanel();
     }
-    webPanelController.initWebPanelButton();
 
     return webPanelController;
   }
@@ -279,7 +276,10 @@ export class WebPanelsController {
    * @param {WebPanelController} webPanelController
    */
   add(webPanelController) {
-    this.webPanelControllers[webPanelController.getUUID()] = webPanelController;
+    this.webPanelControllers.set(
+      webPanelController.getUUID(),
+      webPanelController,
+    );
   }
 
   /**
@@ -288,7 +288,7 @@ export class WebPanelsController {
    * @returns {WebPanelController?}
    */
   get(uuid) {
-    return this.webPanelControllers[uuid] ?? null;
+    return this.webPanelControllers.get(uuid) ?? null;
   }
 
   /**
@@ -296,44 +296,8 @@ export class WebPanelsController {
    * @returns {WebPanelController?}
    */
   getActive() {
-    return (
-      Object.values(this.webPanelControllers).find((webPanelController) =>
-        webPanelController.webPanel.isActive(),
-      ) ?? null
-    );
-  }
-
-  /**
-   *
-   * @param {WebPanel} webPanel
-   * @returns {boolean}
-   */
-  injectWebPanel(webPanel) {
-    if (this.webPanels.contains(webPanel)) {
-      return false;
-    }
-    this.webPanels.appendChild(webPanel);
-    return true;
-  }
-
-  /**
-   *
-   * @param {WebPanelTab} webPanelTab
-   * @returns {boolean}
-   */
-  injectWebPanelTab(webPanelTab) {
-    if (this.webPanelTabs.contains(webPanelTab)) {
-      return false;
-    }
-    this.webPanelTabs.appendChild(webPanelTab);
-    return true;
-  }
-
-  hideActive() {
-    const webPanelController = this.getActive();
-    if (webPanelController !== null) {
-      webPanelController.hide();
-    }
+    const tab = this.webPanelsBrowser.getActiveWebPanelTab();
+    return tab.isEmpty() ? null : this.get(tab.uuid);
   }
 
   /**
@@ -341,7 +305,11 @@ export class WebPanelsController {
    * @param {string} uuid
    */
   delete(uuid) {
-    delete this.webPanelControllers[uuid];
+    this.webPanelControllers.delete(uuid);
+  }
+
+  close() {
+    this.webPanelsBrowser.deselectWebPanelTab();
   }
 
   /**
@@ -350,18 +318,23 @@ export class WebPanelsController {
    */
   loadSettings(webPanelsSettings) {
     console.log("Loading web panels...");
-    for (const webPanelSettings of webPanelsSettings.webPanels) {
-      const webPanelController =
-        WebPanelController.fromSettings(webPanelSettings);
-      if (webPanelSettings.loadOnStartup) {
-        this.injectWebPanelTab(webPanelController.webPanelTab);
-        this.injectWebPanel(webPanelController.webPanel);
-        webPanelController.initWebPanel();
-      }
-      webPanelController.initWebPanelButton();
 
+    // We need to display web panels window for a while to initialize it and
+    // load startup web panels, but don't want to see it
+    this.sidebarBox.showInvisible();
+    this.webPanelsBrowser.init();
+
+    for (const webPanelSettings of webPanelsSettings.webPanels) {
+      const webPanelController = new WebPanelController(webPanelSettings, {
+        loaded: webPanelSettings.loadOnStartup,
+      });
       this.add(webPanelController);
     }
+
+    // Hide web panels window after initialization
+    this.webPanelsBrowser.waitInitialization(() => {
+      this.sidebarBox.hideInvisible();
+    });
   }
 
   /**
@@ -370,7 +343,7 @@ export class WebPanelsController {
    */
   dumpSettings() {
     return new WebPanelsSettings(
-      Object.values(this.webPanelControllers).map((webPanelController) =>
+      Array.from(this.webPanelControllers.values(), (webPanelController) =>
         webPanelController.dumpSettings(),
       ),
     );

@@ -1,22 +1,98 @@
+/* eslint-disable no-unused-vars */
 import { WebPanelEvents, sendEvent } from "./events.mjs";
 
+import { ChromeUtilsWrapper } from "../wrappers/chrome_utils.mjs";
 import { SidebarControllers } from "../sidebar_controllers.mjs";
-import { WebPanel } from "../xul/web_panel.mjs";
+import { SidebarElements } from "../sidebar_elements.mjs";
 import { WebPanelButton } from "../xul/web_panel_button.mjs";
 import { WebPanelSettings } from "../settings/web_panel_settings.mjs";
 import { WebPanelTab } from "../xul/web_panel_tab.mjs";
+import { ZoomManagerWrapper } from "../wrappers/zoom_manager.mjs";
+
+/* eslint-enable no-unused-vars */
+
+const DEFAULT_ZOOM = 1;
 
 export class WebPanelController {
+  #progressListener = this.#createProgressListener();
+  /**@type {WebPanelSettings} */
+  #settings;
+  /**@type {WebPanelButton} */
+  #button;
+  /**@type {WebPanelTab?} */
+  #tab = null;
+
   /**
    *
-   * @param {WebPanel} webPanel
-   * @param {WebPanelButton} webPanelButton
-   * @param {WebPanelTab} webPanelTab
+   * @param {WebPanelSettings} settings
+   * @param {object?} params
+   * @param {boolean?} params.loaded
+   * @param {string?} params.position
    */
-  constructor(webPanel, webPanelButton, webPanelTab) {
-    this.webPanel = webPanel;
-    this.webPanelButton = webPanelButton;
-    this.webPanelTab = webPanelTab;
+  constructor(settings, { loaded = false, position = null } = {}) {
+    this.webPanelsBrowser = SidebarElements.webPanelsBrowser;
+
+    this.#settings = settings;
+    this.#button = this.#createWebPanelButton(settings, loaded, position);
+    if (loaded) {
+      this.load();
+    }
+  }
+
+  #createProgressListener() {
+    const callback = () => {
+      if (this.isActive()) {
+        const title = this.#tab.linkedBrowser.getTitle();
+        const canGoBack = this.#tab.linkedBrowser.canGoBack();
+        const canGoForward = this.#tab.linkedBrowser.canGoForward();
+        SidebarControllers.sidebarController.setToolbarTitle(title);
+        SidebarControllers.sidebarController.setToolbarBackButtonDisabled(
+          !canGoBack,
+        );
+        SidebarControllers.sidebarController.setToolbarForwardButtonDisabled(
+          !canGoForward,
+        );
+        this.setZoom(this.#settings.zoom);
+      }
+    };
+    return {
+      QueryInterface: ChromeUtilsWrapper.generateQI([
+        "nsIWebProgressListener",
+        "nsIWebProgressListener2",
+        "nsISupportsWeakReference",
+        "nsIXULBrowserWindow",
+      ]),
+      onLocationChange: callback,
+      onStateChange: callback,
+      onStatusChange: callback,
+    };
+  }
+
+  /**
+   *
+   * @param {WebPanelSettings} settings
+   * @param {boolean} loaded
+   * @param {string} position
+   */
+  #createWebPanelButton(settings, loaded, position) {
+    const button = new WebPanelButton(settings, position);
+    button.setUnloaded(!loaded);
+
+    button.listenClick((event) => {
+      sendEvent(WebPanelEvents.SWITCH_WEB_PANEL, {
+        uuid: this.#settings.uuid,
+        event,
+      });
+    });
+
+    return button;
+  }
+
+  /**
+   * @returns {WebPanelButton}
+   */
+  get button() {
+    return this.#button;
   }
 
   /**
@@ -24,7 +100,7 @@ export class WebPanelController {
    * @returns {string}
    */
   getUUID() {
-    return this.webPanel.uuid;
+    return this.#settings.uuid;
   }
 
   /**
@@ -32,7 +108,7 @@ export class WebPanelController {
    * @returns {string}
    */
   getURL() {
-    return this.webPanel.url;
+    return this.#settings.url;
   }
 
   /**
@@ -40,8 +116,8 @@ export class WebPanelController {
    * @param {string} value
    */
   setURL(value) {
-    this.webPanel.url = value;
-    this.webPanelButton.setLabel(value).setTooltipText(value);
+    this.#settings.url = value;
+    this.#button.setLabel(value).setTooltipText(value);
   }
 
   /**
@@ -49,42 +125,18 @@ export class WebPanelController {
    * @param {string} userContextId
    */
   setUserContextId(userContextId) {
-    const isActive = this.isActive();
+    this.#settings.userContextId = userContextId;
 
-    const webPanelTab = new WebPanelTab(this.getUUID(), userContextId);
-    const webPanel = new WebPanel(
-      webPanelTab,
-      this.getUUID(),
-      this.webPanel.url,
-      this.webPanel.faviconURL,
-      {
-        pinned: this.webPanel.pinned,
-        width: this.webPanel.width,
-        mobile: this.webPanel.mobile,
-        zoom: this.webPanel.zoom,
-        loadOnStartup: this.webPanel.loadOnStartup,
-        unloadOnClose: this.webPanel.unloadOnClose,
-        hideToolbar: this.webPanel.hideToolbar,
-      },
-    );
-
-    this.unhackAsyncTabSwitcher();
-    this.webPanelTab.remove();
-    this.webPanel.remove();
-
-    this.webPanelTab = webPanelTab;
-    this.webPanel = webPanel;
-    this.webPanelButton.setUserContextId(userContextId);
-
-    if (isActive) {
-      SidebarControllers.webPanelsController.injectWebPanelTab(webPanelTab);
-      SidebarControllers.webPanelsController.injectWebPanel(webPanel);
-      this.initWebPanel();
-      this.webPanel.setDocShellIsActive(true).preserveLayers(false);
-    } else {
-      webPanel.hide();
-      this.webPanelButton.setUnloaded(true);
+    if (!this.isUnloaded()) {
+      const isActive = this.isActive();
+      this.unload();
+      this.load();
+      if (isActive) {
+        this.webPanelsBrowser.selectWebPanelTab(this.#tab);
+      }
     }
+
+    this.#button.setUserContextId(userContextId);
   }
 
   /**
@@ -92,7 +144,7 @@ export class WebPanelController {
    * @returns {string}
    */
   getFaviconURL() {
-    return this.webPanel.faviconURL;
+    return this.#settings.faviconURL;
   }
 
   /**
@@ -100,7 +152,7 @@ export class WebPanelController {
    * @param {string} faviconURL
    */
   setWebPanelFaviconURL(faviconURL) {
-    this.webPanel.faviconURL = faviconURL;
+    this.#settings.faviconURL = faviconURL;
   }
 
   /**
@@ -108,7 +160,7 @@ export class WebPanelController {
    * @param {string} faviconURL
    */
   setWebPanelButtonFaviconURL(faviconURL) {
-    this.webPanelButton.setIcon(faviconURL);
+    this.#button.setIcon(faviconURL);
   }
 
   /**
@@ -116,115 +168,79 @@ export class WebPanelController {
    * @returns {string}
    */
   getCurrentUrl() {
-    return this.webPanel.getCurrentUrl();
-  }
-
-  hackAsyncTabSwitcher() {
-    // prevent AsyncTabSwitcher to unload web panels
-    const tabBrowser = this.webPanel.getTabBrowser();
-    tabBrowser._printPreviewBrowsers.add(this.webPanel.getXUL());
-  }
-
-  unhackAsyncTabSwitcher() {
-    const tabBrowser = this.webPanel.getTabBrowser();
-    tabBrowser._printPreviewBrowsers.delete(this.webPanel.getXUL());
-  }
-
-  initWebPanel() {
-    this.hackAsyncTabSwitcher();
-
-    this.webPanel.listenBrowserProgressListener(() => {
-      this.webPanel.setZoom(this.webPanel.zoom);
-      if (this.webPanel.isActive()) {
-        const canGoBack = this.webPanel.canGoBack();
-        const canGoForward = this.webPanel.canGoForward();
-        const title = this.webPanel.getTitle();
-        SidebarControllers.sidebarController.setToolbarBackButtonDisabled(
-          !canGoBack,
-        );
-        SidebarControllers.sidebarController.setToolbarForwardButtonDisabled(
-          !canGoForward,
-        );
-        SidebarControllers.sidebarController.setToolbarTitle(title);
-      }
-      // mediaController can be changed, so listen here
-      this.webPanel.listenPlaybackStateChange((isPlaying) => {
-        this.webPanelButton.setPlaying(isPlaying);
-      });
-    });
-
-    this.webPanel.goHome();
-  }
-
-  initWebPanelButton() {
-    this.webPanelButton.listenClick((event) => {
-      sendEvent(WebPanelEvents.OPEN_WEB_PANEL, {
-        uuid: this.webPanel.uuid,
-        event,
-      });
-    });
-  }
-
-  openWebPanel() {
-    SidebarControllers.sidebarController.close();
-    SidebarControllers.sidebarController.open(
-      this.webPanel.pinned,
-      this.webPanel.width,
-      this.webPanel.canGoBack(),
-      this.webPanel.canGoForward(),
-      this.webPanel.getTitle(),
-      this.webPanel.getZoom(),
-      this.webPanel.hideToolbar,
-    );
-    this.show();
+    return this.#tab.linkedBrowser.getCurrentUrl();
   }
 
   switchWebPanel() {
-    if (this.webPanel.isActive()) {
-      SidebarControllers.sidebarController.close();
+    const activeTab = this.webPanelsBrowser.getActiveWebPanelTab();
+
+    if (activeTab.uuid === this.getUUID()) {
+      // Select empty web panel tab
+      this.webPanelsBrowser.deselectWebPanelTab();
     } else {
-      SidebarControllers.webPanelsController.hideActive();
-      if (
-        SidebarControllers.webPanelsController.injectWebPanelTab(
-          this.webPanelTab,
-        ) &&
-        SidebarControllers.webPanelsController.injectWebPanel(this.webPanel)
-      ) {
-        this.initWebPanel();
+      // Create web panel tab if it was not loaded yet
+      if (this.isUnloaded()) {
+        this.load();
       }
-      SidebarControllers.sidebarController.open(
-        this.webPanel.pinned,
-        this.webPanel.width,
-        this.webPanel.canGoBack(),
-        this.webPanel.canGoForward(),
-        this.webPanel.getTitle(),
-        this.webPanel.getZoom(),
-        this.webPanel.hideToolbar,
-      );
-      this.show();
+      // Select web panel tab
+      this.webPanelsBrowser.selectWebPanelTab(this.#tab);
     }
   }
 
-  show() {
-    this.webPanel.show().setDocShellIsActive(true).preserveLayers(false);
-    this.webPanelButton.setOpen(true);
-    this.webPanelButton.setUnloaded(false);
+  open() {
+    // Configure web panel and button
+    this.#button.setOpen(true).setUnloaded(false);
+    this.setZoom(this.#settings.zoom);
+
+    // Open sidebar if it was closed and configure
+    SidebarControllers.sidebarController.open(
+      this.#settings.pinned,
+      this.#settings.width,
+      this.#tab.linkedBrowser.canGoBack(),
+      this.#tab.linkedBrowser.canGoForward(),
+      this.#tab.linkedBrowser.getTitle(),
+      this.#settings.hideToolbar,
+    );
   }
 
-  hide() {
-    this.webPanel.hide().setDocShellIsActive(false).preserveLayers(true);
-    if (this.webPanel.unloadOnClose) {
+  close() {
+    this.#button.setOpen(false);
+    if (this.#settings.unloadOnClose) {
       this.unload();
     }
-    this.webPanelButton.setOpen(false);
   }
 
-  unload() {
-    this.unhackAsyncTabSwitcher();
-    SidebarControllers.sidebarController.close();
-    this.webPanel.remove();
-    this.webPanelTab.remove();
-    this.webPanelButton.hidePlayingIcon().setUnloaded(true);
+  load() {
+    this.webPanelsBrowser.waitInitialization(() => {
+      this.#tab = this.webPanelsBrowser.addWebPanelTab(
+        this.#settings,
+        this.#progressListener,
+      );
+      this.#tab.addTabCloseListener(() => this.unload(false));
+      this.#tab.linkedBrowser.addPlaybackStateListener((isPlaying) =>
+        this.#button.setPlaying(isPlaying),
+      );
+      this.#button.setUnloaded(false);
+    });
+  }
+
+  /**
+   *
+   * @param {boolean} force
+   */
+  unload(force = true) {
+    const activeWebPanelController =
+      SidebarControllers.webPanelsController.getActive();
+    if (activeWebPanelController?.getUUID() === this.getUUID()) {
+      this.webPanelsBrowser.deselectWebPanelTab();
+    }
+
+    if (this.#tab && force) {
+      this.webPanelsBrowser.removeWebPanelTab(this.#tab);
+    }
+
+    this.#button.setOpen(false).setUnloaded(true).hidePlayingIcon();
+    this.#tab = null;
   }
 
   /**
@@ -232,7 +248,23 @@ export class WebPanelController {
    * @returns {boolean}
    */
   isUnloaded() {
-    return this.webPanelButton.isUnloaded();
+    return this.#tab === null;
+  }
+
+  reload() {
+    this.#tab.linkedBrowser.reload();
+  }
+
+  goBack() {
+    this.#tab.linkedBrowser.goBack();
+  }
+
+  goForward() {
+    this.#tab.linkedBrowser.goForward();
+  }
+
+  goHome() {
+    this.#tab.linkedBrowser.go(this.#settings.url);
   }
 
   /**
@@ -240,9 +272,14 @@ export class WebPanelController {
    * @param {boolean} value
    */
   setMobile(value) {
-    this.webPanel.mobile = value;
+    this.#settings.mobile = value;
     if (!this.isUnloaded()) {
-      this.webPanel.goHome();
+      if (value) {
+        this.#tab.linkedBrowser.setMobileUserAgent();
+      } else {
+        this.#tab.linkedBrowser.unsetMobileUserAgent();
+      }
+      this.goHome();
     }
   }
 
@@ -251,15 +288,29 @@ export class WebPanelController {
    * @returns {number}
    */
   getZoom() {
-    return this.webPanel.zoom;
+    return this.#settings.zoom;
   }
 
   zoomOut() {
-    this.webPanel.zoomOut(this.isUnloaded());
+    const i =
+      ZoomManagerWrapper.zoomValues.indexOf(
+        ZoomManagerWrapper.snap(this.getZoom()),
+      ) - 1;
+    if (i >= 0) {
+      const zoom = ZoomManagerWrapper.zoomValues[i];
+      this.setZoom(zoom);
+    }
   }
 
   zoomIn() {
-    this.webPanel.zoomIn(this.isUnloaded());
+    const i =
+      ZoomManagerWrapper.zoomValues.indexOf(
+        ZoomManagerWrapper.snap(this.getZoom()),
+      ) + 1;
+    if (i < ZoomManagerWrapper.zoomValues.length) {
+      const zoom = ZoomManagerWrapper.zoomValues[i];
+      this.setZoom(zoom);
+    }
   }
 
   /**
@@ -267,11 +318,12 @@ export class WebPanelController {
    * @param {number} zoom
    */
   setZoom(zoom) {
-    this.webPanel.setZoom(zoom, this.isUnloaded());
+    this.#settings.zoom = zoom;
+    this.#tab?.linkedBrowser?.setZoom(zoom);
   }
 
   resetZoom() {
-    this.webPanel.setZoom(1, this.isUnloaded());
+    this.setZoom(DEFAULT_ZOOM);
   }
 
   /**
@@ -279,7 +331,7 @@ export class WebPanelController {
    * @param {boolean} value
    */
   setLoadOnStartup(value) {
-    this.webPanel.loadOnStartup = value;
+    this.#settings.loadOnStartup = value;
   }
 
   /**
@@ -287,7 +339,7 @@ export class WebPanelController {
    * @returns {boolean}
    */
   getUnloadOnClose() {
-    return this.webPanel.unloadOnClose;
+    return this.#settings.unloadOnClose;
   }
 
   /**
@@ -295,7 +347,7 @@ export class WebPanelController {
    * @param {boolean} value
    */
   setUnloadOnClose(value) {
-    this.webPanel.unloadOnClose = value;
+    this.#settings.unloadOnClose = value;
   }
 
   /**
@@ -303,7 +355,7 @@ export class WebPanelController {
    * @param {boolean} value
    */
   setHideToolbar(value) {
-    this.webPanel.hideToolbar = value;
+    this.#settings.hideToolbar = value;
   }
 
   /**
@@ -311,7 +363,7 @@ export class WebPanelController {
    * @param {number} width
    */
   setWidth(width) {
-    this.webPanel.width = width;
+    this.#settings.width = width;
   }
 
   /**
@@ -319,15 +371,15 @@ export class WebPanelController {
    * @returns {boolean}
    */
   pinned() {
-    return this.webPanel.pinned;
+    return this.#settings.pinned;
   }
 
   pin() {
-    this.webPanel.pinned = true;
+    this.#settings.pinned = true;
   }
 
   unpin() {
-    this.webPanel.pinned = false;
+    this.#settings.pinned = false;
   }
 
   /**
@@ -335,15 +387,7 @@ export class WebPanelController {
    * @param {string} url
    */
   go(url) {
-    this.webPanel.go(url);
-  }
-
-  /**
-   *
-   * @returns {HTMLElement}
-   */
-  getInsertedBeforeXUL() {
-    return this.webPanelButton.nextSibling;
+    this.#tab.linkedBrowser.go(url);
   }
 
   /**
@@ -351,43 +395,14 @@ export class WebPanelController {
    * @returns {boolean}
    */
   isActive() {
-    return this.webPanel.isActive();
+    return this.#tab && this.#tab.selected;
   }
 
   remove() {
-    this.unhackAsyncTabSwitcher();
-    this.webPanel.remove();
-    this.webPanelTab.remove();
-    this.webPanelButton.remove();
-  }
-
-  /**
-   *
-   * @param {WebPanelSettings} webPanelSettings
-   * @returns {WebPanelController}
-   */
-  static fromSettings(webPanelSettings) {
-    const webPanelTab = new WebPanelTab(
-      webPanelSettings.uuid,
-      webPanelSettings.userContextId,
-    );
-
-    const webPanel = new WebPanel(
-      webPanelTab,
-      webPanelSettings.uuid,
-      webPanelSettings.url,
-      webPanelSettings.faviconURL,
-      webPanelSettings,
-    ).hide();
-
-    const webPanelButton = new WebPanelButton(webPanel.uuid)
-      .setUserContextId(webPanelSettings.userContextId)
-      .setIcon(webPanelSettings.faviconURL)
-      .setLabel(webPanelSettings.url)
-      .setTooltipText(webPanelSettings.url)
-      .setUnloaded(!webPanelSettings.loadOnStartup);
-
-    return new WebPanelController(webPanel, webPanelButton, webPanelTab);
+    if (this.#tab) {
+      this.webPanelsBrowser.removeWebPanelTab(this.#tab);
+    }
+    this.#button.remove();
   }
 
   /**
@@ -396,17 +411,19 @@ export class WebPanelController {
    */
   dumpSettings() {
     return new WebPanelSettings(
-      this.webPanel.uuid,
-      this.webPanel.url,
-      this.webPanel.faviconURL,
-      this.webPanel.pinned,
-      this.webPanel.width,
-      this.webPanel.mobile,
-      this.webPanel.zoom,
-      this.webPanel.loadOnStartup,
-      this.webPanel.unloadOnClose,
-      this.webPanel.hideToolbar,
-      this.webPanelTab.getUserContextId(),
+      this.#settings.uuid,
+      this.#settings.url,
+      this.#settings.faviconURL,
+      {
+        pinned: this.#settings.pinned,
+        width: this.#settings.width,
+        mobile: this.#settings.mobile,
+        zoom: this.#settings.zoom,
+        loadOnStartup: this.#settings.loadOnStartup,
+        unloadOnClose: this.#settings.unload,
+        hideToolbar: this.#settings.hideToolbar,
+        userContextId: this.#settings.userContextId,
+      },
     );
   }
 }

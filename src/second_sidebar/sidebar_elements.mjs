@@ -14,8 +14,8 @@ import { WebPanelPopupDelete } from "./xul/web_panel_popup_delete.mjs";
 import { WebPanelPopupEdit } from "./xul/web_panel_popup_edit.mjs";
 import { WebPanelPopupMore } from "./xul/web_panel_popup_more.mjs";
 import { WebPanelPopupNew } from "./xul/web_panel_popup_new.mjs";
-import { WebPanelTabs } from "./xul/web_panel_tabs.mjs";
 import { WebPanels } from "./xul/web_panels.mjs";
+import { WebPanelsBrowser } from "./xul/web_panels_browser.mjs";
 import { XULElement } from "./xul/base/xul_element.mjs";
 
 export class SidebarElements {
@@ -28,9 +28,6 @@ export class SidebarElements {
 
     console.log("Widgets creation...");
     this.#createWidgets();
-
-    console.log("Web panel tabs creation...");
-    this.#createWebPanelTabs();
 
     console.log("Popups creation...");
     this.#createPopups();
@@ -45,6 +42,7 @@ export class SidebarElements {
     this.sidebar = new Sidebar();
     this.sidebarToolbar = new SidebarToolbar();
     this.webPanels = new WebPanels();
+    this.webPanelsBrowser = new WebPanelsBrowser();
 
     const browser = new XULElement({
       element: document.getElementById("browser"),
@@ -58,6 +56,7 @@ export class SidebarElements {
       ),
       this.sidebarMain,
     );
+    this.webPanels.appendChild(this.webPanelsBrowser);
   }
 
   static #registerSidebar() {
@@ -69,13 +68,6 @@ export class SidebarElements {
 
   static #createWidgets() {
     this.webPanelNewButton = new WebPanelNewButton();
-  }
-
-  static #createWebPanelTabs() {
-    this.webPanelTabs = new WebPanelTabs();
-
-    const body = new XULElement({ element: document.body });
-    body.appendChild(this.webPanelTabs);
   }
 
   static #createPopups() {

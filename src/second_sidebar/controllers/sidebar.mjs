@@ -6,15 +6,10 @@ import {
   sendEvents,
 } from "./events.mjs";
 
-import { Sidebar } from "../xul/sidebar.mjs";
-import { SidebarBox } from "../xul/sidebar_box.mjs";
 import { SidebarControllers } from "../sidebar_controllers.mjs";
-import { SidebarMainPopupSettings } from "../xul/sidebar_main_popup_settings.mjs";
+import { SidebarElements } from "../sidebar_elements.mjs";
 import { SidebarSettings } from "../settings/sidebar_settings.mjs";
-import { SidebarSplitterUnpinned } from "../xul/sidebar_splitter_unpinned.mjs";
-import { SidebarToolbar } from "../xul/sidebar_toolbar.mjs";
 import { ToolbarButton } from "../xul/base/toolbar_button.mjs";
-import { WebPanelPopupEdit } from "../xul/web_panel_popup_edit.mjs";
 import { XULElement } from "../xul/base/xul_element.mjs";
 import { changeContainerBorder } from "../utils/containers.mjs";
 import { isLeftMouseButton } from "../utils/buttons.mjs";
@@ -22,30 +17,15 @@ import { isLeftMouseButton } from "../utils/buttons.mjs";
 /* eslint-enable no-unused-vars */
 
 export class SidebarController {
-  /**
-   *
-   * @param {SidebarBox} sidebarBox
-   * @param {Sidebar} sidebar
-   * @param {SidebarToolbar} sidebarToolbar
-   * @param {SidebarSplitterUnpinned} sidebarSplitterUnpinned
-   * @param {WebPanelPopupEdit} webPanelPopupEdit
-   * @param {SidebarMainPopupSettings} sidebarMainPopupSettings
-   */
-  constructor(
-    sidebarBox,
-    sidebar,
-    sidebarToolbar,
-    sidebarSplitterUnpinned,
-    webPanelPopupEdit,
-    sidebarMainPopupSettings,
-  ) {
-    this.sidebarBox = sidebarBox;
-    this.sidebar = sidebar;
-    this.sidebarToolbar = sidebarToolbar;
-    this.sidebarSplitterUnpinned = sidebarSplitterUnpinned;
-    this.webPanelPopupEdit = webPanelPopupEdit;
-    this.sidebarMainPopupSettings = sidebarMainPopupSettings;
+  constructor() {
+    this.sidebarBox = SidebarElements.sidebarBox;
+    this.sidebar = SidebarElements.sidebar;
+    this.sidebarToolbar = SidebarElements.sidebarToolbar;
+    this.sidebarSplitterUnpinned = SidebarElements.sidebarSplitterUnpinned;
+    this.webPanelPopupEdit = SidebarElements.webPanelPopupEdit;
+    this.sidebarMainPopupSettings = SidebarElements.sidebarMainPopupSettings;
     this.root = new XULElement({ element: document.documentElement });
+
     this.#setupListeners();
 
     this.hideInPopupWindows = false;
@@ -77,21 +57,29 @@ export class SidebarController {
       if (isLeftMouseButton(event)) {
         const webPanelController =
           SidebarControllers.webPanelsController.getActive();
-        return callback(webPanelController.webPanel);
+        return callback(webPanelController);
       }
     };
 
     this.sidebarToolbar.listenBackButtonClick((event) => {
-      addWebPanelButtonListener(event, (webPanel) => webPanel.goBack());
+      addWebPanelButtonListener(event, (webPanelController) =>
+        webPanelController.goBack(),
+      );
     });
     this.sidebarToolbar.listenForwardButtonClick((event) => {
-      addWebPanelButtonListener(event, (webPanel) => webPanel.goForward());
+      addWebPanelButtonListener(event, (webPanelController) =>
+        webPanelController.goForward(),
+      );
     });
     this.sidebarToolbar.listenReloadButtonClick((event) => {
-      addWebPanelButtonListener(event, (webPanel) => webPanel.reload());
+      addWebPanelButtonListener(event, (webPanelController) =>
+        webPanelController.reload(),
+      );
     });
     this.sidebarToolbar.listenHomeButtonClick((event) => {
-      addWebPanelButtonListener(event, (webPanel) => webPanel.goHome());
+      addWebPanelButtonListener(event, (webPanelController) =>
+        webPanelController.goHome(),
+      );
     });
 
     this.sidebarToolbar.listenPinButtonClick(() => {
@@ -105,10 +93,10 @@ export class SidebarController {
     });
 
     this.sidebarToolbar.listenCloseButtonClick(() => {
+      this.close();
       const webPanelController =
         SidebarControllers.webPanelsController.getActive();
       webPanelController.unload();
-      this.close();
     });
 
     listenEvent(SidebarEvents.EDIT_SIDEBAR_POSITION, (event) => {
@@ -170,8 +158,8 @@ export class SidebarController {
     });
 
     listenEvent(SidebarEvents.SAVE_SIDEBAR, (event) => {
-      const isWindowActive = event.detail.isWindowActive;
-      if (isWindowActive) {
+      const isActiveWindow = event.detail.isActiveWindow;
+      if (isActiveWindow) {
         this.saveSettings();
       }
     });
@@ -184,10 +172,9 @@ export class SidebarController {
    * @param {boolean} canGoBack
    * @param {boolean} canGoForward
    * @param {string} title
-   * @param {number} zoom
    * @param {boolean} hideToolbar
    */
-  open(pinned, width, canGoBack, canGoForward, title, zoom, hideToolbar) {
+  open(pinned, width, canGoBack, canGoForward, title, hideToolbar) {
     this.sidebarBox.show();
     this.setWidth(width);
     this.setToolbarBackButtonDisabled(!canGoBack);
@@ -200,8 +187,7 @@ export class SidebarController {
 
   close() {
     this.sidebarBox.hide();
-    this.unpin();
-    SidebarControllers.webPanelsController.hideActive();
+    SidebarControllers.webPanelsController.close();
   }
 
   /**

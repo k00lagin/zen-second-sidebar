@@ -1,7 +1,10 @@
+/* eslint-disable no-unused-vars */
 import { Img } from "./base/img.mjs";
+import { WebPanelSettings } from "../settings/web_panel_settings.mjs";
 import { Widget } from "./base/widget.mjs";
 import { applyContainerColor } from "../utils/containers.mjs";
 import { ellipsis } from "../utils/string.mjs";
+/* eslint-enable no-unused-vars */
 
 const URL_LABEL_LIMIT = 24;
 const URL_TOOLTIP_LIMIT = 64;
@@ -9,18 +12,22 @@ const URL_TOOLTIP_LIMIT = 64;
 export class WebPanelButton extends Widget {
   /**
    *
-   * @param {string} uuid
+   * @param {WebPanelSettings} webPanelSettings
    * @param {string?} position
    */
-  constructor(uuid, position = null) {
+  constructor(webPanelSettings, position = null) {
     super({
-      id: uuid,
+      id: webPanelSettings.uuid,
       classList: ["sb2-main-button", "sb2-main-web-panel-button"],
       context: "sb2-web-panel-button-menupopup",
       position,
     });
 
     this.playingIcon = null;
+    this.setUserContextId(webPanelSettings.userContextId)
+      .setIcon(webPanelSettings.faviconURL)
+      .setLabel(webPanelSettings.url)
+      .setTooltipText(webPanelSettings.url);
   }
 
   /**
