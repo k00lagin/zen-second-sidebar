@@ -25,9 +25,30 @@ export const SIDEBAR_MAIN_CSS = `
     }
   }
 
+  #sb2-main[fullscreenShouldAnimate] {
+    transition: 0.8s margin-right ease-out, 0.8s margin-left ease-out;
+  }
+
+  #sb2-main[shouldAnimate] {
+    transition: 0.2s margin-right ease-out, 0.2s margin-left ease-out;
+  }
+
+  #browser:has(#sb2-box:not([hidden])), 
+  #browser:has(#sb2-main toolbarbutton[open]),
+  #main-window:has(#sb2-main-popup-settings[panelopen]),
+  #main-window:has(#sb2-main-menupopup[panelopen]),
+  #main-window:has(#sb2-web-panel-button-menupopup[panelopen]) {
+    #sb2-main {
+      margin-left: 0px !important;
+      margin-right: 0px !important;
+    }
+  }
+
   :root[customizing] {
     #sb2-main {
       min-width: unset !important;
+      margin-left: 0px !important;
+      margin-right: 0px !important;
     }
   }
 
@@ -66,5 +87,13 @@ export const SIDEBAR_MAIN_CSS = `
 
   #widget-overflow-fixed-list .sb2-main-button {
     padding: var(--arrowpanel-menuitem-padding);
+  }
+
+  #sb2-collapse-button[position="left"] {
+    list-style-image: url("chrome://userscripts/content/second_sidebar/icons/sidebar-left.svg");
+  }
+
+  #sb2-collapse-button[position="right"] {
+    list-style-image: url("chrome://userscripts/content/second_sidebar/icons/sidebar-right.svg");
   }
 `;

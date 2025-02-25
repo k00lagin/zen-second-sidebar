@@ -48,6 +48,20 @@ export class WindowWrapper {
   }
 
   /**
+   * @returns {boolean}
+   */
+  get fullScreen() {
+    return this.raw.fullScreen;
+  }
+
+  /**
+   * @returns {number}
+   */
+  get mozInnerScreenX() {
+    return this.raw.mozInnerScreenX;
+  }
+
+  /**
    *
    * @param {Event} event
    * @returns {boolean}

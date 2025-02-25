@@ -1,3 +1,4 @@
+import { CollapseController } from "./controllers/collapse.mjs";
 import { ContextMenuItemsController } from "./controllers/context_menu_items.mjs";
 import { SidebarController } from "./controllers/sidebar.mjs";
 import { SidebarMainController } from "./controllers/sidebar_main.mjs";
@@ -21,5 +22,6 @@ export class SidebarControllers {
     this.webPanelMoreController = new WebPanelMoreController();
     this.webPanelDeleteController = new WebPanelDeleteController();
     this.contextMenuItemsController = new ContextMenuItemsController();
+    this.collapseController = new CollapseController();
   }
 }
