@@ -220,9 +220,9 @@ export class WebPanelController {
         this.#progressListener,
       );
       this.#tab.addTabCloseListener(() => this.unload(false));
-      this.#tab.linkedBrowser.addPlaybackStateListener((isPlaying) =>
-        this.#button.setPlaying(isPlaying),
-      );
+      this.#tab.addEventListener("TabAttrModified", () => {
+        this.#button.setPlaying(this.#tab.soundPlaying, this.#tab.muted);
+      });
       this.#button.setUnloaded(false);
       this.#startTimer();
     });
@@ -244,7 +244,7 @@ export class WebPanelController {
       this.webPanelsBrowser.removeWebPanelTab(this.#tab);
     }
 
-    this.#button.setOpen(false).setUnloaded(true).hidePlayingIcon();
+    this.#button.setPlayingIcon(false, false).setOpen(false).setUnloaded(true);
     this.#tab = null;
   }
 
@@ -431,6 +431,18 @@ export class WebPanelController {
    */
   isActive() {
     return this.#tab && this.#tab.selected;
+  }
+
+  /**
+   *
+   * @returns {boolean}
+   */
+  isMuted() {
+    return this.#tab.muted;
+  }
+
+  toggleMuteAudio() {
+    this.#tab.toggleMuteAudio();
   }
 
   remove() {
