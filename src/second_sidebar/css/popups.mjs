@@ -7,6 +7,7 @@ export const POPUPS_CSS = `
       gap: var(--space-xsmall);
       width: 100%;
       padding: var(--space-xsmall) 0;
+      overflow-y: scroll;
 
       .panel-header {
         align-self: center;
