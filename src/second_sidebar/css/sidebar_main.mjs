@@ -65,16 +65,33 @@ export const SIDEBAR_MAIN_CSS = `
     position: relative;
     padding: 0;
 
-    .tab-icon-overlay {
-      position: absolute !important;
-      padding: 0px !important;
-      margin: 0px !important;
-      top: 0 !important;
-      right: 0 !important;
+    .sb2-sound-icon {
+      position: relative;
+      display: none;
+      height: 16px;
+      width: 16px;
+      top: var(--toolbarbutton-inner-padding);
+      right: calc(-1 * var(--toolbarbutton-inner-padding));
+      padding: 2px;
+      background-position: center;
+      background-repeat: no-repeat;
+      border-radius: var(--border-radius-circle);
+      background-color: color-mix(in srgb, var(--toolbar-bgcolor) 50%, transparent);
+      fill: var(--toolbar-color);
+
+      &[soundplaying] {
+        display: flex;
+        background-image: url("chrome://browser/skin/tabbrowser/tab-audio-playing-small.svg");
+      }
+
+      &[muted] {
+        display: flex;
+        background-image: url("chrome://browser/skin/tabbrowser/tab-audio-muted-small.svg");
+      }
     }
 
-    .tab-icon-overlay[hidden="true"] {
-      display: none !important;
+    .sb2-sound-icon[hidden="true"] {
+      display: none;
     }
   }
 

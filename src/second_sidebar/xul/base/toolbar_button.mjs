@@ -41,11 +41,16 @@ export class ToolbarButton extends XULElement {
 
   /**
    *
-   * @param {string} value
+   * @param {boolean} value
    * @returns {ToolbarButton}
    */
   setBadged(value) {
-    return this.setAttribute("badged", value);
+    if (value) {
+      this.setAttribute("badged", true);
+    } else {
+      this.removeAttribute("badged");
+    }
+    return true;
   }
 
   /**
@@ -144,5 +149,13 @@ export class ToolbarButton extends XULElement {
    */
   getImageXUL() {
     return this.element.querySelector("image");
+  }
+
+  /**
+   *
+   * @returns {HTMLElement}
+   */
+  getBadgeStackXUL() {
+    return this.element.querySelector(".toolbarbutton-badge-stack");
   }
 }
