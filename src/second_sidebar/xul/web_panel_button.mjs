@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { FALLBACK_ICON, useAvailableIcon } from "../utils/icons.mjs";
 
-import { WebPanelPlayingIcon } from "./web_panel_playing_icon.mjs";
 import { WebPanelSettings } from "../settings/web_panel_settings.mjs";
+import { WebPanelSoundIcon } from "./web_panel_sound_icon.mjs";
 import { Widget } from "./base/widget.mjs";
 import { applyContainerColor } from "../utils/containers.mjs";
 import { ellipsis } from "../utils/string.mjs";
@@ -26,10 +26,10 @@ export class WebPanelButton extends Widget {
       position,
     });
 
-    /**@type {WebPanelPlayingIcon} */
-    this.playingIcon = new WebPanelPlayingIcon();
+    /**@type {WebPanelSoundIcon} */
+    this.playingIcon = new WebPanelSoundIcon();
     this.doWhenButtonReady(() => {
-      this.button.appendChild(this.playingIcon);
+      this.button.getBadgeStackXUL().appendChild(this.playingIcon.element);
     });
 
     this.setUserContextId(webPanelSettings.userContextId)
@@ -110,7 +110,7 @@ export class WebPanelButton extends Widget {
   setUserContextId(userContextId) {
     return this.doWhenButtonReady(() =>
       this.doWhenButtonImageReady(() =>
-        applyContainerColor(userContextId, this.button.getImageXUL()),
+        applyContainerColor(userContextId, this.button.getBadgeStackXUL()),
       ),
     );
   }

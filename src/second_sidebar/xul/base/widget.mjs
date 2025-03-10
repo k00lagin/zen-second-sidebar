@@ -83,9 +83,10 @@ export class Widget {
 
   /**
    *
-   * @param {HTMLElement} button
+   * @param {ToolbarButton} button
    */
   #setup(button) {
+    button.setBadged(true);
     button.setOpen(this.open);
     button.setUnloaded(this.unloaded);
     if (this.iconURL) {
