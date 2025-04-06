@@ -5,6 +5,8 @@ const PREF = "second-sidebar.settings";
 export class SidebarSettings {
   /**@type {string} */
   #position;
+  /**@type {boolean} */
+  #floating;
   /**@type {string} */
   #padding;
   /**@type {string} */
@@ -23,6 +25,7 @@ export class SidebarSettings {
   /**
    *
    * @param {string} position
+   * @param {boolean} floating
    * @param {string} padding
    * @param {string} newWebPanelPosition
    * @param {string} unpinnedPadding
@@ -33,6 +36,7 @@ export class SidebarSettings {
    */
   constructor(
     position,
+    floating,
     padding,
     newWebPanelPosition,
     unpinnedPadding,
@@ -42,6 +46,7 @@ export class SidebarSettings {
     containerBorder,
   ) {
     this.#position = position;
+    this.#floating = floating;
     this.#padding = padding;
     this.#newWebPanelPosition = newWebPanelPosition;
     this.#unpinnedPadding = unpinnedPadding;
@@ -53,6 +58,10 @@ export class SidebarSettings {
 
   get position() {
     return this.#position;
+  }
+
+  get floating() {
+    return this.#floating;
   }
 
   get padding() {
@@ -91,6 +100,7 @@ export class SidebarSettings {
     const pref = Settings.load(PREF) ?? {};
     return new SidebarSettings(
       pref.position ?? "right",
+      pref.floating ?? false,
       pref.padding ?? "small",
       pref.newWebPanelPosition ?? "before",
       pref.unpinnedPadding ?? "small",
@@ -104,6 +114,7 @@ export class SidebarSettings {
   save() {
     Settings.save(PREF, {
       position: this.#position,
+      floating: this.#floating,
       padding: this.#padding,
       newWebPanelPosition: this.#newWebPanelPosition,
       unpinnedPadding: this.#unpinnedPadding,

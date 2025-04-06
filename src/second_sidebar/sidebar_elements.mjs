@@ -47,7 +47,7 @@ export class SidebarElements {
     this.webPanels = new WebPanels();
 
     const browser = new XULElement({
-      element: document.getElementById("browser"),
+      element: document.getElementById("zen-tabbox-wrapper"), // browser
     });
     browser.appendChildren(
       this.sidebarSplitterPinned,

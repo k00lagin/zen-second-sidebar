@@ -116,6 +116,11 @@ export class SidebarController {
       this.setPosition(value);
     });
 
+    listenEvent(SidebarEvents.EDIT_SIDEBAR_FLOATING, (event) => {
+      const value = event.detail.value;
+      this.setFloating(value);
+    });
+
     listenEvent(SidebarEvents.EDIT_SIDEBAR_PADDING, (event) => {
       const value = event.detail.value;
       SidebarControllers.sidebarMainController.setPadding(value);
@@ -306,6 +311,22 @@ export class SidebarController {
 
   /**
    *
+   * @returns {boolean}
+   */
+  setFloating(floating) {
+    this.sidebar.setFloating(floating);
+  }
+
+  /**
+   *
+   * @returns {boolean}
+   */
+  getFloating() {
+    return this.sidebar.getFloating();
+  }
+
+  /**
+   *
    * @param {boolean} value
    */
   setHideToolbar(value) {
@@ -382,6 +403,7 @@ export class SidebarController {
    */
   loadSettings(settings) {
     this.setPosition(settings.position);
+    this.setFloating(settings.floating);
     SidebarControllers.sidebarMainController.setPadding(settings.padding);
     SidebarControllers.webPanelNewController.setNewWebPanelPosition(
       settings.newWebPanelPosition,
@@ -400,6 +422,7 @@ export class SidebarController {
   dumpSettings() {
     return new SidebarSettings(
       this.getPosition(),
+      this.getFloating(),
       SidebarControllers.sidebarMainController.getPadding(),
       SidebarControllers.webPanelNewController.getNewWebPanelPosition(),
       this.getUnpinnedPadding(),

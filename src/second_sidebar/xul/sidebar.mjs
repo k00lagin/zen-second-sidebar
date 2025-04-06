@@ -27,6 +27,22 @@ export class Sidebar extends VBox {
    *
    * @returns {Sidebar}
    */
+  setFloating(floating) {
+    return this.setAttribute("floating", floating);
+  }
+
+  /**
+   *
+   * @returns {boolean}
+   */
+  getFloating() {
+    return this.getAttribute("floating") === "true";
+  }
+
+  /**
+   *
+   * @returns {Sidebar}
+   */
   pin() {
     return this.setAttribute("pinned", "true");
   }
