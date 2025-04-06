@@ -1,7 +1,7 @@
 export const SIDEBAR_CSS = `
   #sb2 {
-    box-shadow: var(--content-area-shadow);
-    border-radius: var(--border-radius-medium);
+    border-radius: var(--zen-native-inner-radius);
+    box-shadow: var(--zen-big-shadow);
     overflow: hidden;
     height: 100%;
     pointer-events: auto;
@@ -14,6 +14,10 @@ export const SIDEBAR_CSS = `
       gap: 4px;
       background-color: var(--toolbar-bgcolor);
       color: var(--toolbar-color);
+
+      #sb2-toolbar-nav-buttons {
+        color-scheme: light dark;
+      }
 
       #sb2-toolbar-title-wrapper {
         display: flex;

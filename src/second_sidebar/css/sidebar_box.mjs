@@ -1,6 +1,8 @@
 export const SIDEBAR_BOX_CSS = `
   #sb2-box {
-    background-color: var(--toolbar-bgcolor);
+    background-color: transparent;
+    margin-left: 0;
+    padding: 0;
     min-width: 200px;
     pointer-events: none;
     box-sizing: content-box;
@@ -17,6 +19,8 @@ export const SIDEBAR_BOX_CSS = `
 
     #sb2-splitter-pinned {
       display: flex;
+      width: var(--zen-element-separation);
+      border: unset;
     }
   }
 
@@ -56,8 +60,8 @@ export const SIDEBAR_BOX_CSS = `
 
     #sb2-splitter-pinned {
       order: 5 !important;
-      margin-inline-start: unset;
-      margin-inline-end: calc(-1 * var(--splitter-width));
+      margin-inline-end: calc(-1 * var(--zen-element-separation) + 1px);
+      margin-inline-start: 2px;
     }
   }
 
@@ -70,8 +74,8 @@ export const SIDEBAR_BOX_CSS = `
 
     #sb2-splitter-pinned {
       order: -1 !important;
-      margin-inline-start: calc(-1 * var(--splitter-width));
-      margin-inline-end: unset;
+      margin-inline-start: calc(-1 * var(--zen-element-separation) + 1px);
+      margin-inline-end: 2px;
     }
   }
 
