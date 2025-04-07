@@ -55,6 +55,7 @@ export const SIDEBAR_MAIN_CSS = `
     box-shadow: var(--zen-big-shadow);
     outline: 1px solid var(--zen-colors-border-contrast);
     outline-offset: -1px;
+    -moz-window-dragging: no-drag;
     
     transition: transform 0.2s 0.35s ease-in-out, opacity 0.1s 0.35s linear;
     opacity: 0;
