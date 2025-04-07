@@ -75,6 +75,7 @@ export const SIDEBAR_MAIN_CSS = `
     transform: translateX(calc(-100% + 4px));
   }
 
+  #browser:has(#sb2[floating="true"]:not([pinned="true"])):has(#sb2-box:not([hidden="true"])) #sb2-main,
   #browser:has(#sb2[floating="true"]) #sb2-main:hover,
   #browser:has(#sb2[floating="true"]) #sb2-main:focus-within {
     transform: translateX(0) !important;
