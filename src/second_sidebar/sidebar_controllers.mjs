@@ -1,4 +1,4 @@
-import { ContextItemController } from "./controllers/context_item.mjs";
+import { ContextMenuItemsController } from "./controllers/context_menu_items.mjs";
 import { SidebarController } from "./controllers/sidebar.mjs";
 import { SidebarElements } from "./sidebar_elements.mjs";
 import { SidebarMainController } from "./controllers/sidebar_main.mjs";
@@ -59,6 +59,6 @@ export class SidebarControllers {
       SidebarElements.webPanelPopupDelete,
     );
 
-    this.contextItemController = new ContextItemController();
+    this.contextMenuItemsController = new ContextMenuItemsController();
   }
 }
