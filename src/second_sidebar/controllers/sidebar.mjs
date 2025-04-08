@@ -185,6 +185,7 @@ export class SidebarController {
   /**
    *
    * @param {boolean} pinned
+   * @param {string} type
    * @param {number} width
    * @param {boolean} canGoBack
    * @param {boolean} canGoForward
@@ -192,7 +193,7 @@ export class SidebarController {
    * @param {number} zoom
    * @param {boolean} hideToolbar
    */
-  open(pinned, width, canGoBack, canGoForward, title, zoom, hideToolbar) {
+  open({pinned, type, width, canGoBack, canGoForward, title, zoom, hideToolbar}) {
     this.sidebarBox.show();
     this.setWidth(width);
     this.setToolbarBackButtonDisabled(!canGoBack);
@@ -200,12 +201,13 @@ export class SidebarController {
     this.setToolbarTitle(title);
     this.setHideToolbar(hideToolbar);
     this.updateAbsolutePosition();
+    this.setType(type);
     pinned ? this.pin() : this.unpin();
   }
 
   close() {
     this.sidebarBox.hide();
-    this.unpin();
+    // this.unpin();
     SidebarControllers.webPanelsController.hideActive();
   }
 
@@ -227,6 +229,10 @@ export class SidebarController {
     this.sidebar.unpin();
     this.sidebarToolbar.changePinButton(false);
     document.addEventListener("click", this.onClickOutsideWhileUnpinned);
+  }
+
+  setType(type) {
+    this.sidebar.setType(type);
   }
 
   /**

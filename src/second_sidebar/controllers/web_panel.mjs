@@ -59,6 +59,7 @@ export class WebPanelController {
       this.webPanel.faviconURL,
       {
         pinned: this.webPanel.pinned,
+        type: this.webPanel.type,
         width: this.webPanel.width,
         mobile: this.webPanel.mobile,
         zoom: this.webPanel.zoom,
@@ -167,15 +168,16 @@ export class WebPanelController {
 
   openWebPanel() {
     SidebarControllers.sidebarController.close();
-    SidebarControllers.sidebarController.open(
-      this.webPanel.pinned,
-      this.webPanel.width,
-      this.webPanel.canGoBack(),
-      this.webPanel.canGoForward(),
-      this.webPanel.getTitle(),
-      this.webPanel.getZoom(),
-      this.webPanel.hideToolbar,
-    );
+    SidebarControllers.sidebarController.open({
+      pinned: this.webPanel.pinned,
+      type: this.webPanel.type,
+      width: this.webPanel.width,
+      canGoBack: this.webPanel.canGoBack(),
+      canGoForward: this.webPanel.canGoForward(),
+      title: this.webPanel.getTitle(),
+      zoom: this.webPanel.getZoom(),
+      hideToolbar: this.webPanel.hideToolbar,
+    });
     this.show();
   }
 
@@ -192,15 +194,16 @@ export class WebPanelController {
       ) {
         this.initWebPanel();
       }
-      SidebarControllers.sidebarController.open(
-        this.webPanel.pinned,
-        this.webPanel.width,
-        this.webPanel.canGoBack(),
-        this.webPanel.canGoForward(),
-        this.webPanel.getTitle(),
-        this.webPanel.getZoom(),
-        this.webPanel.hideToolbar,
-      );
+      SidebarControllers.sidebarController.open({
+        pinned: this.webPanel.pinned,
+        type: this.webPanel.type,
+        width: this.webPanel.width,
+        canGoBack: this.webPanel.canGoBack(),
+        canGoForward: this.webPanel.canGoForward(),
+        title: this.webPanel.getTitle(),
+        zoom: this.webPanel.getZoom(),
+        hideToolbar: this.webPanel.hideToolbar,
+      });
       this.show();
     }
   }
@@ -332,6 +335,18 @@ export class WebPanelController {
 
   /**
    *
+   * @returns {string}
+   */
+  getType() {
+    return this.webPanel.type;
+  }
+
+  setType(type) {
+    this.webPanel.type = type;
+  }
+
+  /**
+   *
    * @param {string} url
    */
   go(url) {
@@ -395,18 +410,19 @@ export class WebPanelController {
    * @returns {WebPanelSettings}
    */
   dumpSettings() {
-    return new WebPanelSettings(
-      this.webPanel.uuid,
-      this.webPanel.url,
-      this.webPanel.faviconURL,
-      this.webPanel.pinned,
-      this.webPanel.width,
-      this.webPanel.mobile,
-      this.webPanel.zoom,
-      this.webPanel.loadOnStartup,
-      this.webPanel.unloadOnClose,
-      this.webPanel.hideToolbar,
-      this.webPanelTab.getUserContextId(),
-    );
+    return new WebPanelSettings({
+      uuid: this.webPanel.uuid,
+      url: this.webPanel.url,
+      faviconURL: this.webPanel.faviconURL,
+      pinned: this.webPanel.pinned,
+      type: this.webPanel.type,
+      width: this.webPanel.width,
+      mobile: this.webPanel.mobile,
+      zoom: this.webPanel.zoom,
+      loadOnStartup: this.webPanel.loadOnStartup,
+      unloadOnClose: this.webPanel.unloadOnClose,
+      hideToolbar: this.webPanel.hideToolbar,
+      userContextId: this.webPanelTab.getUserContextId(),
+    });
   }
 }

@@ -42,7 +42,7 @@ export const SIDEBAR_CSS = `
     }
   }
   
-  #sb2[pinned="true"] {
+  #sb2[type="split"] {
     width: 100% !important;
   }
 `;

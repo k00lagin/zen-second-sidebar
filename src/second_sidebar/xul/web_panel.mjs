@@ -28,6 +28,7 @@ export class WebPanel extends Browser {
    * @param {string} faviconURL
    * @param {object} params
    * @param {boolean} params.pinned
+   * @param {string} params.type
    * @param {string} params.width
    * @param {boolean} params.mobile
    * @param {number} params.zoom
@@ -43,6 +44,7 @@ export class WebPanel extends Browser {
     faviconURL,
     {
       pinned = false,
+      type = "floating",
       width = "400",
       mobile = false,
       zoom = 1,
@@ -65,6 +67,7 @@ export class WebPanel extends Browser {
     this.url = url;
     this.faviconURL = faviconURL;
     this.pinned = pinned;
+    this.type = type;
     this.width = width;
     this.mobile = mobile;
     this.zoom = zoom;

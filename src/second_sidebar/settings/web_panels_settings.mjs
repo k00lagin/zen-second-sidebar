@@ -29,19 +29,20 @@ export class WebPanelsSettings {
     return new WebPanelsSettings(
       pref.map(
         (webPanelPref) =>
-          new WebPanelSettings(
-            webPanelPref.uuid,
-            webPanelPref.url,
-            webPanelPref.faviconURL,
-            webPanelPref.pinned,
-            webPanelPref.width,
-            webPanelPref.mobile,
-            webPanelPref.zoom,
-            webPanelPref.loadOnStartup,
-            webPanelPref.unloadOnClose,
-            webPanelPref.hideToolbar,
-            webPanelPref.userContextId,
-          ),
+          new WebPanelSettings({
+            uuid: webPanelPref.uuid,
+            url: webPanelPref.url,
+            faviconURL: webPanelPref.faviconURL,
+            pinned: webPanelPref.pinned,
+            type: webPanelPref.type,
+            width: webPanelPref.width,
+            mobile: webPanelPref.mobile,
+            zoom: webPanelPref.zoom,
+            loadOnStartup: webPanelPref.loadOnStartup,
+            unloadOnClose: webPanelPref.unloadOnClose,
+            hideToolbar: webPanelPref.hideToolbar,
+            userContextId: webPanelPref.userContextId,
+          }),
       ),
     );
   }

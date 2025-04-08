@@ -10,6 +10,8 @@ export class WebPanelSettings {
   /**@type {boolean} */
   #pinned;
   /**@type {string} */
+  #type;
+  /**@type {string} */
   #width;
   /**@type {boolean} */
   #mobile;
@@ -30,6 +32,7 @@ export class WebPanelSettings {
    * @param {string} url
    * @param {string} faviconURL
    * @param {boolean} pinned
+   * @param {string} type
    * @param {string} width
    * @param {boolean} mobile
    * @param {number} zoom
@@ -38,11 +41,12 @@ export class WebPanelSettings {
    * @param {boolean} hideToolbar
    * @param {string} userContextId
    */
-  constructor(
+  constructor({
     uuid,
     url,
     faviconURL,
     pinned,
+    type,
     width,
     mobile,
     zoom,
@@ -50,11 +54,12 @@ export class WebPanelSettings {
     unloadOnClose,
     hideToolbar,
     userContextId,
-  ) {
+  }) {
     this.#uuid = uuid ?? crypto.randomUUID();
     this.#url = url;
     this.#faviconURL = faviconURL;
-    this.#pinned = pinned ?? true;
+    this.#pinned = pinned ?? false;
+    this.#type = type ?? "split";
     this.#width = width ?? "400";
     this.#mobile = mobile ?? false;
     this.#zoom = zoom ?? 1;
@@ -79,6 +84,10 @@ export class WebPanelSettings {
 
   get pinned() {
     return this.#pinned;
+  }
+
+  get type() {
+    return this.#type;
   }
 
   get width() {
@@ -119,6 +128,7 @@ export class WebPanelSettings {
       url: this.#url,
       faviconURL: this.#faviconURL,
       pinned: this.#pinned,
+      type: this.#type,
       width: this.#width,
       mobile: this.#mobile,
       zoom: this.#zoom,
