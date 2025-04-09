@@ -16,7 +16,7 @@ export const SIDEBAR_CSS = `
       color: var(--toolbar-color);
 
       #sb2-toolbar-nav-buttons {
-        color-scheme: light dark;
+        color-scheme: dark;
       }
 
       #sb2-toolbar-title-wrapper {

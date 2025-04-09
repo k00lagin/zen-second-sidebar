@@ -104,6 +104,22 @@ export const SIDEBAR_MAIN_CSS = `
     .tab-icon-overlay[hidden="true"] {
       display: none !important;
     }
+
+    .sb2-sound-icon {
+      background-size: 60%;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-color: color-mix(in srgb, var(--toolbar-bgcolor) 50%, transparent);
+      padding: 2px !important;
+
+      &[soundplaying=""] {
+        background-image: url("chrome://browser/skin/tabbrowser/tab-audio-playing-small.svg") !important;
+      }
+
+      &[soundpaused=""] {
+        background-image: url("chrome://browser/skin/tabbrowser/tab-audio-paused-small.svg") !important;
+      }
+    }
   }
 
   .sb2-main-button[unloaded="true"] {

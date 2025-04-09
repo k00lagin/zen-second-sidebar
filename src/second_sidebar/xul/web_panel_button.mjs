@@ -43,7 +43,7 @@ export class WebPanelButton extends Widget {
   showPlayingIcon() {
     return this.doWhenButtonReady(() => {
       if (this.playingIcon === null) {
-        this.playingIcon = new Img({ classList: ["tab-icon-overlay"] })
+        this.playingIcon = new Img({ classList: ["sb2-sound-icon", "tab-icon-overlay"] })
           .setAttribute("role", "presentation")
           .setAttribute("soundplaying", "")
           .setAttribute("pinned", "");
