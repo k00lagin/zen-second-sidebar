@@ -6,6 +6,7 @@ import { XULElement } from "../xul/base/xul_element.mjs";
 import { gCustomizeModeWrapper } from "../wrappers/g_customize_mode.mjs";
 import { gNavToolboxWrapper } from "../wrappers/g_nav_toolbox.mjs";
 import { isRightMouseButton } from "../utils/buttons.mjs";
+import { ScriptSecurityManagerWrapper } from "../wrappers/script_security_manager.mjs";
 /* eslint-enable no-unused-vars */
 
 export class SidebarMainController {
@@ -51,6 +52,27 @@ export class SidebarMainController {
       const springs = document.querySelectorAll("#sb2-main toolbarspring");
       for (const spring of springs) {
         spring.removeAttribute("context");
+      }
+    });
+
+    // TODO: provide visual feedback for all drag events
+    this.sidebarMain.addEventListener("dragover", (e) => {
+      e.preventDefault();
+    });
+
+    this.sidebarMain.addEventListener("dragleave", (e) => {
+      e.preventDefault();
+    });
+
+    this.sidebarMain.addEventListener("drop", (e) => {
+      e.preventDefault();
+      const link = e.dataTransfer.getData("URL") || e.dataTransfer.getData("text/uri-list");
+
+      if (link) {
+        SidebarControllers.webPanelNewController.createWebPanel(
+          link,
+          ScriptSecurityManagerWrapper.DEFAULT_USER_CONTEXT_ID,
+        );
       }
     });
   }
