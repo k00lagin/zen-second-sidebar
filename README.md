@@ -112,7 +112,7 @@ https://github.com/user-attachments/assets/a92fb9b5-84d5-42a1-99f3-ad718767383f
 1. Install [fx-autoconfig](https://github.com/MrOtherGuy/fx-autoconfig).
 2. Copy the contents of the `src/` directory (`second_sidebar/` and `second_sidebar.uc.mjs`) into `chrome/JS/`.
 3. Copy the contents of the `src/resources/` directory (`second_sidebar/`) into `chrome/resources/`.
-4. (optional) Copy and merge the contents of the `src/extras/` directory (`js/`, `css/` etc.) into `chrome/`. Read corresponding [readme](https://github.com/k00lagin/zen-second-sidebar/tree/zen-second-sidebar/src/extras) for more information.
+4. (optional) Copy and merge the contents of the `src/extras/` directory (`js/`, `css/` etc.) into `chrome/`. Read corresponding [readme](https://github.com/k00lagin/zen-second-sidebar/tree/zen-second-sidebar/extras-src) for more information.
 5. [Clear](https://github.com/MrOtherGuy/fx-autoconfig?tab=readme-ov-file#deleting-startup-cache) startup-cache.
 6. Have fun!
 
