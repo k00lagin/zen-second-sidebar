@@ -95,9 +95,13 @@ export class WebPanelsBrowser extends Browser {
     }
 
     // Constantly hide elements
+    // Force content visibility (specificity hack)
     const style = new Style(`
       ${selectors.join(", ")} {
         display: none;
+      }
+      #zen-appcontent-wrapper#zen-appcontent-wrapper {
+        opacity: 1 !important;
       }
     `);
     windowRoot.appendChild(style);
