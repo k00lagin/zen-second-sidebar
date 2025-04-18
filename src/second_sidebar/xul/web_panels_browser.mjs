@@ -84,6 +84,7 @@ export class WebPanelsBrowser extends Browser {
       "#sidebar-box",
       "#context-bookmarkpage",
       "#context-viewsource",
+      "#zen-appcontent-navbar-container",
     ];
 
     // Hide elements right after initialization
