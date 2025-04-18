@@ -35,6 +35,7 @@ export class WebPanelsBrowser extends Browser {
       autoscroll: "false",
       tooltip: "aHTMLTooltip",
       autocompletepopup: "PopupAutoComplete",
+      chromehidden: "toolbar, menubar",
     });
 
     this.initialized = false;
@@ -117,6 +118,7 @@ export class WebPanelsBrowser extends Browser {
 
     // Add class for userChrome.css
     windowRoot.addClass("sb2-webpanels-window");
+    windowRoot.setAttribute("chromehidden", "toolbar, menubar");
   }
 
   /**
@@ -169,6 +171,7 @@ export class WebPanelsBrowser extends Browser {
       this.window.gBrowser.addTab(webPanelSettings.url, {
         triggeringPrincipal: ScriptSecurityManagerWrapper.getSystemPrincipal(),
         userContextId: webPanelSettings.userContextId,
+        _forZenEmptyTab: true,
       }),
     );
     tab.uuid = webPanelSettings.uuid;
