@@ -63,4 +63,20 @@ export class Sidebar extends VBox {
   pinned() {
     return this.getAttribute("pinned") === "true";
   }
+
+  /**
+   *
+   * @returns {Sidebar}
+   */
+  setType(type) {
+    return this.setAttribute("type", type);
+  }
+
+  /**
+   *
+   * @returns {string}
+   */
+  getType() {
+    return this.getAttribute("type");
+  }
 }

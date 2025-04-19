@@ -18,6 +18,10 @@ const removeElements = (elements) => {
 const run = () => {
     if (navigator.userAgent.toLowerCase().includes("mobile")) {
         const css = `
+        body {
+            overflow-y: auto !important;
+        }
+
         .main-content,
         #zenMarketplaceGroup {
             display: contents;        

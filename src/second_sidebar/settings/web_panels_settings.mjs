@@ -35,6 +35,7 @@ export class WebPanelsSettings {
             webPanelPref.faviconURL,
             {
               pinned: webPanelPref.pinned,
+              type: webPanelPref.type,
               width: webPanelPref.width,
               mobile: webPanelPref.mobile,
               zoom: webPanelPref.zoom,

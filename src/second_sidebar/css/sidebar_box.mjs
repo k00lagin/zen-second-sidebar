@@ -12,7 +12,7 @@ export const SIDEBAR_BOX_CSS = `
     }
   }
 
-  #browser:has(#sb2[pinned="true"]) {
+  #browser:has(#sb2[type="split"]) {
     #sb2-box-filler {
       display: none;
     }
@@ -28,7 +28,7 @@ export const SIDEBAR_BOX_CSS = `
     }
   }
 
-  #browser:has(#sb2[pinned="false"]) {
+  #browser:has(#sb2[type="floating"]) {
     #sb2-box {
       position: absolute;
       background-color: transparent;
@@ -50,7 +50,7 @@ export const SIDEBAR_BOX_CSS = `
     }
   }
 
-  #browser:has(#sb2[pinned="true"][position="right"]) {
+  #browser:has(#sb2[type="split"][position="right"]) {
     #sb2-box {
       order: 16 !important;
       padding-inline-start: var(--space-small);
@@ -64,7 +64,7 @@ export const SIDEBAR_BOX_CSS = `
     }
   }
 
-  #browser:has(#sb2[pinned="true"][position="left"]) {
+  #browser:has(#sb2[type="split"][position="left"]) {
     #sb2-box {
       order: -2 !important;
       padding-inline-start: 1px;
@@ -78,7 +78,7 @@ export const SIDEBAR_BOX_CSS = `
     }
   }
 
-  #browser:has(#sb2[pinned="false"][position="right"]) {
+  #browser:has(#sb2[type="floating"][position="right"]) {
     #sb2-box-filler {
       order: 0;
     }
@@ -98,7 +98,7 @@ export const SIDEBAR_BOX_CSS = `
     }
   }
 
-  #browser:has(#sb2[pinned="false"][position="left"]) {
+  #browser:has(#sb2[type="floating"][position="left"]) {
     #sb2-box-filler {
       order: 2;
     }
