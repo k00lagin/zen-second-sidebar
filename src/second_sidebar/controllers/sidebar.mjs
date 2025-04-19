@@ -41,6 +41,7 @@ export class SidebarController {
     this.containerBorder = "left";
     this.autoHideSidebar = false;
     this.hideSidebarAnimated = false;
+    this.floatingSidebar = false;
   }
 
   #setupListeners() {
@@ -111,6 +112,11 @@ export class SidebarController {
     listenEvent(SidebarEvents.EDIT_SIDEBAR_POSITION, (event) => {
       const value = event.detail.value;
       this.setPosition(value);
+    });
+
+    listenEvent(SidebarEvents.EDIT_SIDEBAR_FLOATING_SIDEBAR, (event) => {
+      const value = event.detail.value;
+      this.setFloatingSidebar(value);
     });
 
     listenEvent(SidebarEvents.EDIT_SIDEBAR_PADDING, (event) => {
@@ -327,6 +333,22 @@ export class SidebarController {
 
   /**
    *
+   * @returns {boolean}
+   */
+  setFloatingSidebar(floatingSidebar) {
+    this.sidebar.setFloatingSidebar(floatingSidebar);
+  }
+
+  /**
+   *
+   * @returns {boolean}
+   */
+  getFloatingSidebar() {
+    return this.sidebar.getFloatingSidebar();
+  }
+
+  /**
+   *
    * @param {boolean} value
    */
   setHideToolbar(value) {
@@ -426,6 +448,7 @@ export class SidebarController {
     this.setContainerBorder(settings.containerBorder);
     this.setAutoHideSidebar(settings.autoHideSidebar);
     this.hideSidebarAnimated = settings.hideSidebarAnimated;
+    this.setFloatingSidebar(settings.floatingSidebar);
   }
 
   /**
@@ -444,6 +467,7 @@ export class SidebarController {
       this.containerBorder,
       this.autoHideSidebar,
       this.hideSidebarAnimated,
+      this.getFloatingSidebar(),
     );
   }
 

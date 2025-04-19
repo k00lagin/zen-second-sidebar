@@ -51,11 +51,11 @@ export class SidebarMainController {
       gCustomizeModeWrapper.enter();
     });
 
-    const browser = new XULElement({
-      element: document.getElementById("browser"),
+    const sidebarContainer = new XULElement({
+      element: document.getElementById("zen-tabbox-wrapper"),
     });
     gNavToolboxWrapper.addEventListener("customizationready", () => {
-      browser.show();
+      sidebarContainer.show();
     });
     gNavToolboxWrapper.addEventListener("aftercustomization", () => {
       const springs = document.querySelectorAll("#sb2-main toolbarspring");
