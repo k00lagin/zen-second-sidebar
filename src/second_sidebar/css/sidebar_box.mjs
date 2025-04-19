@@ -1,9 +1,27 @@
 export const SIDEBAR_BOX_CSS = `
   #sb2-box {
-    background-color: var(--toolbar-bgcolor);
+    background-color: transparent;
+    margin-left: 0;
+    padding: 0;
     min-width: 200px;
     pointer-events: none;
     box-sizing: content-box;
+  }
+
+  #browser:has(#sb2[pinned="true"]) {
+    #sb2-box-filler {
+      display: none;
+    }
+
+    #sb2-splitter-unpinned {
+      display: none;
+    }
+
+    #sb2-splitter-pinned {
+      display: flex;
+      width: var(--zen-element-separation);
+      border: unset;
+    }
   }
 
   #browser:has(#sb2[pinned="false"]) {
@@ -37,8 +55,8 @@ export const SIDEBAR_BOX_CSS = `
 
     #sb2-splitter-pinned {
       order: 15 !important;
-      margin-inline-start: unset;
-      margin-inline-end: calc(-1 * var(--splitter-width));
+      margin-inline-start: 2px;
+      margin-inline-end: calc(-1 * var(--zen-element-separation) + 1px);
     }
   }
 
@@ -51,8 +69,8 @@ export const SIDEBAR_BOX_CSS = `
 
     #sb2-splitter-pinned {
       order: -1 !important;
-      margin-inline-start: calc(-1 * var(--splitter-width));
-      margin-inline-end: unset;
+      margin-inline-start: calc(-1 * var(--zen-element-separation) + 1px);
+      margin-inline-end: 2px;
     }
   }
 
