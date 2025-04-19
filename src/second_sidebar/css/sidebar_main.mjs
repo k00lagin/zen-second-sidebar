@@ -11,10 +11,12 @@ export const SIDEBAR_MAIN_CSS = `
 
     toolbarpaletteitem[place="panel"][id^="wrapper-customizableui-special-spring"], toolbarspring {
       flex: 1;
-      min-height: 10px;
-      max-height: 112px;
+      min-height: unset;
+      max-height: unset;
       min-width: unset;
       max-width: unset;
+      flex-grow: 1;
+      flex-shrink: 1;
     }
 
     .toolbaritem-combined-buttons {
@@ -62,7 +64,7 @@ export const SIDEBAR_MAIN_CSS = `
     order: -3 !important;
   }
 
-  #browser:has(#sb2[floating-sidebar="true"]) #sb2-main {
+  #zen-main-app-wrapper:has(+ #customization-container[hidden="true"]):has(#sb2[floating-sidebar="true"]) #sb2-main {
     position: fixed;
     top: 32px;
     bottom: 32px;
@@ -75,9 +77,11 @@ export const SIDEBAR_MAIN_CSS = `
     transition: transform 0.2s ease-in-out, opacity 0.1s linear;
     opacity: 0;
     margin: 0;
+    padding-top: var(--space-small);
+    padding-bottom: var(--space-small);
   }
 
-  #browser:has(#sb2[position="right"]):has(#sb2[floating-sidebar="true"]) #sb2-main {
+  #zen-main-app-wrapper:has(+ #customization-container[hidden="true"]):has(#sb2[position="right"]):has(#sb2[floating-sidebar="true"]) #sb2-main {
     right: -1px;
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
@@ -85,7 +89,7 @@ export const SIDEBAR_MAIN_CSS = `
     transform: translateX(calc(100% - 4px));
   }
 
-  #browser:has(#sb2[position="left"]):has(#sb2[floating-sidebar="true"]) #sb2-main {
+  #zen-main-app-wrapper:has(+ #customization-container[hidden="true"]):has(#sb2[position="left"]):has(#sb2[floating-sidebar="true"]) #sb2-main {
     left: -1px;
     border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
@@ -93,9 +97,9 @@ export const SIDEBAR_MAIN_CSS = `
     transform: translateX(calc(-100% + 4px));
   }
 
-  #browser:has(#sb2[floating-sidebar="true"]:not([pinned="true"])):has(#sb2-box:not([hidden="true"])) #sb2-main,
-  #browser:has(#sb2[floating-sidebar="true"]) #sb2-main:hover,
-  #browser:has(#sb2[floating-sidebar="true"]) #sb2-main:focus-within {
+  #zen-main-app-wrapper:has(+ #customization-container[hidden="true"]):has(#sb2[floating-sidebar="true"]:not([pinned="true"])):has(#sb2-box:not([hidden="true"])) #sb2-main,
+  #zen-main-app-wrapper:has(+ #customization-container[hidden="true"]):has(#sb2[floating-sidebar="true"]) #sb2-main:hover,
+  #zen-main-app-wrapper:has(+ #customization-container[hidden="true"]):has(#sb2[floating-sidebar="true"]) #sb2-main:focus-within {
     transform: translateX(0) !important;
     opacity: 1;
   }
