@@ -14,10 +14,10 @@ const ICONS = {
   MORE: "chrome://browser/skin/zen-icons/menu.svg",
   PINNED:
     "chrome://activity-stream/content/data/content/assets/glyph-unpin-16.svg",
-  PINNED_ALT: "chrome://newtab/content/data/content/assets/glyph-unpin-16.svg",
+  PINNED_ALT: UC_API.FileSystem.getEntry("second_sidebar/icons/pinned.svg").fileURI,
   UNPINNED:
     "chrome://activity-stream/content/data/content/assets/glyph-pin-16.svg",
-  UNPINNED_ALT: "chrome://newtab/content/data/content/assets/glyph-pin-16.svg",
+  UNPINNED_ALT: "chrome://browser/skin/zen-icons/pin.svg",
   CLOSE: "chrome://browser/skin/zen-icons/close.svg",
 };
 
