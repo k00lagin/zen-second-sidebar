@@ -6,6 +6,10 @@ export const SIDEBAR_BOX_CSS = `
     min-width: 200px;
     pointer-events: none;
     box-sizing: content-box;
+
+    #sb2-toolbar {
+      color-scheme: dark !important;
+    }
   }
 
   #browser:has(#sb2[pinned="true"]) {
