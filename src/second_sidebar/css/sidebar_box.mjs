@@ -9,6 +9,10 @@ export const SIDEBAR_BOX_CSS = `
 
     #sb2-toolbar {
       color-scheme: dark !important;
+
+      #sb2-toolbar-title-wrapper {
+        -moz-window-dragging: no-drag;
+      }
     }
   }
 
