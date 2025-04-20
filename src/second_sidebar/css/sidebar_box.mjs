@@ -16,6 +16,13 @@ export const SIDEBAR_BOX_CSS = `
     }
   }
 
+  #browser:has(#sb2-box[hidden="true"]) {
+    #sb2-splitter-unpinned,
+    #sb2-splitter-pinned {
+      display: none !important;
+    }
+  }
+
   #browser:has(#sb2[type="split"]) {
     #sb2-box-filler {
       display: none;
