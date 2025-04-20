@@ -1,4 +1,7 @@
-export const SIDEBAR_MAIN_CSS = `
+const dontHasCustomizationShown = /* css */ `:not(:has(~ #customization-container[hidden="false"]))`;
+const hasFloatingSidebar = /* css */ `:has(#sb2[floating-sidebar="true"])`;
+
+export const SIDEBAR_MAIN_CSS = /* css */ `
   #sb2-main {
     display: flex;
     flex-direction: column;
@@ -64,7 +67,7 @@ export const SIDEBAR_MAIN_CSS = `
     order: -3 !important;
   }
 
-  #zen-main-app-wrapper:has(+ #customization-container[hidden="true"]):has(#sb2[floating-sidebar="true"]) #sb2-main {
+  #zen-main-app-wrapper${dontHasCustomizationShown}${hasFloatingSidebar} #sb2-main {
     position: fixed;
     top: 32px;
     bottom: 32px;
@@ -82,7 +85,7 @@ export const SIDEBAR_MAIN_CSS = `
     padding-bottom: var(--space-small);
   }
 
-  #zen-main-app-wrapper:has(+ #customization-container[hidden="true"]):has(#sb2[position="right"]):has(#sb2[floating-sidebar="true"]) #sb2-main {
+  #zen-main-app-wrapper${dontHasCustomizationShown}:has(#sb2[position="right"])${hasFloatingSidebar} #sb2-main {
     right: -1px;
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
@@ -90,7 +93,7 @@ export const SIDEBAR_MAIN_CSS = `
     transform: translateX(calc(100% - 4px));
   }
 
-  #zen-main-app-wrapper:has(+ #customization-container[hidden="true"]):has(#sb2[position="left"]):has(#sb2[floating-sidebar="true"]) #sb2-main {
+  #zen-main-app-wrapper${dontHasCustomizationShown}:has(#sb2[position="left"])${hasFloatingSidebar} #sb2-main {
     left: -1px;
     border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
@@ -98,9 +101,9 @@ export const SIDEBAR_MAIN_CSS = `
     transform: translateX(calc(-100% + 4px));
   }
 
-  #zen-main-app-wrapper:has(+ #customization-container[hidden="true"]):has(#sb2[floating-sidebar="true"]:not([type="split"])):has(#sb2-box:not([hidden="true"])) #sb2-main,
-  #zen-main-app-wrapper:has(+ #customization-container[hidden="true"]):has(#sb2[floating-sidebar="true"]) #sb2-main:hover,
-  #zen-main-app-wrapper:has(+ #customization-container[hidden="true"]):has(#sb2[floating-sidebar="true"]) #sb2-main:focus-within {
+  #zen-main-app-wrapper${dontHasCustomizationShown}:has(#sb2[floating-sidebar="true"]:not([type="split"])):has(#sb2-box:not([hidden="true"])) #sb2-main,
+  #zen-main-app-wrapper${dontHasCustomizationShown}${hasFloatingSidebar} #sb2-main:hover,
+  #zen-main-app-wrapper${dontHasCustomizationShown}${hasFloatingSidebar} #sb2-main:focus-within {
     transform: translateX(0) !important;
     transition: transform 0.2s ease-in-out, opacity 0.1s linear;
     opacity: 1;
