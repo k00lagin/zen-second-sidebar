@@ -105,6 +105,9 @@ export class WebPanelsBrowser extends Browser {
       #zen-appcontent-wrapper#zen-appcontent-wrapper {
         opacity: 1 !important;
       }
+      #zen-tabbox-wrapper {
+        margin: 0 !important;
+      }
     `);
     windowRoot.appendChild(style);
 
