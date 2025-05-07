@@ -15,6 +15,7 @@ export class WebPanelMenuPopup extends MenuPopup {
 
     this.unloadItem = new MenuItem().setLabel("Unload web panel");
     this.muteItem = new MenuItem();
+    this.pinItem = new MenuItem();
     this.editItem = new MenuItem().setLabel("Edit web panel");
     this.deleteItem = new MenuItem().setLabel("Delete web panel");
     this.customizeItem = new MenuItem().setLabel("Customize Toolbar...");
@@ -35,6 +36,10 @@ export class WebPanelMenuPopup extends MenuPopup {
           `${this.webPanelController.isMuted() ? "Unmute" : "Mute"} web panel`,
         );
       }
+      // pinning
+      this.pinItem.setLabel(
+        `${this.webPanelController.isPinned() ? "Unpin" : "Pin"} web panel`,
+      );
     });
   }
 
@@ -42,6 +47,7 @@ export class WebPanelMenuPopup extends MenuPopup {
     this.appendChildren(
       this.unloadItem,
       this.muteItem,
+      this.pinItem,
       new MenuSeparator(),
       this.editItem,
       this.deleteItem,
@@ -66,6 +72,16 @@ export class WebPanelMenuPopup extends MenuPopup {
    */
   listenMuteItemClick(callback) {
     this.muteItem.addEventListener("command", () => {
+      callback(this.webPanelController);
+    });
+  }
+
+  /**
+   *
+   * @param {function(WebPanelController):void} callback
+   */
+  listenPinItemClick(callback) {
+    this.pinItem.addEventListener("command", () => {
       callback(this.webPanelController);
     });
   }

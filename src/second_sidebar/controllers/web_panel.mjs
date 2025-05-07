@@ -477,6 +477,14 @@ export class WebPanelController {
     return this.#tab.muted;
   }
 
+  /**
+   *
+   * @returns {boolean}
+   */
+  isPinned() {
+    return this.#settings.pinned;
+  }
+
   toggleMuteAudio() {
     this.#tab.toggleMuteAudio();
   }

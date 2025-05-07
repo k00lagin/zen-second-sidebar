@@ -1,4 +1,4 @@
-import { WebPanelEvents, listenEvent } from "./events.mjs";
+import { WebPanelEvents, listenEvent, sendEvents } from "./events.mjs";
 import { isLeftMouseButton, isMiddleMouseButton } from "../utils/buttons.mjs";
 
 import { NetUtilWrapper } from "../wrappers/net_utils.mjs";
@@ -34,6 +34,14 @@ export class WebPanelsController {
 
     this.webPanelMenuPopup.listenMuteItemClick((webPanelController) => {
       webPanelController.toggleMuteAudio();
+    });
+
+    this.webPanelMenuPopup.listenPinItemClick((webPanelController) => {
+      sendEvents(WebPanelEvents.EDIT_WEB_PANEL_PINNED, {
+        uuid: webPanelController.getUUID(),
+        pinned: !webPanelController.pinned(),
+      });
+      sendEvents(WebPanelEvents.SAVE_WEB_PANELS);
     });
 
     this.webPanelMenuPopup.listenEditItemClick((webPanelController) => {
