@@ -3,6 +3,7 @@
 // @description     A Zen Browser userChrome.js script for adding a second sidebar with web panels like in Vivaldi/Floorp/Edge.
 // @author          k00lagin
 // @homepageURL     https://github.com/k00lagin/zen-second-sidebar
+// @include         chrome://browser/content/browser.xhtml
 // ==/UserScript==
 
 import { ContextualIdentityServiceWrapper } from "./second_sidebar/wrappers/contextual_identity_service.mjs";
@@ -11,6 +12,8 @@ import { SidebarDecorator } from "./second_sidebar/sidebar_decorator.mjs";
 import { SidebarInjector } from "./second_sidebar/sidebar_injector.mjs";
 
 const run = () => {
+  if (window !== window.top) return;
+
   ContextualIdentityServiceWrapper.ensureDataReady();
   if (SidebarInjector.inject()) {
     SidebarDecorator.decorate();
