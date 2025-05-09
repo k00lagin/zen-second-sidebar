@@ -21,7 +21,13 @@ export class CustomizeModePatcher {
         .replace(
           "window.CustomizableUI.removeListener",
           "CustomizableUI.removeListener",
-        ) + getPlaceForItem.toString()
+        ).replace(`let container = this.$("customization-container");`, `
+          let container = this.$("customization-container");
+          let zenTabboxWrapper = document.querySelector("#zen-tabbox-wrapper");
+          if (container && zenTabboxWrapper && !zenTabboxWrapper.querySelector("#customization-container")) {
+            zenTabboxWrapper.appendChild(container);
+          }
+        `) + getPlaceForItem.toString()
     );
   }
 

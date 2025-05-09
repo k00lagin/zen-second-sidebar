@@ -1,27 +1,15 @@
 export const CUSTOMIZATION_CSS = `
   #customization-container {
-    position: absolute;
-    z-index: 2147483647;
-    width: 80%;
-    height: 70%;
-    margin: auto;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    border-radius: var(--arrowpanel-border-radius);
-    box-shadow: 0px 0px 16px 1px var(--arrowpanel-border-color);
-
-    #customization-panel-container {
-      flex: unset;
-      .panel-arrow {
-        display: none;
-      }
-    }
+    border-radius: var(--zen-native-inner-radius);
+    box-shadow: var(--zen-big-shadow);
 
     toolbarpaletteitem::after {
       overflow-x: scroll;
       text-overflow: ellipsis;
     }
+  }
+
+  #tabbrowser-tabbox:has(~ #customization-container:not([hidden])) {
+    display: none !important;
   }
 `;
