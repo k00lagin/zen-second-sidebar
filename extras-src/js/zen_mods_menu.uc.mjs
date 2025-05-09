@@ -5,9 +5,16 @@
 // @include         about:preferences#zenMarketplace
 // ==/UserScript==
 
-const run = () => { 
-    if (navigator.userAgent.toLowerCase().includes("mobile")) {
+const run = () => {
+    if (navigator.userAgent.toLowerCase().includes("mobile") === false)
+        return;
+
         const css = /*css*/`
+            :root {
+                background-color: color-mix(in oklab, var(--zen-main-browser-background) 95%, transparent) !important;
+                color: var(--toolbar-color) !important;
+            }
+            
             body {
                 overflow-y: auto !important;
             }
@@ -25,6 +32,8 @@ const run = () => {
             #ZenMarketplaceCategory,
             [data-l10n-id="zen-theme-marketplace-description"],
             [data-l10n-id="zen-theme-marketplace-link"],
+            [data-l10n-id="zen-theme-marketplace-import-button"],
+            [data-l10n-id="zen-theme-marketplace-export-button"],
             [data-l10n-id="zen-theme-marketplace-check-for-updates-button"],
             .zenThemeMarketplaceItemActions,
             .zenThemeMarketplaceItemDescription {
@@ -67,7 +76,7 @@ const run = () => {
 
             #zenMarketplaceHeader:hover,
             .zenThemeMarketplaceItem:hover {
-                background-color: color-mix(in srgb, var(--toolbarbutton-hover-background) 50%, transparent 50%);
+                background-color: color-mix(in oklab, var(--toolbarbutton-hover-background) 50%, transparent 50%);
             }
 
             .zenThemeMarketplaceItem h3 {
@@ -75,7 +84,7 @@ const run = () => {
             }
 
             toolbarseparator {
-                border-top: 1px solid var(--panel-separator-color);
+                border-top: 1px solid var(--zen-colors-border);
                 margin: var(--space-small) 0;
             }
         `;
@@ -87,7 +96,6 @@ const run = () => {
         const separator = document.createElement("toolbarseparator");
         let zenThemeMarketplaceList = document.querySelector("#zenThemeMarketplaceList");
         zenThemeMarketplaceList.parentNode.insertBefore(separator, zenThemeMarketplaceList);
-    }
 };
 
 if (typeof UC_API !== "undefined") {

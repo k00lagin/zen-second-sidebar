@@ -25,12 +25,17 @@ const pageLoaded = () => {
 }
 
 const run = () => {
-    if (!navigator.userAgent.toLowerCase().includes("mobile")) {
+    if (!navigator.userAgent.toLowerCase().includes("mobile"))
         return;
-    }
 
     pageLoaded().then(() => {
         const css = /*css*/`
+            :root {
+                background-color: color-mix(in oklab, var(--zen-main-browser-background) 95%, transparent) !important;
+                color: var(--toolbar-color) !important;
+                overscroll-behavior: none !important;
+            }
+
             body {
                 overflow-y: auto !important;
                 overflow-x: clip;
@@ -47,11 +52,13 @@ const run = () => {
 
             .sticky-container {
                 position: relative;
+                background-color: transparent !important;
             }
 
             .main-heading {
                 padding: var(--space-medium);
                 margin: 0;
+                background-color: transparent !important;
             }
 
             .extension-enable-button::after {
@@ -72,7 +79,7 @@ const run = () => {
             }
 
             .extension-enable-button:hover::after {
-                background-color: color-mix(in srgb, var(--toolbarbutton-hover-background) 50%, transparent 50%);
+                background-color: color-mix(in oklab, var(--toolbarbutton-hover-background) 50%, transparent 50%);
             }
 
             #sidebar,
@@ -122,7 +129,7 @@ const run = () => {
                 height: 20px;
             }
         `;
-        
+
         const style = document.createElement("style");
         style.textContent = css;
         document.head.appendChild(style);
