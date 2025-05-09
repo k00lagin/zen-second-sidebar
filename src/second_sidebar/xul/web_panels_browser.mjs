@@ -108,8 +108,10 @@ export class WebPanelsBrowser extends Browser {
       #zen-tabbox-wrapper {
         margin: 0 !important;
       }
-      #browser {
-        background-color: transparent !important;
+      browser,
+      #browser,
+      #zen-main-app-wrapper {
+        background: transparent !important;
       }
     `);
     windowRoot.appendChild(style);
