@@ -8,8 +8,6 @@ export const SIDEBAR_BOX_CSS = `
     box-sizing: content-box;
 
     #sb2-toolbar {
-      color-scheme: dark !important;
-
       #sb2-toolbar-title-wrapper {
         -moz-window-dragging: no-drag;
       }
