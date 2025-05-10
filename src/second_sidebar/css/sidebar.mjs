@@ -36,6 +36,10 @@ export const SIDEBAR_CSS = `
       box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
       z-index: 10;
 
+      &[hidden="true"] {
+        display: none;
+      }
+
       #sb2-toolbar-nav-buttons,
       #sb2-toolbar-sidebar-buttons {
         display: contents;
