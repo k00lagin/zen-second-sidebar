@@ -6,17 +6,51 @@ export const SIDEBAR_CSS = `
     height: 100%;
     pointer-events: auto;
     min-width: 200px;
+    position: relative;
+
+    &:hover {
+      #sb2-toolbar {
+        opacity: 1;
+      }
+    }
 
     #sb2-toolbar {
       flex-direction: row;
       min-height: unset;
-      gap: 4px;
-      background-color: var(--toolbar-bgcolor);
       color: var(--toolbar-color);
-      padding: 1px;
+      opacity: 0;
+      transition: opacity 0.2s 0.2s ease-in-out;
+      display: flex;
+      align-items: center;
 
-      #sb2-toolbar-nav-buttons {
-        color-scheme: dark;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+
+      padding: 0 0.6rem 0.2rem 0.6rem;
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+      background-color: light-dark(rgba(255, 255, 255, 1), rgba(0, 0, 0, 1));
+      box-shadow: 0 0 0 1px var(--button-primary-border-color);
+      gap: 0.8rem;
+      box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+
+      #sb2-toolbar-nav-buttons,
+      #sb2-toolbar-sidebar-buttons {
+        display: contents;
+      }
+
+      .sb2-toolbar-button {
+        cursor: pointer;
+        padding: 2px;
+      }
+
+      .toolbarbutton-icon {
+        width: 12px;
+        height: 12px;
+        padding: 0;
+        background-color: transparent;
       }
 
       #sb2-toolbar-title-wrapper {
@@ -25,6 +59,8 @@ export const SIDEBAR_CSS = `
         align-items: center;
         flex: 1;
         overflow: hidden;
+
+        display: none;
       }
 
       #sb2-toolbar-title {
