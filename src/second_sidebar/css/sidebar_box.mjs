@@ -47,8 +47,8 @@ export const SIDEBAR_BOX_CSS = /*css*/ `
     #sb2-box {
       position: absolute;
       background-color: transparent;
-      padding-block-start: var(--sb2-box-unpinned-top-padding);
-      height: calc(100% - var(--sb2-box-unpinned-top-padding) - var(--sb2-box-unpinned-bottom-padding));
+      padding-block-start: var(--space-xsmall);
+      height: calc(100% - var(--space-xsmall) - var(--space-xsmall));
       width: 100% !important;
       z-index: 3;
 
@@ -65,7 +65,7 @@ export const SIDEBAR_BOX_CSS = /*css*/ `
     }
   }
 
-  #browser:has(#sb2[type="split"][position="right"]) {
+  :root${sidebarRight} #browser:has(#sb2[type="split"]) {
     #sb2-box {
       order: 16 !important;
       padding-inline-start: var(--space-small);
@@ -79,7 +79,7 @@ export const SIDEBAR_BOX_CSS = /*css*/ `
     }
   }
 
-  #browser:has(#sb2[type="split"][position="left"]) {
+  :root${sidebarLeft} #browser:has(#sb2[type="split"]) {
     #sb2-box {
       order: -2 !important;
       padding-inline-start: 1px;
@@ -93,7 +93,7 @@ export const SIDEBAR_BOX_CSS = /*css*/ `
     }
   }
 
-  #browser:has(#sb2[type="floating"][position="right"]) {
+  :root${sidebarRight} #browser:has(#sb2[type="floating"]) {
     #sb2-box-filler {
       order: 0;
     }
@@ -109,11 +109,12 @@ export const SIDEBAR_BOX_CSS = /*css*/ `
     }
 
     #sb2-box {
-      padding-inline-end: var(--sb2-box-unpinned-side-padding);
+      padding-inline-end: var(--space-xsmall);
+      right: 50px !important;
     }
   }
 
-  #browser:has(#sb2[type="floating"][position="left"]) {
+  :root${sidebarLeft} #browser:has(#sb2[type="floating"]) {
     #sb2-box-filler {
       order: 2;
     }
@@ -129,7 +130,8 @@ export const SIDEBAR_BOX_CSS = /*css*/ `
     }
 
     #sb2-box {
-      padding-inline-start: var(--sb2-box-unpinned-side-padding);
+      padding-inline-start: var(--space-xsmall);
+      left: 50px !important;
     }
   }
 `;

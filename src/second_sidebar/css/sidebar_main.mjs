@@ -1,5 +1,8 @@
-const dontHasCustomizationShown = /* css */ `:not(:has(~ #customization-container[hidden="false"]))`;
-const hasFloatingSidebar = /* css */ `:has(#sb2[floating-sidebar="true"])`;
+const notCustomizing = /* css */ `:not([customizing])`;
+const compactMode = /* css */ `[zen-compact-mode="true"]${notCustomizing}`;
+const sidebarLeft = /* css */ `[zen-right-side="true"]`;
+const sidebarRight = /* css */ `:not([zen-right-side="true"])`;
+const singleToolbar = /* css */ `[zen-single-toolbar="true"]`;
 
 export const SIDEBAR_MAIN_CSS = /* css */ `
   #sb2-main {
@@ -7,10 +10,10 @@ export const SIDEBAR_MAIN_CSS = /* css */ `
     flex-direction: column;
     justify-content: var(--sb2-main-web-panel-buttons-position);
     gap: var(--space-small);
-    padding: 0 var(--sb2-main-padding) var(--space-small) var(--sb2-main-padding);
     overflow-y: scroll;
     scrollbar-width: none;
-    background-color: transparent;
+    min-width: unset !important;
+    padding: 0;
 
     toolbarpaletteitem[place="panel"][id^="wrapper-customizableui-special-spring"], toolbarspring {
       flex: 1;
@@ -29,6 +32,27 @@ export const SIDEBAR_MAIN_CSS = /* css */ `
 
     .toolbarbutton-1 {
       padding: 0 !important;
+      border-radius: var(--border-radius-medium);
+      width: var(--tab-collapsed-background-width);
+      height: var(--tab-collapsed-background-width);
+      outline: var(--tab-outline);
+      outline-offset: var(--tab-outline-offset);
+      margin-inline: auto;
+
+      &:hover {
+        background-color: var(--tab-hover-background-color);
+        outline-color: var(--tab-hover-outline-color);
+      }
+
+      &[open] {
+        background-color: var(--tab-selected-bgcolor);
+        box-shadow: var(--tab-selected-shadow);
+        outline-color: var(--tab-selected-outline-color);
+      }
+
+      stack {
+        background-color: transparent !important;
+      }
     }
   }
 
@@ -40,70 +64,95 @@ export const SIDEBAR_MAIN_CSS = /* css */ `
     transition: 0.2s margin-right ease-out, 0.2s margin-left ease-out;
   }
 
-  #browser:has(#sb2-box:not([hidden])), 
-  #browser:has(#sb2-main toolbarbutton[open]),
-  #main-window:has(#sb2-main-popup-settings[panelopen]),
-  #main-window:has(#sb2-main-menupopup[panelopen]),
-  #main-window:has(#sb2-web-panel-button-menupopup[panelopen]) {
-    #sb2-main {
-      margin-left: 0px !important;
-      margin-right: 0px !important;
-    }
-  }
-
-  :root[customizing] {
-    #sb2-main {
-      min-width: unset !important;
-      margin-left: 0px !important;
-      margin-right: 0px !important;
-    }
-  }
-
-  #browser:has(#sb2[position="right"]) #sb2-main {
+  :root${sidebarRight} #sb2-main {
     order: 17 !important;
+    margin-left: var(--zen-toolbox-padding);
+    margin-right: calc(var(--zen-toolbox-padding) - var(--zen-element-separation));
   }
 
-  #browser:has(#sb2[position="left"]) #sb2-main {
+  :root${sidebarLeft} #sb2-main {
     order: -3 !important;
+    margin-left: calc(var(--zen-toolbox-padding) - var(--zen-element-separation));
+    margin-right: var(--zen-toolbox-padding);
   }
 
-  #zen-main-app-wrapper${dontHasCustomizationShown}${hasFloatingSidebar} #sb2-main {
-    position: fixed;
-    top: 32px;
-    bottom: 32px;
+  :root${compactMode} #sb2-main {
+    position: absolute;
     z-index: 99;
-    background-color: var(--sidebar-background-color);
-    box-shadow: var(--zen-big-shadow);
-    outline: 1px solid var(--zen-colors-border-contrast);
-    outline-offset: -1px;
+    top: 0;
+    bottom: 0;
     -moz-window-dragging: no-drag;
     
     transition: transform 0.2s 0.35s ease-in-out, opacity 0.1s 0.35s linear;
     opacity: 0;
     margin: 0;
-    padding-top: var(--space-small);
-    padding-bottom: var(--space-small);
+    padding: var(--zen-toolbox-padding) var(--zen-element-separation);
+    width: 66px;
+
+    &::before {
+      content: "";
+      position: absolute;
+      max-width: 48px;
+      inset: 0;
+      margin-inline: auto;
+      background: var(--zen-dialog-background);
+      border-radius: calc(var(--zen-native-inner-radius) + var(--zen-element-separation) / 4);
+      z-index: -1;
+      outline: 1px solid var(--zen-colors-border-contrast);
+      outline-offset: -1px;
+      box-shadow: var(--zen-big-shadow);
+      @media -moz-pref('zen.view.compact.color-sidebar') {
+        background-image: var(--zen-main-browser-background-toolbar) !important;
+        background-attachment: fixed !important;
+        background-size: 2000px !important;
+      }
+      @media -moz-pref('zen.theme.acrylic-elements') {
+        backdrop-filter: blur(42px) saturate(110%) brightness(0.25) contrast(100%) !important;
+      }
+    }
   }
 
-  #zen-main-app-wrapper${dontHasCustomizationShown}:has(#sb2[position="right"])${hasFloatingSidebar} #sb2-main {
-    right: -1px;
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
+  :root${sidebarRight}${compactMode} #sb2-main {
+    margin-right: -12px !important;
+    right: 0;
+    transform: translateX(calc(100% - var(--zen-element-separation)));
 
-    transform: translateX(calc(100% - 4px));
+    &::after {
+      right: calc(var(--zen-toolbox-padding) * 0.5);
+    }
   }
 
-  #zen-main-app-wrapper${dontHasCustomizationShown}:has(#sb2[position="left"])${hasFloatingSidebar} #sb2-main {
-    left: -1px;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
+  :root${sidebarLeft}${compactMode} #sb2-main {
+    margin-left: -12px !important;
+    left: 0;
+    transform: translateX(calc(-100% + var(--zen-element-separation)));
 
-    transform: translateX(calc(-100% + 4px));
+    &::after {
+      left: calc(var(--zen-toolbox-padding) * 0.5);
+    }
   }
 
-  #zen-main-app-wrapper${dontHasCustomizationShown}:has(#sb2[floating-sidebar="true"]:not([type="split"])):has(#sb2-box:not([hidden="true"])) #sb2-main,
-  #zen-main-app-wrapper${dontHasCustomizationShown}${hasFloatingSidebar} #sb2-main:hover,
-  #zen-main-app-wrapper${dontHasCustomizationShown}${hasFloatingSidebar} #sb2-main:focus-within {
+  :root${compactMode}${singleToolbar} #sb2-main {
+    position: fixed;
+    top: var(--zen-toolbox-padding);
+    bottom: var(--zen-toolbox-padding);    
+  }
+  :root${compactMode}${singleToolbar}${sidebarLeft} #sb2-main {
+    margin-left: calc(var(--zen-toolbox-padding) * -1) !important;
+  }
+  :root${compactMode}${singleToolbar}${sidebarRight} #sb2-main {
+    margin-right: calc(var(--zen-toolbox-padding) * -1) !important;
+  }
+
+  #main-window:has(#sb2-main-menupopup[panelopen]) #sb2-main,
+  #main-window:has(#sb2-main-popup-settings[panelopen]) #sb2-main,
+  #main-window:has(#sb2-web-panel-new[panelopen]) #sb2-main,
+  #main-window:has(#sb2-web-panel-edit[panelopen]) #sb2-main,
+  #main-window:has(#sb2-web-panel-delete[panelopen]) #sb2-main,
+  #main-window:has(#sb2-web-panel-button-menupopup[panelopen]) #sb2-main,  
+  :root${compactMode}:not(:has(#sb2[type="split"])):has(#sb2-box:not([hidden="true"])) #sb2-main,
+  :root${compactMode} #sb2-main:hover,
+  :root${compactMode} #sb2-main:focus-within {
     transform: translateX(0) !important;
     transition: transform 0.2s ease-in-out, opacity 0.1s linear;
     opacity: 1;
@@ -178,11 +227,11 @@ export const SIDEBAR_MAIN_CSS = /* css */ `
     padding: var(--arrowpanel-menuitem-padding);
   }
 
-  #sb2-collapse-button[position="left"] {
+  :root${sidebarLeft} #sb2-collapse-button {
     list-style-image: url("chrome://userscripts/content/second_sidebar/icons/sidebar-left.svg");
   }
 
-  #sb2-collapse-button[position="right"] {
+  :root${sidebarRight} #sb2-collapse-button {
     list-style-image: url("chrome://userscripts/content/second_sidebar/icons/sidebar-right.svg");
   }
 `;

@@ -91,24 +91,6 @@ export class SidebarMainController {
    *
    * @returns {string}
    */
-  getPadding() {
-    const value = this.root.getProperty("--sb2-main-padding");
-    return value.match(/var\(--space-([^)]+)\)/)[1];
-  }
-
-  /**
-   *
-   * @param {string} value
-   */
-  setPadding(value) {
-    this.root.setProperty("--sb2-main-padding", `var(--space-${value})`);
-    SidebarControllers.sidebarController.updateAbsolutePosition();
-  }
-
-  /**
-   *
-   * @returns {string}
-   */
   getWidth() {
     return Math.round(this.sidebarMain.getBoundingClientRect().width) + "px";
   }
