@@ -9,8 +9,6 @@ export class SidebarSettings {
   #padding;
   /**@type {string} */
   #newWebPanelPosition;
-  /**@type {string} */
-  #unpinnedPadding;
   /**@type {boolean} */
   #hideInPopupWindows;
   /**@type {boolean} */
@@ -31,7 +29,6 @@ export class SidebarSettings {
    * @param {string} position
    * @param {string} padding
    * @param {string} newWebPanelPosition
-   * @param {string} unpinnedPadding
    * @param {boolean} hideInPopupWindows
    * @param {boolean} autoHideBackButton
    * @param {boolean} autoHideForwardButton
@@ -44,7 +41,6 @@ export class SidebarSettings {
     position,
     padding,
     newWebPanelPosition,
-    unpinnedPadding,
     hideInPopupWindows,
     autoHideBackButton,
     autoHideForwardButton,
@@ -56,7 +52,6 @@ export class SidebarSettings {
     this.#position = position;
     this.#padding = padding;
     this.#newWebPanelPosition = newWebPanelPosition;
-    this.#unpinnedPadding = unpinnedPadding;
     this.#hideInPopupWindows = hideInPopupWindows;
     this.#autoHideBackButton = autoHideBackButton;
     this.#autoHideForwardButton = autoHideForwardButton;
@@ -76,10 +71,6 @@ export class SidebarSettings {
 
   get newWebPanelPosition() {
     return this.#newWebPanelPosition;
-  }
-
-  get unpinnedPadding() {
-    return this.#unpinnedPadding;
   }
 
   get hideInPopupWindows() {
@@ -120,7 +111,6 @@ export class SidebarSettings {
       pref.position ?? "right",
       pref.padding ?? "small",
       pref.newWebPanelPosition ?? "after",
-      pref.unpinnedPadding ?? "small",
       pref.hideInPopupWindows ?? false,
       pref.autoHideBackButton ?? false,
       pref.autoHideForwardButton ?? false,
@@ -136,7 +126,6 @@ export class SidebarSettings {
       position: this.#position,
       padding: this.#padding,
       newWebPanelPosition: this.#newWebPanelPosition,
-      unpinnedPadding: this.#unpinnedPadding,
       hideInPopupWindows: this.#hideInPopupWindows,
       autoHideBackButton: this.#autoHideBackButton,
       autoHideForwardButton: this.#autoHideForwardButton,

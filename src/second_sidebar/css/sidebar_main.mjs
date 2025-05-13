@@ -103,6 +103,8 @@ export const SIDEBAR_MAIN_CSS = /* css */ `
       box-shadow: var(--zen-big-shadow);
       @media -moz-pref('zen.view.compact.color-sidebar') {
         background-image: var(--zen-main-browser-background-toolbar) !important;
+        background-attachment: fixed !important;
+        background-size: 2000px !important;
       }
       @media -moz-pref('zen.theme.acrylic-elements') {
         backdrop-filter: blur(42px) saturate(110%) brightness(0.25) contrast(100%) !important;

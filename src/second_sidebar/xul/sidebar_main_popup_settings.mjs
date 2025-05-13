@@ -34,7 +34,6 @@ export class SidebarMainPopupSettings extends Panel {
     this.autoHideBackToggle = new Toggle();
     this.floatingSidebarToggle = new Toggle();
     this.autoHideForwardToggle = new Toggle();
-    this.unpinnedPaddingMenuList = this.#createPaddingMenuList();
     this.containerBorderMenuList = this.#createContainerBorderMenuList();
     this.autoHideSidebarToggle = new Toggle();
     this.hideSidebarAnimatedToggle = new Toggle();
@@ -110,10 +109,6 @@ export class SidebarMainPopupSettings extends Panel {
           new ToolbarSeparator(),
           createPopupGroup("Sidebar width", this.paddingMenuList),
           createPopupGroup(
-            "Floating web panel offset",
-            this.unpinnedPaddingMenuList,
-          ),
-          createPopupGroup(
             "New web panel position",
             this.newWebPanelPositionMenuList,
           ),
@@ -144,7 +139,6 @@ export class SidebarMainPopupSettings extends Panel {
    * @param {function(boolean):void} callbacks.floatingSidebar
    * @param {function(string):void} callbacks.padding
    * @param {function(string):void} callbacks.newWebPanelPosition
-   * @param {function(string):void} callbacks.unpinnedPadding
    * @param {function(boolean):void} callbacks.hideInPopupWindows
    * @param {function(boolean):void} callbacks.autoHideBackButton
    * @param {function(boolean):void} callbacks.autoHideForwardButton
@@ -157,7 +151,6 @@ export class SidebarMainPopupSettings extends Panel {
     floatingSidebar,
     padding,
     newWebPanelPosition,
-    unpinnedPadding,
     hideInPopupWindows,
     autoHideBackButton,
     autoHideForwardButton,
@@ -169,7 +162,6 @@ export class SidebarMainPopupSettings extends Panel {
     this.onFloatingSidebarChange = floatingSidebar;
     this.onPaddingChange = padding;
     this.onNewWebPanelPositionChange = newWebPanelPosition;
-    this.onUnpinnedPaddingChange = unpinnedPadding;
     this.onHideInPopupWindowsChange = hideInPopupWindows;
     this.onAutoHideBackButtonChange = autoHideBackButton;
     this.onAutoHideForwardButtonChange = autoHideForwardButton;
@@ -188,9 +180,6 @@ export class SidebarMainPopupSettings extends Panel {
     );
     this.newWebPanelPositionMenuList.addEventListener("command", () =>
       newWebPanelPosition(this.newWebPanelPositionMenuList.getValue()),
-    );
-    this.unpinnedPaddingMenuList.addEventListener("command", () =>
-      unpinnedPadding(this.unpinnedPaddingMenuList.getValue()),
     );
     this.hideInPopupWindowsToggle.addEventListener("toggle", () =>
       hideInPopupWindows(this.hideInPopupWindowsToggle.getPressed()),
@@ -248,7 +237,6 @@ export class SidebarMainPopupSettings extends Panel {
     this.floatingSidebarToggle.setPressed(settings.floatingSidebar);
     this.paddingMenuList.setValue(settings.padding);
     this.newWebPanelPositionMenuList.setValue(settings.newWebPanelPosition);
-    this.unpinnedPaddingMenuList.setValue(settings.unpinnedPadding);
     this.hideInPopupWindowsToggle.setPressed(settings.hideInPopupWindows);
     this.autoHideBackToggle.setPressed(settings.autoHideBackButton);
     this.autoHideForwardToggle.setPressed(settings.autoHideForwardButton);
@@ -285,11 +273,6 @@ export class SidebarMainPopupSettings extends Panel {
       this.settings.newWebPanelPosition
     ) {
       this.onNewWebPanelPositionChange(this.settings.newWebPanelPosition);
-    }
-    if (
-      this.unpinnedPaddingMenuList.getValue() !== this.settings.unpinnedPadding
-    ) {
-      this.onUnpinnedPaddingChange(this.settings.unpinnedPadding);
     }
     if (
       this.hideInPopupWindowsToggle.getPressed() !==

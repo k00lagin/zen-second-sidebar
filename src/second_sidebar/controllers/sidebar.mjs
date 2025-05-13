@@ -129,11 +129,6 @@ export class SidebarController {
       SidebarControllers.webPanelNewController.setNewWebPanelPosition(value);
     });
 
-    listenEvent(SidebarEvents.EDIT_SIDEBAR_UNPINNED_PADDING, (event) => {
-      const value = event.detail.value;
-      this.setUnpinnedPadding(value);
-    });
-
     listenEvent(SidebarEvents.EDIT_SIDEBAR_HIDE_IN_POPUP_WINDOWS, (event) => {
       const value = event.detail.value;
       this.hideInPopupWindows = value;
@@ -361,27 +356,6 @@ export class SidebarController {
     value ? this.sidebarToolbar.hide() : this.sidebarToolbar.show();
   }
 
-  /**
-   *
-   * @returns {string}
-   */
-  getUnpinnedPadding() {
-    const value = this.root.getProperty("--sb2-box-unpinned-padding");
-    return value.match(/var\(--space-([^)]+)\)/)[1];
-  }
-
-  /**
-   *
-   * @param {string} value
-   */
-  setUnpinnedPadding(value) {
-    document.documentElement.style.setProperty(
-      "--sb2-box-unpinned-padding",
-      `var(--space-${value})`,
-    );
-    this.updateAbsolutePosition();
-  }
-
   updateAbsolutePosition() {
     const sidebarMainWidth =
       SidebarControllers.sidebarMainController.getWidth();
@@ -447,7 +421,6 @@ export class SidebarController {
     SidebarControllers.webPanelNewController.setNewWebPanelPosition(
       settings.newWebPanelPosition,
     );
-    this.setUnpinnedPadding(settings.unpinnedPadding);
     this.hideInPopupWindows = settings.hideInPopupWindows;
     this.autoHideBackButton = settings.autoHideBackButton;
     this.autoHideForwardButton = settings.autoHideForwardButton;
@@ -466,7 +439,6 @@ export class SidebarController {
       this.getPosition(),
       SidebarControllers.sidebarMainController.getPadding(),
       SidebarControllers.webPanelNewController.getNewWebPanelPosition(),
-      this.getUnpinnedPadding(),
       this.hideInPopupWindows,
       this.autoHideBackButton,
       this.autoHideForwardButton,

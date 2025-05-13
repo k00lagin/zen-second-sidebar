@@ -47,8 +47,8 @@ export const SIDEBAR_BOX_CSS = /*css*/ `
     #sb2-box {
       position: absolute;
       background-color: transparent;
-      padding-block-start: var(--sb2-box-unpinned-top-padding);
-      height: calc(100% - var(--sb2-box-unpinned-top-padding) - var(--sb2-box-unpinned-bottom-padding));
+      padding-block-start: var(--space-xsmall);
+      height: calc(100% - var(--space-xsmall) - var(--space-xsmall));
       width: 100% !important;
       z-index: 3;
 
@@ -109,7 +109,7 @@ export const SIDEBAR_BOX_CSS = /*css*/ `
     }
 
     #sb2-box {
-      padding-inline-end: var(--sb2-box-unpinned-side-padding);
+      padding-inline-end: var(--space-xsmall);
       right: 50px !important;
     }
   }
@@ -130,7 +130,7 @@ export const SIDEBAR_BOX_CSS = /*css*/ `
     }
 
     #sb2-box {
-      padding-inline-start: var(--sb2-box-unpinned-side-padding);
+      padding-inline-start: var(--space-xsmall);
       left: 50px !important;
     }
   }

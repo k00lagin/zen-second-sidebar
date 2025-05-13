@@ -21,8 +21,6 @@ export class SidebarMainSettingsController {
         sendEvents(SidebarEvents.EDIT_SIDEBAR_NEW_WEB_PANEL_POSITION, {
           value,
         }),
-      unpinnedPadding: (value) =>
-        sendEvents(SidebarEvents.EDIT_SIDEBAR_UNPINNED_PADDING, { value }),
       hideInPopupWindows: (value) =>
         sendEvents(SidebarEvents.EDIT_SIDEBAR_HIDE_IN_POPUP_WINDOWS, { value }),
       autoHideBackButton: (value) =>
