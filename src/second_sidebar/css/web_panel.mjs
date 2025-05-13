@@ -1,4 +1,4 @@
-export const WEB_PANEL_CSS = `
+export const WEB_PANEL_CSS = /*css*/ `
   .web-panel {
     width: 100%;
     height: calc(100% + 1px);

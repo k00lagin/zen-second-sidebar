@@ -1,4 +1,4 @@
-export const CUSTOMIZATION_CSS = `
+export const CUSTOMIZATION_CSS = /*css*/ `
   #customization-container {
     border-radius: var(--zen-native-inner-radius);
     box-shadow: var(--zen-big-shadow);

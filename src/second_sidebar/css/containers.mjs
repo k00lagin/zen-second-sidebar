@@ -1,4 +1,4 @@
-export const CONTAINERS_CSS = `
+export const CONTAINERS_CSS = /*css*/ `
   .sb2-container {
     box-shadow: var(--sb2-container-borders-part) var(--sb2-container-color-part) inset;
   }
