@@ -6,8 +6,6 @@ export class SidebarSettings {
   /**@type {string} */
   #position;
   /**@type {string} */
-  #padding;
-  /**@type {string} */
   #newWebPanelPosition;
   /**@type {boolean} */
   #hideInPopupWindows;
@@ -21,13 +19,10 @@ export class SidebarSettings {
   #autoHideSidebar;
   /**@type {boolean} */
   #hideSidebarAnimated;
-  /**@type {boolean} */
-  #floatingSidebar;
 
   /**
    *
    * @param {string} position
-   * @param {string} padding
    * @param {string} newWebPanelPosition
    * @param {boolean} hideInPopupWindows
    * @param {boolean} autoHideBackButton
@@ -35,11 +30,9 @@ export class SidebarSettings {
    * @param {string} containerBorder
    * @param {boolean} autoHideSidebar
    * @param {boolean} hideSidebarAnimated
-   * @param {boolean} floatingSidebar
    */
   constructor(
     position,
-    padding,
     newWebPanelPosition,
     hideInPopupWindows,
     autoHideBackButton,
@@ -47,10 +40,8 @@ export class SidebarSettings {
     containerBorder,
     autoHideSidebar,
     hideSidebarAnimated,
-    floatingSidebar,
   ) {
     this.#position = position;
-    this.#padding = padding;
     this.#newWebPanelPosition = newWebPanelPosition;
     this.#hideInPopupWindows = hideInPopupWindows;
     this.#autoHideBackButton = autoHideBackButton;
@@ -58,15 +49,10 @@ export class SidebarSettings {
     this.#containerBorder = containerBorder;
     this.#autoHideSidebar = autoHideSidebar;
     this.#hideSidebarAnimated = hideSidebarAnimated;
-    this.#floatingSidebar = floatingSidebar;
   }
 
   get position() {
     return this.#position;
-  }
-
-  get padding() {
-    return this.#padding;
   }
 
   get newWebPanelPosition() {
@@ -97,10 +83,6 @@ export class SidebarSettings {
     return this.#hideSidebarAnimated;
   }
 
-  get floatingSidebar() {
-    return this.#floatingSidebar;
-  }
-
   /**
    *
    * @returns {SidebarSettings}
@@ -108,8 +90,7 @@ export class SidebarSettings {
   static load() {
     const pref = Settings.load(PREF) ?? {};
     return new SidebarSettings(
-      pref.position ?? "right",
-      pref.padding ?? "small",
+      "right", // position
       pref.newWebPanelPosition ?? "after",
       pref.hideInPopupWindows ?? false,
       pref.autoHideBackButton ?? false,
@@ -117,14 +98,12 @@ export class SidebarSettings {
       pref.containerBorder ?? "left",
       pref.autoHideSidebar ?? false,
       pref.hideSidebarAnimated ?? false,
-      pref.floatingSidebar ?? false,
     );
   }
 
   save() {
     Settings.save(PREF, {
       position: this.#position,
-      padding: this.#padding,
       newWebPanelPosition: this.#newWebPanelPosition,
       hideInPopupWindows: this.#hideInPopupWindows,
       autoHideBackButton: this.#autoHideBackButton,
@@ -132,7 +111,6 @@ export class SidebarSettings {
       containerBorder: this.#containerBorder,
       autoHideSidebar: this.#autoHideSidebar,
       hideSidebarAnimated: this.#hideSidebarAnimated,
-      floatingSidebar: this.#floatingSidebar,
     });
   }
 }

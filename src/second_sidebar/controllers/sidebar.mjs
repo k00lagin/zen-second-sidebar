@@ -41,7 +41,6 @@ export class SidebarController {
     this.containerBorder = "left";
     this.autoHideSidebar = false;
     this.hideSidebarAnimated = false;
-    this.floatingSidebar = false;
   }
 
   #setupListeners() {
@@ -112,16 +111,6 @@ export class SidebarController {
     listenEvent(SidebarEvents.EDIT_SIDEBAR_POSITION, (event) => {
       const value = event.detail.value;
       this.setPosition(value);
-    });
-
-    listenEvent(SidebarEvents.EDIT_SIDEBAR_FLOATING_SIDEBAR, (event) => {
-      const value = event.detail.value;
-      this.setFloatingSidebar(value);
-    });
-
-    listenEvent(SidebarEvents.EDIT_SIDEBAR_PADDING, (event) => {
-      const value = event.detail.value;
-      SidebarControllers.sidebarMainController.setPadding(value);
     });
 
     listenEvent(SidebarEvents.EDIT_SIDEBAR_NEW_WEB_PANEL_POSITION, (event) => {
@@ -334,22 +323,6 @@ export class SidebarController {
 
   /**
    *
-   * @returns {boolean}
-   */
-  setFloatingSidebar(floatingSidebar) {
-    this.sidebar.setFloatingSidebar(floatingSidebar);
-  }
-
-  /**
-   *
-   * @returns {boolean}
-   */
-  getFloatingSidebar() {
-    return this.sidebar.getFloatingSidebar();
-  }
-
-  /**
-   *
    * @param {boolean} value
    */
   setHideToolbar(value) {
@@ -417,7 +390,6 @@ export class SidebarController {
    */
   loadSettings(settings) {
     this.setPosition(settings.position);
-    SidebarControllers.sidebarMainController.setPadding(settings.padding);
     SidebarControllers.webPanelNewController.setNewWebPanelPosition(
       settings.newWebPanelPosition,
     );
@@ -427,7 +399,6 @@ export class SidebarController {
     this.setContainerBorder(settings.containerBorder);
     this.setAutoHideSidebar(settings.autoHideSidebar);
     this.hideSidebarAnimated = settings.hideSidebarAnimated;
-    this.setFloatingSidebar(settings.floatingSidebar);
   }
 
   /**
@@ -437,7 +408,6 @@ export class SidebarController {
   dumpSettings() {
     return new SidebarSettings(
       this.getPosition(),
-      SidebarControllers.sidebarMainController.getPadding(),
       SidebarControllers.webPanelNewController.getNewWebPanelPosition(),
       this.hideInPopupWindows,
       this.autoHideBackButton,
@@ -445,7 +415,6 @@ export class SidebarController {
       this.containerBorder,
       this.autoHideSidebar,
       this.hideSidebarAnimated,
-      this.getFloatingSidebar(),
     );
   }
 
