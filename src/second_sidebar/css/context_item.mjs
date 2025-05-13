@@ -1,4 +1,4 @@
-export const CONTEXT_ITEM_CSS = `
+export const CONTEXT_ITEM_CSS = /*css*/ `
   #contentAreaContextMenu:has(#context-openlink[hidden="true"]) {
     #context-openlinkinsidebar, #context-sep-open {
       display: none;

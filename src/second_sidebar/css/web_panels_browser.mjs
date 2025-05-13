@@ -1,4 +1,4 @@
-export const WEB_PANELS_BROWSER_CSS = `
+export const WEB_PANELS_BROWSER_CSS = /*css*/ `
   .sb2-web-panels-browser {
     width: 100%;
     height: calc(100% + 1px);

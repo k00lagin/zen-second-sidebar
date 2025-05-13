@@ -1,4 +1,4 @@
-export const COMMON_CSS = `
+export const COMMON_CSS = /*css*/ `
   @import url("chrome://global/content/elements/moz-toggle.css");
 
   :root {

@@ -1,6 +1,6 @@
 import { emptySvgAsDataUrl } from "../utils/css.mjs";
 
-export const POPUPS_CSS = `
+export const POPUPS_CSS = /*css*/ `
   .sb2-popup > panelmultiview {
     display: flex;
     flex-direction: column;

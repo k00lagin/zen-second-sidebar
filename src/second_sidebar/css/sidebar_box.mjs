@@ -1,4 +1,10 @@
-export const SIDEBAR_BOX_CSS = `
+const notCustomizing = /* css */ `:not([customizing])`;
+const compactMode = /* css */ `[zen-compact-mode="true"]${notCustomizing}`;
+const sidebarLeft = /* css */ `[zen-right-side="true"]`;
+const sidebarRight = /* css */ `:not([zen-right-side="true"])`;
+const singleToolbar = /* css */ `[zen-single-toolbar="true"]`;
+
+export const SIDEBAR_BOX_CSS = /*css*/ `
   #sb2-box {
     background-color: transparent;
     margin-left: 0;

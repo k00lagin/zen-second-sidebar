@@ -1,4 +1,4 @@
-export const SIDEBAR_CSS = `
+export const SIDEBAR_CSS = /*css*/ `
   #sb2 {
     border-radius: var(--zen-native-inner-radius);
     box-shadow: var(--zen-big-shadow);
