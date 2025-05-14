@@ -1,3 +1,6 @@
+const sidebarLeft = /* css */ `[zen-right-side="true"]`;
+const sidebarRight = /* css */ `:not([zen-right-side="true"])`;
+
 import { emptySvgAsDataUrl } from "../utils/css.mjs";
 
 export const POPUPS_CSS = /*css*/ `
@@ -97,5 +100,13 @@ export const POPUPS_CSS = /*css*/ `
       min-width: calc(4ch + 8px);
       text-align: center;
     }
+  }
+
+  :root${sidebarLeft} #context-openlinkinsidebar {
+    --menu-image: url("chrome://userscripts/content/second_sidebar/icons/sidebar-left.svg");
+  }
+
+  :root${sidebarRight} #context-openlinkinsidebar {
+    --menu-image: url("chrome://userscripts/content/second_sidebar/icons/sidebar-right.svg");
   }
 `;
