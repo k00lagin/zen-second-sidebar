@@ -68,10 +68,17 @@ export class SidebarMainController {
     // TODO: provide visual feedback for all drag events
     this.sidebarMain.addEventListener("dragover", (e) => {
       e.preventDefault();
+      if (this.sidebarMain.getAttribute("has-drag-over")) {
+        return;
+      }
+      this.sidebarMain.setAttribute("has-drag-over", "true");
     });
 
     this.sidebarMain.addEventListener("dragleave", (e) => {
       e.preventDefault();
+      if (this.sidebarMain.getAttribute("has-drag-over")) {
+        this.sidebarMain.removeAttribute("has-drag-over");
+      }
     });
 
     this.sidebarMain.addEventListener("drop", (e) => {
@@ -83,6 +90,9 @@ export class SidebarMainController {
           link,
           ScriptSecurityManagerWrapper.DEFAULT_USER_CONTEXT_ID,
         );
+      }
+      if (this.sidebarMain.getAttribute("has-drag-over")) {
+        this.sidebarMain.removeAttribute("has-drag-over");
       }
     });
   }

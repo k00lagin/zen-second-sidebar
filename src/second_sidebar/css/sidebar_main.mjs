@@ -152,6 +152,7 @@ export const SIDEBAR_MAIN_CSS = /* css */ `
   :root${compactMode}:not(:has(#sb2[type="split"])):has(#sb2-box:not([hidden="true"])) #sb2-main,
   :root${compactMode} #sb2-main:hover,
   :root${compactMode} #sb2-main[has-hover],
+  :root${compactMode} #sb2-main[has-drag-over],
   :root${compactMode} #sb2-main:focus-within {
     transform: translateX(0) !important;
     transition: transform 0.1s ease-in-out;
