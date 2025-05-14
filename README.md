@@ -5,7 +5,7 @@ An opinionated fork/port of [aminought](https://github.com/aminought)'s [firefox
 ![2025-05-15 001712](https://github.com/user-attachments/assets/e4e341be-4cf4-489e-8650-155ded6c9dc8)
 
 ---
-## Original descriptiom
+## Original description
 
 # Second Sidebar for Firefox
 
