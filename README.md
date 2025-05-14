@@ -1,3 +1,10 @@
+# Zen Garden
+
+An opinionated fork/port of [aminought](https://github.com/aminought)'s [firefox-second-sidebar](https://github.com/aminought/firefox-second-sidebar), intended to bring web panels back to Zen browser, but also to make them feel and look like a native Zen feature.
+
+---
+## Original descriptiom
+
 # Second Sidebar for Firefox
 
 A Firefox userChrome.js script for adding a second sidebar with web panels like in Vivaldi/Edge/Floorp/Zen but better.
