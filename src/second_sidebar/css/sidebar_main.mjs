@@ -83,8 +83,7 @@ export const SIDEBAR_MAIN_CSS = /* css */ `
     bottom: 0;
     -moz-window-dragging: no-drag;
     
-    transition: transform 0.2s 0.35s ease-in-out, opacity 0.1s 0.35s linear;
-    opacity: 0;
+    transition: transform 0.1s 0.15s ease-in-out;
     margin: 0;
     padding: var(--zen-toolbox-padding) var(--zen-element-separation);
     width: 66px;
@@ -152,10 +151,10 @@ export const SIDEBAR_MAIN_CSS = /* css */ `
   #main-window:has(#sb2-web-panel-button-menupopup[panelopen]) #sb2-main,  
   :root${compactMode}:not(:has(#sb2[type="split"])):has(#sb2-box:not([hidden="true"])) #sb2-main,
   :root${compactMode} #sb2-main:hover,
+  :root${compactMode} #sb2-main[has-hover],
   :root${compactMode} #sb2-main:focus-within {
     transform: translateX(0) !important;
-    transition: transform 0.2s ease-in-out, opacity 0.1s linear;
-    opacity: 1;
+    transition: transform 0.1s ease-in-out;
   }
 
   .sb2-main-button {
