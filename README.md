@@ -2,6 +2,8 @@
 
 An opinionated fork/port of [aminought](https://github.com/aminought)'s [firefox-second-sidebar](https://github.com/aminought/firefox-second-sidebar), intended to bring web panels back to Zen browser, but also to make them feel and look like a native Zen feature.
 
+![2025-05-15 001712](https://github.com/user-attachments/assets/e4e341be-4cf4-489e-8650-155ded6c9dc8)
+
 ---
 ## Original descriptiom
 
