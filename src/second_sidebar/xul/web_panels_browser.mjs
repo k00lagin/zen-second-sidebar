@@ -113,6 +113,9 @@ export class WebPanelsBrowser extends Browser {
       #zen-main-app-wrapper {
         background: transparent !important;
       }
+      #zen-sidebar-splitter {
+        display: none !important;
+      }
     `);
     windowRoot.appendChild(style);
 
