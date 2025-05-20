@@ -21,8 +21,8 @@ export const SIDEBAR_BOX_CSS = /*css*/ `
   }
 
   #browser:has(#sb2-box[hidden="true"]) {
-    #sb2-splitter-unpinned,
-    #sb2-splitter-pinned {
+    #sb2-floating-splitter,
+    #sb2-split-splitter {
       display: none !important;
     }
   }
@@ -32,12 +32,12 @@ export const SIDEBAR_BOX_CSS = /*css*/ `
       display: none;
     }
 
-    #sb2-splitter-unpinned {
+    #sb2-floating-splitter {
       display: none;
     }
 
-    #sb2-splitter-pinned {
-      display: flex;
+    #sb2-split-splitter {
+      display: flex !important;
       width: var(--zen-element-separation);
       border: unset;
     }
@@ -58,7 +58,8 @@ export const SIDEBAR_BOX_CSS = /*css*/ `
         pointer-events: none;
       }
 
-      #sb2-splitter-unpinned {
+      #sb2-floating-splitter {
+        display: flex !important;
         pointer-events: auto;
         border: unset;
       }
@@ -72,7 +73,7 @@ export const SIDEBAR_BOX_CSS = /*css*/ `
       padding-inline-end: 1px;
     }
 
-    #sb2-splitter-pinned {
+    #sb2-split-splitter {
       order: 15 !important;
       margin-inline-start: 2px;
       margin-inline-end: calc(-1 * var(--zen-element-separation) + 1px);
@@ -86,7 +87,7 @@ export const SIDEBAR_BOX_CSS = /*css*/ `
       padding-inline-end: var(--space-small);
     }
 
-    #sb2-splitter-pinned {
+    #sb2-split-splitter {
       order: -1 !important;
       margin-inline-start: calc(-1 * var(--zen-element-separation) + 1px);
       margin-inline-end: 2px;
@@ -98,7 +99,7 @@ export const SIDEBAR_BOX_CSS = /*css*/ `
       order: 0;
     }
 
-    #sb2-splitter-unpinned {
+    #sb2-floating-splitter {
       order: 1;
       margin-inline-start: calc(-1 * var(--splitter-width));
       margin-inline-end: unset;
@@ -119,7 +120,7 @@ export const SIDEBAR_BOX_CSS = /*css*/ `
       order: 2;
     }
 
-    #sb2-splitter-unpinned {
+    #sb2-floating-splitter {
       order: 1;
       margin-inline-start: unset;
       margin-inline-end: calc(-1 * var(--splitter-width));
