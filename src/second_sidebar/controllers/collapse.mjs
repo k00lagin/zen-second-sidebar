@@ -5,7 +5,6 @@ import { SidebarElements } from "../sidebar_elements.mjs";
 import { WindowWrapper } from "../wrappers/window.mjs";
 import { XULElement } from "../xul/base/xul_element.mjs";
 
-const FULLSCREEN_ANIMATE_ATTRIBUTE = "fullscreenShouldAnimate";
 const ANIMATE_ATTRIBUTE = "shouldAnimate";
 
 export class CollapseController {
@@ -61,26 +60,6 @@ export class CollapseController {
     root.addEventListener("mouseleave", (e) => this.#onRootLeave(e, root));
     root.addEventListener("dragleave", (e) => this.#onRootLeave(e, root));
 
-    window.addEventListener("fullscreen", () => {
-      if (window.fullScreen) {
-        // Show sidebar and then immediately hide with fullscreen animation
-        this.uncollapse();
-        setTimeout(() => {
-          this.collapse(false, true);
-        }, 0);
-      } else {
-        if (this.sidebarController.autoHideSidebar) {
-          // Show sidebar and then immediately hide with fullscreen animation
-          this.uncollapse();
-          setTimeout(() => {
-            this.collapse(false, true);
-          });
-        } else {
-          this.uncollapse(this.sidebarController.hideSidebarAnimated);
-        }
-      }
-    });
-
     this.sidebarCollapseButton.listenClick(() => {
       sendEvents(SidebarEvents.COLLAPSE_SIDEBAR);
     });
@@ -115,47 +94,6 @@ export class CollapseController {
 
   /**
    *
-   * @param {boolean} animate
-   */
-  fullScreenShouldAnimate(animate) {
-    this.sidebarMain.toggleAttribute(FULLSCREEN_ANIMATE_ATTRIBUTE, animate);
-  }
-
-  /**
-   *
-   * @param {MouseEvent} event
-   */
-  handleEvent(event) {
-    const window = new WindowWrapper();
-    if (!window.fullScreen && !this.sidebarController.autoHideSidebar) {
-      return;
-    }
-    const position = this.sidebarController.getPosition();
-    const root = new XULElement({ element: window.document.documentElement });
-    const rootRect = root.getBoundingClientRect();
-    const sidebarRect = this.sidebarMain.getBoundingClientRect();
-    const leftEdge = window.mozInnerScreenX;
-    const rightEdge = leftEdge + rootRect.width;
-    if (
-      this.collapsed() &&
-      ((position === "right" &&
-        event.screenX > rightEdge - sidebarRect.width) ||
-        (position === "left" && event.screenX < leftEdge + sidebarRect.width))
-    ) {
-      this.uncollapse(this.sidebarController.hideSidebarAnimated);
-    } else if (
-      !this.collapsed() &&
-      ((position === "right" &&
-        event.screenX < rightEdge - 2 * sidebarRect.width) ||
-        (position === "left" &&
-          event.screenX > leftEdge + 2 * sidebarRect.width))
-    ) {
-      this.collapse(this.sidebarController.hideSidebarAnimated);
-    }
-  }
-
-  /**
-   *
    * @returns {boolean}
    */
   collapsed() {
@@ -165,22 +103,18 @@ export class CollapseController {
   /**
    *
    * @param {boolean} animate
-   * @param {boolean} fullScreenAnimate
    */
-  collapse(animate = false, fullScreenAnimate = false) {
+  collapse(animate = false) {
     this.shouldAnimate(animate);
-    this.fullScreenShouldAnimate(fullScreenAnimate);
     this.sidebarMainController.collapse();
   }
 
   /**
    *
    * @param {boolean} animate
-   * @param {boolean} fullScreenAnimate
    */
-  uncollapse(animate = false, fullScreenAnimate = false) {
+  uncollapse(animate = false) {
     this.shouldAnimate(animate);
-    this.fullScreenShouldAnimate(fullScreenAnimate);
     this.sidebarMainController.uncollapse();
   }
 }
