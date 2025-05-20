@@ -56,7 +56,9 @@ export class SidebarController {
         !this.webPanelPopupEdit.contains(target) &&
         !this.sidebarMainPopupSettings.contains(target) &&
         !this.sidebarMainMenuPopup.contains(target) &&
-        !this.webPanelMenuPopup.contains(target)
+        !this.webPanelMenuPopup.contains(target) &&
+        !this.sidebarSplitterPinned.contains(target) &&
+        !this.sidebarSplitterUnpinned.contains(target)
       ) {
         this.close();
       }
