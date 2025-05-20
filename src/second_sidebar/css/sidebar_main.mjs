@@ -56,8 +56,8 @@ export const SIDEBAR_MAIN_CSS = /* css */ `
     }
   }
 
-  #sb2-main[fullscreenShouldAnimate] {
-    transition: 0.8s margin-right ease-out, 0.8s margin-left ease-out;
+  :root:is([inDOMFullscreen="true"]) #sb2-main {
+    visibility: collapse;
   }
 
   #sb2-main[shouldAnimate] {
