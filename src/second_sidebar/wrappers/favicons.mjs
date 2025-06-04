@@ -21,6 +21,10 @@ export class FaviconsWrapper {
    * @param {function(URI):void} callback
    */
   static getFaviconURLForPage(uri, callback) {
-    Favicons.getFaviconURLForPage(uri, callback);
+    if (Favicons.getFaviconURLForPage) {
+      Favicons.getFaviconURLForPage(uri, callback);
+    } else {
+      callback(null);
+    }
   }
 }
