@@ -102,7 +102,7 @@ export class WebPanelsBrowser extends Browser {
       ${selectors.join(", ")} {
         display: none;
       }
-      #zen-appcontent-wrapper#zen-appcontent-wrapper {
+      #zen-appcontent-wrapper#zen-appcontent-wrapper#zen-appcontent-wrapper#zen-appcontent-wrapper#zen-appcontent-wrapper#zen-appcontent-wrapper {
         opacity: 1 !important;
       }
       #zen-tabbox-wrapper {
