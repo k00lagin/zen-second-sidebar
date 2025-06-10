@@ -28,8 +28,8 @@ export class WebPanelPopupMore extends Panel {
     });
     this.setType("arrow");
 
-    this.openInNewTabButton = createSubviewButton("Open in New Tab");
-    this.copyPageUrlButton = createSubviewButton("Copy Page URL");
+    this.openInNewTabButton = createSubviewButton("Open in New Tab", { id: 'sb2-open-in-new-tab-button'});
+    this.copyPageUrlButton = createSubviewButton("Copy Page URL", { id: 'sb2-copy-page-url-button'});
     this.mobileButton = createSubviewButton("Mobile View", {
       type: "checkbox",
     });
