@@ -1,7 +1,18 @@
+import { propagatePropertyValue } from "../utils/css.mjs";
+
 const sidebarLeft = /* css */ `[zen-right-side="true"]`;
 const sidebarRight = /* css */ `:not([zen-right-side="true"])`;
 
 import { emptySvgAsDataUrl } from "../utils/css.mjs";
+
+propagatePropertyValue('#appMenu-new-tab-button2 > image', 'list-style-image', '--sb2-open-in-new-tab-button-image');
+
+// open and close main menu, so the icons are loaded
+document.querySelector('#PanelUI-menu-button').click();
+const delay = setTimeout(() => {
+  document.querySelector('#PanelUI-menu-button').click();
+  clearTimeout(delay);
+}, 1);
 
 export const POPUPS_CSS = /*css*/ `
   .sb2-popup > panelmultiview {
@@ -100,6 +111,10 @@ export const POPUPS_CSS = /*css*/ `
       min-width: calc(4ch + 8px);
       text-align: center;
     }
+  }
+
+  #sb2-open-in-new-tab-button > image {
+    list-style-image: var(--sb2-open-in-new-tab-button-image);
   }
 
   :root${sidebarLeft} #context-openlinkinsidebar {

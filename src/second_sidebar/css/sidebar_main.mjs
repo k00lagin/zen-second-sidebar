@@ -1,10 +1,10 @@
+import { queryGetPropertyValue } from "../utils/css.mjs";
+
 const notCustomizing = /* css */ `:not([customizing])`;
 const compactMode = /* css */ `[zen-compact-mode="true"]${notCustomizing}`;
 const sidebarLeft = /* css */ `[zen-right-side="true"]`;
 const sidebarRight = /* css */ `:not([zen-right-side="true"])`;
 const singleToolbar = /* css */ `[zen-single-toolbar="true"]`;
-
-const tabsStyle = window.getComputedStyle(document.querySelector('#tabbrowser-tabs'));
 
 export const SIDEBAR_MAIN_CSS = /* css */ `
   #sb2-main {
@@ -16,8 +16,8 @@ export const SIDEBAR_MAIN_CSS = /* css */ `
     scrollbar-width: none;
     min-width: unset !important;
     padding: 0;
-    --tab-selected-bgcolor: ${tabsStyle.getPropertyValue('--tab-selected-bgcolor')};
-    --tab-selected-shadow: ${tabsStyle.getPropertyValue('--tab-selected-shadow')};
+    --tab-selected-bgcolor: ${queryGetPropertyValue('#tabbrowser-tabs', '--tab-selected-bgcolor')};
+    --tab-selected-shadow: ${queryGetPropertyValue('#tabbrowser-tabs', '--tab-selected-shadow')};
 
     toolbarpaletteitem[place="panel"][id^="wrapper-customizableui-special-spring"], toolbarspring {
       flex: 1;
