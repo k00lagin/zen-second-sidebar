@@ -37,8 +37,8 @@ export const SIDEBAR_MAIN_CSS = /* css */ `
     .toolbarbutton-1 {
       padding: 0 !important;
       border-radius: var(--border-radius-medium);
-      width: var(--tab-collapsed-background-width);
-      height: var(--tab-collapsed-background-width);
+      width: var(--tab-min-height);
+      height: var(--tab-min-height);
       outline: var(--tab-outline);
       outline-offset: var(--tab-outline-offset);
       margin-inline: auto;
