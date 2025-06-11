@@ -58,7 +58,9 @@ export class SidebarController {
         !this.sidebarMainMenuPopup.contains(target) &&
         !this.webPanelMenuPopup.contains(target) &&
         !this.sidebarSplitterPinned.contains(target) &&
-        !this.sidebarSplitterUnpinned.contains(target)
+        !this.sidebarSplitterUnpinned.contains(target) &&
+        !event.view.location.href.startsWith("about:devtools") &&
+        !event.view.location.href.startsWith("chrome://devtools")
       ) {
         this.close();
       }
