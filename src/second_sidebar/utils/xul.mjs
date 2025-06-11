@@ -64,6 +64,20 @@ export function createInput({ type = "text" } = {}) {
   return new Input().setType(type);
 }
 
+export function createContextNavigationButtons(
+  contextBackButton,
+  contextForwardButton,
+  contextReloadButton,
+  contextHomeButton,
+) {
+  return new HBox({ id: "sb2-context-buttons" }).appendChildren(
+    contextBackButton,
+    contextForwardButton,
+    contextReloadButton,
+    contextHomeButton,
+  );
+}
+
 /**
  *
  * @param {ToolbarButton} zoomOutButton

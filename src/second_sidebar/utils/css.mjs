@@ -3,10 +3,12 @@ export function emptySvgAsDataUrl(size = 16) {
 }
 
 export function elementGetPropertyValue(element, property) {
+  if (!element) return;
   return window.getComputedStyle(element).getPropertyValue(property);
 }
 
 export function queryGetPropertyValue(query, property) {
+  if (!query) return;
   return elementGetPropertyValue(document.querySelector(query), property);
 }
 

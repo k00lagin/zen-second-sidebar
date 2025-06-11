@@ -30,6 +30,7 @@ export class SidebarController {
     this.sidebarMainMenuPopup = SidebarElements.sidebarMainMenuPopup;
     this.webPanelMenuPopup = SidebarElements.webPanelMenuPopup;
     this.sidebarCollapseButton = SidebarElements.sidebarCollapseButton;
+    this.webPanelPopupMore = SidebarElements.webPanelPopupMore;
     this.webPanelsBrowser = SidebarElements.webPanelsBrowser;
     this.root = new XULElement({ element: document.documentElement });
 
@@ -252,9 +253,11 @@ export class SidebarController {
    * @param {boolean} value
    */
   setToolbarBackButtonDisabled(value) {
-    const button = this.sidebarToolbar.backButton;
-    button.setDisabled(value);
-    this.autoHideButton(button, this.autoHideBackButton);
+    const toolbarButton = this.sidebarToolbar.backButton;
+    toolbarButton.setDisabled(value);
+    this.autoHideButton(toolbarButton, this.autoHideBackButton);
+
+    this.webPanelPopupMore.contextBackButton.setDisabled(value);
   }
 
   /**
@@ -262,9 +265,11 @@ export class SidebarController {
    * @param {boolean} value
    */
   setToolbarForwardButtonDisabled(value) {
-    const button = this.sidebarToolbar.forwardButton;
-    button.setDisabled(value);
-    this.autoHideButton(button, this.autoHideForwardButton);
+    const toolbarButton = this.sidebarToolbar.forwardButton;
+    toolbarButton.setDisabled(value);
+    this.autoHideButton(toolbarButton, this.autoHideForwardButton);
+
+    this.webPanelPopupMore.contextForwardButton.setDisabled(value);
   }
 
   /**

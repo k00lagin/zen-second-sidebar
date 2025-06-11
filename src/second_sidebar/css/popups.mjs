@@ -117,6 +117,27 @@ export const POPUPS_CSS = /*css*/ `
     list-style-image: var(--sb2-open-in-new-tab-button-image);
   }
 
+  #sb2-copy-page-url-button > image {
+    list-style-image: url("chrome://devtools/skin/images/copy.svg");
+  }
+
+  #sb2-context-buttons > toolbarbutton {
+    flex: 1 0;
+    display: grid;
+    place-content: center;
+    min-width: 44px;
+    min-height: 30px;
+    padding: 0;
+  }
+
+  #sb2-toolbar #sb2-context-buttons > toolbarbutton > .toolbarbutton-icon {
+    width: auto;
+    height: auto;
+    max-width: 16px;
+    max-height: 16px;
+    box-sizing: content-box;
+  }
+
   :root${sidebarLeft} #context-openlinkinsidebar {
     --menu-image: url("chrome://userscripts/content/second_sidebar/icons/sidebar-left.svg");
   }

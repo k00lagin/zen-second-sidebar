@@ -18,6 +18,30 @@ export class WebPanelMoreController {
       this.webPanelPopupMore.setDefaults(webPanelController.dumpSettings());
     });
 
+    this.webPanelPopupMore.listenContextBackButtonClick((uuid) => {
+      const webPanelController =
+        SidebarControllers.webPanelsController.get(uuid);
+      webPanelController.goBack();
+    });
+
+    this.webPanelPopupMore.listenContextForwardButtonClick((uuid) => {
+      const webPanelController =
+        SidebarControllers.webPanelsController.get(uuid);
+      webPanelController.goForward();
+    });
+
+    this.webPanelPopupMore.listenContextReloadButtonClick((uuid) => {
+      const webPanelController =
+        SidebarControllers.webPanelsController.get(uuid);
+      webPanelController.reload();
+    });
+
+    this.webPanelPopupMore.listenContextHomeButtonClick((uuid) => {
+      const webPanelController =
+        SidebarControllers.webPanelsController.get(uuid);
+      webPanelController.goHome();
+    });
+
     this.webPanelPopupMore.listenOpenInNewTabButtonClick((event, uuid) => {
       const webPanelController =
         SidebarControllers.webPanelsController.get(uuid);
