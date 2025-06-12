@@ -83,8 +83,8 @@ export const SIDEBAR_MAIN_CSS = /* css */ `
   :root${compactMode} #sb2-main {
     position: absolute;
     z-index: 99;
-    top: 0;
-    bottom: 0;
+    top: -4px;
+    bottom: -4px;
     -moz-window-dragging: no-drag;
     
     transition: transform 0.1s 0.15s ease-in-out;
@@ -98,7 +98,7 @@ export const SIDEBAR_MAIN_CSS = /* css */ `
       max-width: 48px;
       inset: 0;
       margin-inline: auto;
-      background: var(--zen-dialog-background);
+      background: transparent;
       border-radius: calc(var(--zen-native-inner-radius) + var(--zen-element-separation) / 4);
       z-index: -1;
       outline: 1px solid var(--zen-colors-border-contrast);
@@ -108,15 +108,33 @@ export const SIDEBAR_MAIN_CSS = /* css */ `
         background-image: var(--zen-main-browser-background-toolbar) !important;
         background-attachment: fixed !important;
         background-size: 2000px !important;
+        background-color: var(--zen-main-browser-background-toolbar) !important;
       }
       @media -moz-pref('zen.theme.acrylic-elements') {
         backdrop-filter: blur(42px) saturate(110%) brightness(0.25) contrast(100%) !important;
       }
     }
+
+    @media -moz-pref('zen.view.compact.color-sidebar') {
+      &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        max-width: 48px;
+        margin-inline: auto;
+        background-image: url(chrome://browser/content/zen-images/grain-bg.png);
+        pointer-events: none;
+        z-index: 0;
+        opacity: var(--zen-grainy-background-opacity, 0);
+        mix-blend-mode: overlay;
+        transition: opacity 0.3s ease-in-out;
+        border-radius: calc(var(--zen-native-inner-radius) + var(--zen-element-separation) / 4);
+      }
+    }
   }
 
   :root${sidebarRight}${compactMode} #sb2-main {
-    margin-right: -12px !important;
+    margin-right: -14px !important;
     right: 0;
     transform: translateX(calc(100% - var(--zen-element-separation)));
 
@@ -126,7 +144,7 @@ export const SIDEBAR_MAIN_CSS = /* css */ `
   }
 
   :root${sidebarLeft}${compactMode} #sb2-main {
-    margin-left: -12px !important;
+    margin-left: -14px !important;
     left: 0;
     transform: translateX(calc(-100% + var(--zen-element-separation)));
 
