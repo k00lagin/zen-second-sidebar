@@ -60,7 +60,8 @@ export class SidebarController {
         !this.sidebarSplitterPinned.contains(target) &&
         !this.sidebarSplitterUnpinned.contains(target) &&
         !event.view.location.href.startsWith("about:devtools") &&
-        !event.view.location.href.startsWith("chrome://devtools")
+        !event.view.location.href.startsWith("chrome://devtools") &&
+        !event.view.location.href.startsWith("chrome://global/content/commonDialog.xhtml")
       ) {
         this.close();
       }
