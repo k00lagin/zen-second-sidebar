@@ -36,10 +36,11 @@ export class CustomizeModePatcher {
    * @param {string} moduleText
    */
   static async #replaceModule(moduleText) {
-    const moduleBlob = new Blob([moduleText], {
-      type: "application/javascript",
-    });
-    const moduleURL = URL.createObjectURL(moduleBlob);
+    await UC_API.FileSystem.writeFile(
+      "second_sidebar/tmp/customize_mode_patcher.mjs",
+      moduleText,
+    );
+    const moduleURL = UC_API.FileSystem.getEntry("second_sidebar/tmp/customize_mode_patcher.mjs").fileURI;
     import(moduleURL).then((module) => {
       ChromeUtils.defineLazyGetter(window, "gCustomizeMode", () => {
         return new module.CustomizeMode(window);
