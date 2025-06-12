@@ -14,6 +14,7 @@ export const SIDEBAR_BOX_CSS = /*css*/ `
     box-sizing: content-box;
 
     #sb2-toolbar {
+      -moz-window-dragging: no-drag;
       #sb2-toolbar-title-wrapper {
         -moz-window-dragging: no-drag;
       }
