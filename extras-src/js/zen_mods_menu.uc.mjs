@@ -30,6 +30,7 @@ const run = () => {
 
             .navigation,
             #ZenMarketplaceCategory,
+            #zenThemeMarketplaceAutoUpdate,
             [data-l10n-id="zen-theme-marketplace-description"],
             [data-l10n-id="zen-theme-marketplace-link"],
             [data-l10n-id="zen-theme-marketplace-import-button"],
