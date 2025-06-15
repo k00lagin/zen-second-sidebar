@@ -10,6 +10,7 @@ import { ContextualIdentityServiceWrapper } from "./second_sidebar/wrappers/cont
 import { CustomizeModePatcher } from "./second_sidebar/customize_mode_patcher.mjs";
 import { SidebarDecorator } from "./second_sidebar/sidebar_decorator.mjs";
 import { SidebarInjector } from "./second_sidebar/sidebar_injector.mjs";
+import { CommandListeners } from "./second_sidebar/command_listeners.mjs"
 
 const run = () => {
   if (window !== window.top) return;
@@ -18,6 +19,7 @@ const run = () => {
   if (SidebarInjector.inject()) {
     SidebarDecorator.decorate();
     CustomizeModePatcher.patch();
+    CommandListeners.init();
   }
 };
 
