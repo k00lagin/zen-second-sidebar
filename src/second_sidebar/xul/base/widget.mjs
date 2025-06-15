@@ -53,13 +53,16 @@ export class Widget {
       this.#setup(this.button);
     }
     if (position) {
-      const placement =
-        CustomizableUIWrapper.getPlacementOfWidget("new-web-panel");
-      CustomizableUIWrapper.addWidgetToArea(
-        id,
-        placement.area,
-        placement.position + (position === "before" ? 0 : 1),
-      );
+      const placement = CustomizableUIWrapper.getPlacementOfWidget("new-web-panel")
+      if (placement) {
+        CustomizableUIWrapper.addWidgetToArea(
+          id,
+          placement?.area,
+          placement.position + (position === "before" ? 0 : 1),
+        );        
+      } else {
+        CustomizableUIWrapper.addWidgetToArea(id, "sb2-main", 0);
+      }
     }
   }
 
