@@ -83,6 +83,20 @@ export class XULElement {
 
   /**
    *
+   * @param {boolean} value
+   * @returns {XULElement}
+   */
+  setFullToolbar(value) {
+    if (value) {
+      this.setAttribute("fulltoolbar", "true");
+    } else {
+      this.removeAttribute("fulltoolbar");
+    }
+    return this;
+  }
+
+  /**
+   *
    * @param {string} selector
    * @returns {XULElement?}
    */

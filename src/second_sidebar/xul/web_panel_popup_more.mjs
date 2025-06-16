@@ -4,6 +4,7 @@ import {
   createContextNavigationButtons,
   createZoomButtons,
   updateZoomButtons,
+  createPopupGroup,
 } from "../utils/xul.mjs";
 
 /* eslint-disable no-unused-vars */
@@ -71,10 +72,11 @@ export class WebPanelPopupMore extends Panel {
           this.copyPageUrlButton,
           this.mobileButton,
           new MenuSeparator(),
-          createZoomButtons(
+          createPopupGroup("Zoom", createZoomButtons(
             this.zoomOutButton,
-            this.resetZoomButton,
-            this.zoomInButton,
+              this.resetZoomButton,
+              this.zoomInButton,
+            ),
           ),
           new MenuSeparator(),
           this.unloadButton

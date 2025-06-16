@@ -206,6 +206,7 @@ export class WebPanelController {
       canGoForward: this.#tab.linkedBrowser.canGoForward(),
       title: this.#tab.linkedBrowser.getTitle(),
       hideToolbar: this.#settings.hideToolbar,
+      fullToolbar: this.#settings.fullToolbar,
     });
   }
 
@@ -392,6 +393,14 @@ export class WebPanelController {
    *
    * @param {boolean} value
    */
+  setFullToolbar(value) {
+    this.#settings.fullToolbar = value;
+  }
+
+  /**
+   *
+   * @param {boolean} value
+   */
   setHideSoundIcon(value) {
     this.#settings.hideSoundIcon = value;
     this.#button.hideSoundIcon(value);
@@ -514,6 +523,7 @@ export class WebPanelController {
         loadOnStartup: this.#settings.loadOnStartup,
         unloadOnClose: this.#settings.unloadOnClose,
         hideToolbar: this.#settings.hideToolbar,
+        fullToolbar: this.#settings.fullToolbar,
         userContextId: this.#settings.userContextId,
         periodicReload: this.#settings.periodicReload,
         hideSoundIcon: this.#settings.hideSoundIcon,

@@ -62,6 +62,7 @@ export class WebPanelPopupEdit extends Panel {
     this.loadOnStartupToggle = new Toggle();
     this.unloadOnCloseToggle = new Toggle();
     this.hideToolbarToggle = new Toggle();
+    this.fullToolbarToggle = new Toggle();
     this.hideSoundIconToggle = new Toggle();
     this.hideNotificationBadgeToggle = new Toggle();
     this.periodicReloadMenuList = this.#createPeriodicReloadMenuList();
@@ -151,6 +152,7 @@ export class WebPanelPopupEdit extends Panel {
             ),
             new ToolbarSeparator(),
             createPopupGroup("Hide toolbar", this.hideToolbarToggle),
+            createPopupGroup("Full toolbar", this.fullToolbarToggle),
             createPopupGroup("Hide sound icon", this.hideSoundIconToggle),
             createPopupGroup(
               "Hide notification badge",
@@ -186,6 +188,7 @@ export class WebPanelPopupEdit extends Panel {
    * @param {function(string, boolean):void} callbacks.loadOnStartup
    * @param {function(string, boolean):void} callbacks.unloadOnClose
    * @param {function(string, boolean):void} callbacks.hideToolbar
+   * @param {function(string, boolean):void} callbacks.fullToolbar
    * @param {function(string, boolean):void} callbacks.hideSoundIcon
    * @param {function(string, boolean):void} callbacks.hideNotificationBadge
    * @param {function(string, number):void} callbacks.periodicReload
@@ -203,6 +206,7 @@ export class WebPanelPopupEdit extends Panel {
     loadOnStartup,
     unloadOnClose,
     hideToolbar,
+    fullToolbar,
     hideSoundIcon,
     hideNotificationBadge,
     periodicReload,
@@ -219,6 +223,7 @@ export class WebPanelPopupEdit extends Panel {
     this.onLoadOnStartupChange = loadOnStartup;
     this.onUnloadOnCloseChange = unloadOnClose;
     this.onHideToolbar = hideToolbar;
+    this.onFullToolbar = fullToolbar;
     this.onHideSoundIcon = hideSoundIcon;
     this.onHideNotificationBadge = hideNotificationBadge;
     this.onPeriodicReload = periodicReload;
@@ -252,6 +257,9 @@ export class WebPanelPopupEdit extends Panel {
     });
     this.hideToolbarToggle.addEventListener("toggle", () => {
       hideToolbar(this.settings.uuid, this.hideToolbarToggle.getPressed());
+    });
+    this.fullToolbarToggle.addEventListener("toggle", () => {
+      fullToolbar(this.settings.uuid, this.fullToolbarToggle.getPressed());
     });
     this.hideSoundIconToggle.addEventListener("toggle", () => {
       hideSoundIcon(this.settings.uuid, this.hideSoundIconToggle.getPressed());
@@ -350,6 +358,7 @@ export class WebPanelPopupEdit extends Panel {
     this.loadOnStartupToggle.setPressed(settings.loadOnStartup);
     this.unloadOnCloseToggle.setPressed(settings.unloadOnClose);
     this.hideToolbarToggle.setPressed(settings.hideToolbar);
+    this.fullToolbarToggle.setPressed(settings.fullToolbar);
     this.hideSoundIconToggle.setPressed(settings.hideSoundIcon);
     this.hideNotificationBadgeToggle.setPressed(settings.hideNotificationBadge);
     this.periodicReloadMenuList.setValue(settings.periodicReload);
@@ -418,6 +427,9 @@ export class WebPanelPopupEdit extends Panel {
     }
     if (this.hideToolbarToggle.getPressed() !== this.settings.hideToolbar) {
       this.onHideToolbar(this.settings.uuid, this.settings.hideToolbar);
+    }
+    if (this.fullToolbarToggle.getPressed() !== this.settings.fullToolbar) {
+      this.onFullToolbar(this.settings.uuid, this.settings.fullToolbar);
     }
     if (this.hideSoundIconToggle.getPressed() !== this.settings.hideSoundIcon) {
       this.onHideSoundIcon(this.settings.uuid, this.settings.hideSoundIcon);

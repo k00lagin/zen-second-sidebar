@@ -130,7 +130,12 @@ export const POPUPS_CSS = /*css*/ `
     padding: 0;
   }
 
-  #sb2-toolbar #sb2-context-buttons > toolbarbutton > .toolbarbutton-icon {
+  #sb2-web-panel-more toolbarbutton > .toolbarbutton-icon {
+    width: 12px;
+    height: 12px;
+  }
+
+  #sb2-toolbar:not([fulltoolbar]) #sb2-context-buttons > toolbarbutton > .toolbarbutton-icon {
     width: auto;
     height: auto;
     max-width: 16px;

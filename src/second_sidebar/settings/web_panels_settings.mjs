@@ -42,6 +42,7 @@ export class WebPanelsSettings {
               loadOnStartup: webPanelPref.loadOnStartup,
               unloadOnClose: webPanelPref.unloadOnClose,
               hideToolbar: webPanelPref.hideToolbar,
+              fullToolbar: webPanelPref.fullToolbar,
               userContextId: webPanelPref.userContextId,
               periodicReload: webPanelPref.periodicReload,
               hideSoundIcon: webPanelPref.hideSoundIcon,

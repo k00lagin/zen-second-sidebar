@@ -173,6 +173,15 @@ export class WebPanelsController {
       SidebarControllers.sidebarController.setHideToolbar(hideToolbar);
     });
 
+    listenEvent(WebPanelEvents.EDIT_WEB_PANEL_FULL_TOOLBAR, (event) => {
+      const uuid = event.detail.uuid;
+      const fullToolbar = event.detail.fullToolbar;
+
+      const webPanelController = this.get(uuid);
+      webPanelController.setFullToolbar(fullToolbar);
+      SidebarControllers.sidebarController.setFullToolbar(fullToolbar);
+    });
+
     listenEvent(WebPanelEvents.EDIT_WEB_PANEL_HIDE_SOUND_ICON, (event) => {
       const uuid = event.detail.uuid;
       const hideSoundIcon = event.detail.hideSoundIcon;

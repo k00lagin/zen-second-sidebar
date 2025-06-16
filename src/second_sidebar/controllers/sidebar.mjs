@@ -186,14 +186,16 @@ export class SidebarController {
    * @param {boolean} canGoForward
    * @param {string} title
    * @param {boolean} hideToolbar
+   * @param {boolean} fullToolbar
    */
-  open({pinned, type, width, canGoBack, canGoForward, title, hideToolbar}) {
+  open({pinned, type, width, canGoBack, canGoForward, title, hideToolbar, fullToolbar}) {
     this.sidebarBox.show();
     this.setWidth(width);
     this.setToolbarBackButtonDisabled(!canGoBack);
     this.setToolbarForwardButtonDisabled(!canGoForward);
     this.setToolbarTitle(title);
     this.setHideToolbar(hideToolbar);
+    this.setFullToolbar(fullToolbar); 
     this.updateAbsolutePosition();
     this.setType(type);
     pinned ? this.pin() : this.unpin();
@@ -334,6 +336,10 @@ export class SidebarController {
    */
   setHideToolbar(value) {
     value ? this.sidebarToolbar.hide() : this.sidebarToolbar.show();
+  }
+
+  setFullToolbar(value) {
+    this.sidebarToolbar.setFullToolbar(value);
   }
 
   updateAbsolutePosition() {
