@@ -98,5 +98,12 @@ export class WebPanelMoreController {
         SidebarControllers.webPanelsController.get(uuid);
       return webPanelController.getZoom();
     });
+
+    this.webPanelPopupMore.listenUnloadButtonClick((uuid) => {
+      const webPanelController =
+        SidebarControllers.webPanelsController.get(uuid);
+      SidebarControllers.sidebarController.close();
+      webPanelController.unload();
+    });
   }
 }

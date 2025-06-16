@@ -45,12 +45,12 @@ export class WebPanelMenuPopup extends MenuPopup {
 
   #compose() {
     this.appendChildren(
-      this.unloadItem,
       this.muteItem,
       this.pinItem,
       new MenuSeparator(),
       this.editItem,
       this.deleteItem,
+      this.unloadItem,
       new MenuSeparator(),
       this.customizeItem,
     );

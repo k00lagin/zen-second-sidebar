@@ -49,6 +49,10 @@ export class WebPanelPopupMore extends Panel {
       id: "sb2-zoom-button",
       tooltipText: "Reset Zoom",
     });
+    this.unloadButton = createSubviewButton("Unload Web Panel", {
+      id: "sb2-unload-button",
+      tooltipText: "Close and unload current Web Panel",
+    });
     this.#compose();
   }
 
@@ -72,6 +76,8 @@ export class WebPanelPopupMore extends Panel {
             this.resetZoomButton,
             this.zoomInButton,
           ),
+          new MenuSeparator(),
+          this.unloadButton
         ),
       ),
     );
@@ -158,6 +164,18 @@ export class WebPanelPopupMore extends Panel {
       if (isLeftMouseButton(event)) {
         const zoom = callback(this.settings.uuid);
         this.#updateZoomButtons(zoom);
+      }
+    });
+  }
+
+  /**
+   *
+   * @param {function(string):void} callback
+   */
+  listenUnloadButtonClick(callback) {
+    this.unloadButton.addEventListener("click", (event) => {
+      if (isLeftMouseButton(event)) {
+        callback(this.settings.uuid);
       }
     });
   }

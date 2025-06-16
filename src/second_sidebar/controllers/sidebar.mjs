@@ -108,10 +108,7 @@ export class SidebarController {
     });
 
     this.sidebarToolbar.listenCloseButtonClick(() => {
-      const webPanelController =
-        SidebarControllers.webPanelsController.getActive();
       this.close();
-      webPanelController.unload();
     });
 
     listenEvent(SidebarEvents.EDIT_SIDEBAR_POSITION, (event) => {
