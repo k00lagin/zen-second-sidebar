@@ -39,7 +39,7 @@ export class SidebarToolbar extends Toolbar {
     // Sidebar buttons
     this.moreButton = this.#createMenuButton("More", ICONS.MORE);
     this.pinButton = this.#createButton();
-    this.closeButton = this.#createButton("Unload", ICONS.CLOSE);
+    this.closeButton = this.#createButton("Close", ICONS.CLOSE);
     this.sidebarButtons = this.#createSidebarButtons();
   }
 

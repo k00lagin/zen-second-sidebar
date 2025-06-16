@@ -15,6 +15,7 @@ export class WebPanelSettings {
    * @param {boolean?} params.loadOnStartup
    * @param {boolean?} params.unloadOnClose
    * @param {boolean?} params.hideToolbar
+   * @param {boolean?} params.fullToolbar
    * @param {string?} params.userContextId
    * @param {number} params.periodicReload
    * @param {number} params.hideSoundIcon
@@ -33,6 +34,7 @@ export class WebPanelSettings {
       loadOnStartup,
       unloadOnClose,
       hideToolbar,
+      fullToolbar,
       userContextId,
       periodicReload,
       hideSoundIcon,
@@ -61,6 +63,8 @@ export class WebPanelSettings {
     this.unloadOnClose = unloadOnClose ?? false;
     /**@type {boolean} */
     this.hideToolbar = hideToolbar ?? false;
+    /**@type {boolean} */
+    this.fullToolbar = fullToolbar ?? false;
     /**@type {number} */
     this.userContextId =
       userContextId ?? ScriptSecurityManagerWrapper.DEFAULT_USER_CONTEXT_ID;
@@ -89,6 +93,7 @@ export class WebPanelSettings {
       loadOnStartup: this.loadOnStartup,
       unloadOnClose: this.unloadOnClose,
       hideToolbar: this.hideToolbar,
+      fullToolbar: this.fullToolbar,
       userContextId: this.userContextId,
       periodicReload: this.periodicReload,
       hideSoundIcon: this.hideSoundIcon,

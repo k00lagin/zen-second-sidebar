@@ -71,6 +71,12 @@ export class WebPanelEditController {
           hideToolbar,
         });
       },
+      fullToolbar: (uuid, fullToolbar) => {
+        sendEvents(WebPanelEvents.EDIT_WEB_PANEL_FULL_TOOLBAR, {
+          uuid,
+          fullToolbar,
+        });
+      },
       hideSoundIcon: (uuid, hideSoundIcon) => {
         sendEvents(WebPanelEvents.EDIT_WEB_PANEL_HIDE_SOUND_ICON, {
           uuid,

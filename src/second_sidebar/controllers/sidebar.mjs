@@ -30,6 +30,7 @@ export class SidebarController {
     this.sidebarMainMenuPopup = SidebarElements.sidebarMainMenuPopup;
     this.webPanelMenuPopup = SidebarElements.webPanelMenuPopup;
     this.sidebarCollapseButton = SidebarElements.sidebarCollapseButton;
+    this.webPanelPopupMore = SidebarElements.webPanelPopupMore;
     this.webPanelsBrowser = SidebarElements.webPanelsBrowser;
     this.root = new XULElement({ element: document.documentElement });
 
@@ -107,10 +108,7 @@ export class SidebarController {
     });
 
     this.sidebarToolbar.listenCloseButtonClick(() => {
-      const webPanelController =
-        SidebarControllers.webPanelsController.getActive();
       this.close();
-      webPanelController.unload();
     });
 
     listenEvent(SidebarEvents.EDIT_SIDEBAR_POSITION, (event) => {
@@ -188,14 +186,16 @@ export class SidebarController {
    * @param {boolean} canGoForward
    * @param {string} title
    * @param {boolean} hideToolbar
+   * @param {boolean} fullToolbar
    */
-  open({pinned, type, width, canGoBack, canGoForward, title, hideToolbar}) {
+  open({pinned, type, width, canGoBack, canGoForward, title, hideToolbar, fullToolbar}) {
     this.sidebarBox.show();
     this.setWidth(width);
     this.setToolbarBackButtonDisabled(!canGoBack);
     this.setToolbarForwardButtonDisabled(!canGoForward);
     this.setToolbarTitle(title);
     this.setHideToolbar(hideToolbar);
+    this.setFullToolbar(fullToolbar); 
     this.updateAbsolutePosition();
     this.setType(type);
     pinned ? this.pin() : this.unpin();
@@ -252,9 +252,11 @@ export class SidebarController {
    * @param {boolean} value
    */
   setToolbarBackButtonDisabled(value) {
-    const button = this.sidebarToolbar.backButton;
-    button.setDisabled(value);
-    this.autoHideButton(button, this.autoHideBackButton);
+    const toolbarButton = this.sidebarToolbar.backButton;
+    toolbarButton.setDisabled(value);
+    this.autoHideButton(toolbarButton, this.autoHideBackButton);
+
+    this.webPanelPopupMore.contextBackButton.setDisabled(value);
   }
 
   /**
@@ -262,9 +264,11 @@ export class SidebarController {
    * @param {boolean} value
    */
   setToolbarForwardButtonDisabled(value) {
-    const button = this.sidebarToolbar.forwardButton;
-    button.setDisabled(value);
-    this.autoHideButton(button, this.autoHideForwardButton);
+    const toolbarButton = this.sidebarToolbar.forwardButton;
+    toolbarButton.setDisabled(value);
+    this.autoHideButton(toolbarButton, this.autoHideForwardButton);
+
+    this.webPanelPopupMore.contextForwardButton.setDisabled(value);
   }
 
   /**
@@ -332,6 +336,10 @@ export class SidebarController {
    */
   setHideToolbar(value) {
     value ? this.sidebarToolbar.hide() : this.sidebarToolbar.show();
+  }
+
+  setFullToolbar(value) {
+    this.sidebarToolbar.setFullToolbar(value);
   }
 
   updateAbsolutePosition() {
