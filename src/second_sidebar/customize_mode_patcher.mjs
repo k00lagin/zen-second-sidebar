@@ -40,7 +40,7 @@ export class CustomizeModePatcher {
       "second_sidebar/tmp/customize_mode_patcher.mjs",
       moduleText,
     );
-    const moduleURL = UC_API.FileSystem.getEntry("second_sidebar/tmp/customize_mode_patcher.mjs").fileURI;
+    const moduleURL = `chrome://userchrome/content/second_sidebar/tmp/customize_mode_patcher.mjs`;
     import(moduleURL).then((module) => {
       ChromeUtils.defineLazyGetter(window, "gCustomizeMode", () => {
         return new module.CustomizeMode(window);
