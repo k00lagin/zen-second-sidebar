@@ -4,7 +4,6 @@ import { XULElement } from "../xul/base/xul_element.mjs";
 import { gCustomizeModeWrapper } from "../wrappers/g_customize_mode.mjs";
 import { gNavToolboxWrapper } from "../wrappers/g_nav_toolbox.mjs";
 import { isRightMouseButton } from "../utils/buttons.mjs";
-import { parseFunction } from "../utils/parsers.mjs";
 import { ScriptSecurityManagerWrapper } from "../wrappers/script_security_manager.mjs";
 
 export class SidebarMainController {
@@ -19,15 +18,24 @@ export class SidebarMainController {
 
   #setupGlobalListeners() {
     fetch("chrome://browser/content/navigator-toolbox.js").then((response) => {
-      response.text().then((moduleSource) => {
+      response.text().then(async (moduleSource) => {
         const matches = moduleSource.matchAll(/\s{4}function.*?^\s{4}}/gms);
+        let moduleText = "";
         for (const match of matches) {
           const functionSource = match[0];
-          const parsedFunction = parseFunction(functionSource);
-          const eventName = parsedFunction.name
-            .toLowerCase()
-            .replace(/^on/, "");
-          this.sidebarMain.addEventListener(eventName, parsedFunction.func);
+          const cleanedSource = functionSource.replace(/^ {4}/gm, "");
+          moduleText += "export " + cleanedSource + "\n";
+        }
+
+        const tempPath = "second_sidebar/tmp/global-listeners.mjs";
+        await UC_API.FileSystem.writeFile(tempPath, moduleText);
+        const moduleURL = `chrome://userchrome/content/${tempPath}`;
+
+        const eventModule = await import(moduleURL);
+
+        for (const [name, func] of Object.entries(eventModule)) {
+          const eventName = name.toLowerCase().replace(/^on/, "");
+          this.sidebarMain.addEventListener(eventName, func);
         }
       });
     });
